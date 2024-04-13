@@ -13,6 +13,46 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+// Route::get('/', function() {
+//     return view('health_managements.profile');
+// });
+
+// Route::get('/', function() {
+//     return view('health_managements.profile_setting');
+// });
+
+// Route::get('/', function() {
+//      return view('health_managements.meal');
+// });
+
+// Route::get('/', function() {
+//      return view('health_managements.meal_record');
+// });
+
+// Route::get('/', function() {
+//      return view('health_managements.movement');
+// });
+
+// Route::get('/', function() {
+//      return view('health_managements.movement_record');
+// });
+
+// Route::get('/', function() {
+//      return view('health_managements.body_weight');
+// });
+
+// // Route::get('/', function() {
+// //      return view('health_managements.body_weight_record');
+// // });
+
+Route::get('/', function() {
+     return view('health_managements.sleeping');
 });
+
+// Route::get('/', function() {
+//      return view('health_managements.sleeping_record');
+// });
