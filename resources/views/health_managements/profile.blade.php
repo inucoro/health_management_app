@@ -25,11 +25,11 @@
                 background-color: #fff;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             }
-            .profile-img {
+            .profile_img {
                 text-align: center;
                 margin-bottom: 20px;
             }
-            .profile-img img {
+            .profile_img img {
                 width: 200px;
                 height: 200px;
                 border-radius: 50%;
@@ -37,25 +37,25 @@
                 border: 4px solid #fff;
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             }
-            .profile-info {
+            .profile_info {
                 margin-bottom: 20px;
             }
-            .profile-info label {
+            .profile_info label {
                 font-weight: bold;
                 display: block;
                 margin-bottom: 5px;
                 color: #333;
             }
-            .profile-info span {
+            .profile_info span {
                 display: block;
                 margin-top: 5px;
                 font-size: 16px;
             }
-            .profile-buttons {
+            .profile_buttons {
                 text-align: center;
                 margin-top: 20px;
             }
-            .profile-buttons button {
+            .profile_buttons button {
                 padding: 10px 20px;
                 margin: 0 10px;
                 border: none;
@@ -63,7 +63,7 @@
                 cursor: pointer;
                 font-size: 16px;
             }
-            .profile-buttons button:hover {
+            .profile_buttons button:hover {
                 background-color: #ddd;
             }
             h2 {
@@ -76,59 +76,59 @@
     <body>
         <div class="profile">
             <h2>プロフィール表示</h2>
-            <div class="profile-img">
-                <img id="profile-img" src="default_profile.jpg" alt="プロフィール写真">
+            <div class="profile_img">
+                <img id="profile_img" src="{{ asset('image/IMG_3252.JPG') }}" alt="プロフィール写真">
             </div>
-            <div class="profile-info">
+            <div class="profile_info">
                 <label>名前</label>
-                <span id="name">John Doe</span>
+                <span id="name">{{ $user->name }}</span>
             </div>
-            <div class="profile-info">
+            <div class="profile_info">
                 <label>性別</label>
-                <span id="sex">男性</span>
+                <span id="sex">{{ $user->sex }}</span>
             </div>
-            <div class="profile-info">
+            <div class="profile_info">
                 <label>身長(cm)</label>
-                <span id="height">180</span>
+                <span id="height">{{ $user->height }}</span>
             </div>
-            <div class="profile-info">
+            <div class="profile_info">
                 <label>体重(kg)</label>
-                <span id="body_weight">75</span>
+                <span id="body_weight">{{ $user->body_weight }}</span>
             </div>
-            <div class="profile-info">
+            <div class="profile_info">
                 <label>年齢</label>
-                <span id="age">30</span>
+                <span id="age">{{ $user->age }}</span>
             </div>
             <h2>目標設定</h2>
-            <div class="profile-info">
+            <div class="profile_info">
                 <label>目標体重(kg)</label>
-                <span id="target_body_weight">70</span>
+                <span id="target_body_weight">{{ $user->target_body_weight }}</span>
             </div>
-            <div class="profile-info">
+            <div class="profile_info">
                 <label>目標カロリー(kcal)</label>
-                <span id="target_cal">2000</span>
+                <span id="target_cal">{{ $user->target_cal }}</span>
             </div>
-            <div class="profile-info">
+            <div class="profile_info">
                 <label>目標タンパク質(g)</label>
-                <span id="target_protein">100</span>
+                <span id="target_protein">{{ $user->target_protein }}</span>
             </div>
-            <div class="profile-info">
+            <div class="profile_info">
                 <label>目標脂質(g)</label>
-                <span id="target_fat">70</span>
+                <span id="target_fat">{{ $user->target_fat }}</span>
             </div>
-            <div class="profile-info">
+            <div class="profile_info">
                 <label>目標炭水化物(g)</label>
-                <span id="target_carbo">200</span>
+                <span id="target_carbo">{{ $user->target_carbo }}</span>
             </div>
-            <div class="profile-info">
+            <div class="profile_info">
                 <label>目標運動消費カロリー(kcal)</label>
-                <span id="target_movement_consumption_cal">300</span>
+                <span id="target_movement_consumption_cal">{{ $user->target_movement_comsumption_cal }}</span>
             </div>
-            <div class="profile-info">
+            <div class="profile_info">
                 <label>目標睡眠時間(h)</label>
-                <span id="target_sleeping_time">7</span>
+                <span id="target_sleeping_time">{{ $user->target_sleeping_time }}</span>
             </div>
-            <div class="profile-buttons">
+            <div class="profile_buttons">
                 <button onclick="location.href='update_profile.html'">プロフィール設定</button>
                 <button onclick="updateProfile()">更新</button>
                 <button onclick="location.href='#'">食事記録</button>
@@ -137,29 +137,5 @@
                 <button onclick="location.href='#'">睡眠記録</button>
             </div>
         </div>
-
-        <script>
-            function updateProfile() {
-                // ここでプロフィール情報を更新する処理を実装します
-                // 例えば、入力フォームから値を取得して、それを表示する部分のspan要素の内容を更新します
-                var name = document.getElementById("name").value;
-                var sex = document.getElementById("sex").value;
-                var height = document.getElementById("height").value;
-                var body_weight = document.getElementById("body_weight").value;
-                var age = document.getElementById("age").value;
-    
-                // 以下のように、取得した値をそれぞれの要素に反映させます
-                document.getElementById("name").textContent = name;
-                document.getElementById("sex").textContent = sex;
-                document.getElementById("height").textContent = height;
-                document.getElementById("body_weight").textContent = body_weight;
-                document.getElementById("age").textContent = age;
-    
-                // 他のプロフィール情報も同様に更新する処理を追加します
-    
-                // 更新が完了したら、ボタンのクリックに応じて適切なページに移動します
-                // ここでは更新後もプロフィール表示画面に留まるよう、何もしないでおきます
-            }
-        </script>
     </body>
 </html>

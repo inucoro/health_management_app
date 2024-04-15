@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Health_management_Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,11 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function() {
 //     return view('health_managements.profile');
 // });
+
+
+// プロフィール表示画面のルート
+Route::get('/profile', [Health_Management_Controller::class, 'showProfile'])->name('profile.show');
+
 
 // Route::get('/', function() {
 //     return view('health_managements.profile_setting');
@@ -49,9 +55,9 @@ use Illuminate\Support\Facades\Route;
 // //      return view('health_managements.body_weight_record');
 // // });
 
-Route::get('/', function() {
-     return view('health_managements.sleeping');
-});
+// Route::get('/', function() {
+//      return view('health_managements.sleeping');
+// });
 
 // Route::get('/', function() {
 //      return view('health_managements.sleeping_record');
