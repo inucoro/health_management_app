@@ -14,26 +14,20 @@ use App\Http\Controllers\Health_management_Controller;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-// Route::get('/', function() {
-//     return view('health_managements.profile');
-// });
-
 
 // プロフィール表示画面のルート
 Route::get('/profile', [Health_Management_Controller::class, 'showProfile'])->name('profile.show');
 
+// プロフィール設定画面のルート
+Route::get('/profile/profile_setting', [Health_Management_Controller::class, 'updateProfile'])->name('profile.update');
+Route::put('/profile/profile_setting', [Health_Management_Controller::class, 'updatedProfile'])->name('profile.updated');
 
-// Route::get('/', function() {
-//     return view('health_managements.profile_setting');
-// });
 
 // Route::get('/', function() {
 //      return view('health_managements.meal');
 // });
+
+// 食事画面のルート
 
 // Route::get('/', function() {
 //      return view('health_managements.meal_record');

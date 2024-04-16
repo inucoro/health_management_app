@@ -67,15 +67,15 @@
             <div class="summary">
                 <div class="summary-item">
                     <label>摂取カロリー:</label>
-                    <span id="ingestion_cal">1500 kcal</span>
+                    <span id="ingestion_cal">2200 kcal</span>
                 </div>
                 <div class="summary-item">
                     <label>運動消費カロリー:</label>
-                    <span id="movement_consumption_cal">300 kcal</span>
+                    <span id="movement_consumption_cal">{{ $meal->movement_consumption_cal }} kcal</span>
                 </div>
                 <div class="summary-item">
                     <label>目標カロリー:</label>
-                    <span id="target_cal">2000 kcal</span>
+                    <span id="target_cal">{{ $meal->target_cal }} kcal</span>
                 </div>
                 <div class="summary-item">
                     <label>残り摂取カロリー:</label>
