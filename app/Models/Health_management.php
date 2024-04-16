@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Health_management extends Model
 {
-    // モデルが関連付けられているテーブル名を指定します（デフォルトではクラス名のスネークケースとなります）
+    // モデルが関連付けられているテーブル名を指定する
     protected $table = 'users';
 
-    // モデルで更新可能なフィールドを指定します
+    // モデルで更新可能なフィールドを指定する
     protected $fillable = [
         'name',
         'sex',

@@ -122,14 +122,14 @@
             </div>
             <div class="profile_info">
                 <label>目標運動消費カロリー(kcal)</label>
-                <span id="target_movement_consumption_cal">{{ $user->target_movement_comsumption_cal }}</span>
+                <span id="target_movement_consumption_cal">{{ $user->target_movement_consumption_cal }}</span>
             </div>
             <div class="profile_info">
                 <label>目標睡眠時間(h)</label>
                 <span id="target_sleeping_time">{{ $user->target_sleeping_time }}</span>
             </div>
             <div class="profile_buttons">
-                <button onclick="location.href='update_profile.html'">プロフィール設定</button>
+                <button onclick="location.href='/profile/profile_setting'">プロフィール設定</button>
                 <button onclick="updateProfile()">更新</button>
                 <button onclick="location.href='#'">食事記録</button>
                 <button onclick="location.href='#'">運動記録</button>
