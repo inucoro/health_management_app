@@ -76,6 +76,12 @@
     <body>
         <div class="profile">
             <h2>プロフィール表示</h2>
+            <div class="profile_buttons">
+                <button onclick="location.href='/profile/meal'">食事</button>
+                <button onclick="location.href='/profile/movement'">運動</button>
+                <button onclick="location.href='/profile/body_weight'">体重</button>
+                <button onclick="location.href='/profile/sleeping'">睡眠</button>
+            </div>
             <div class="profile_img">
                 <img id="profile_img" src="{{ asset('image/IMG_3252.JPG') }}" alt="プロフィール写真">
             </div>
@@ -130,11 +136,10 @@
             </div>
             <div class="profile_buttons">
                 <button onclick="location.href='/profile/profile_setting'">プロフィール設定</button>
-                <button onclick="updateProfile()">更新</button>
-                <button onclick="location.href='#'">食事記録</button>
-                <button onclick="location.href='#'">運動記録</button>
-                <button onclick="location.href='#'">体重記録</button>
-                <button onclick="location.href='#'">睡眠記録</button>
+                <button onclick="location.href='/profile/meal/meal_record'">食事記録</button>
+                <button onclick="location.href='/profile/movement/movement_record'">運動記録</button>
+                <button onclick="location.href='/profile/body_weight/body_weight_record'">体重記録</button>
+                <button onclick="location.href='/profile/sleeping/sleeping_record'">睡眠記録</button>
             </div>
         </div>
     </body>

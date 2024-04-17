@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Profile_Controller;
 use App\Http\Controllers\Meal_Controller;
+use App\Http\Controllers\Movement_Controller;
+use App\Http\Controllers\Body_weight_Controller;
+use App\Http\Controllers\Sleeping_Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,9 +33,8 @@ Route::get('/profile/meal', [Meal_Controller::class, 'showMeal'])->name('meal.sh
 Route::get('/profile/meal/meal_record', [Meal_Controller::class, 'createMeal'])->name('create.meal');
 Route::post('/profile/meal/meal_record', [Meal_Controller::class, 'storeMeal'])->name('store.meal');
 
-// Route::get('/', function() {
-//      return view('health_managements.meal_record');
-// });
+// 運動画面のルート
+Route::get('/profile/movement', [Movement_Controller::class, 'showMovement'])->name('movement.show');
 
 // Route::get('/', function() {
 //      return view('health_managements.movement');

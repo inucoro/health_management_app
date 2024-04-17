@@ -16,7 +16,7 @@ class Meal_Controller extends Controller
         
         $userId = $user->id; //最初のユーザーidの取得
         
-        $movement = Movement::where('user_id', $userId)->first(); //運動消費カロリーの取得
+        $sum_movement_consumption_cal = Movement::where('user_id', $userId)->sum('movement_consumption_cal'); //合計運動消費カロリーの計算
         
         //カロリー
         $ingestion_cal = Meal::where('user_id', $userId)->sum('record_cal'); //合計摂取カロリーの計算
@@ -53,7 +53,7 @@ class Meal_Controller extends Controller
         return view('health_managements.meal', 
         ['user' => $user, 
         'ingestion_cal' => $ingestion_cal, 
-        'movement' => $movement, 
+        'sum_movement_consumption_cal' => $sum_movement_consumption_cal, 
         'remaining_ingestion_cal' => $remaining_ingestion_cal, 
         'sum_ingested_protein' => $sum_ingested_protein, 
         'target_protein' => $target_protein,
