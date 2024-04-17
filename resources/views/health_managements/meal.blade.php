@@ -70,8 +70,8 @@
                     <span id="ingestion_cal">{{ $ingestion_cal }} kcal</span>
                 </div>
                 <div class="summary_item">
-                    <label>運動消費カロリー:</label>
-                    <span id="movement_consumption_cal">{{ $movement->movement_consumption_cal }} kcal</span>
+                    <label>合計運動消費カロリー:</label>
+                    <span id="sum_movement_consumption_cal">{{ $sum_movement_consumption_cal }} kcal</span>
                 </div>
                 <div class="summary_item">
                     <label>目標カロリー:</label>
@@ -132,6 +132,7 @@
                     @endforeach
                 </tbody>
             </table>
+            <a href='/profile'>プロフィール</a>
             <a href='/profile/meal/meal_record'>食事記録</a>
         </div>
     </body>
