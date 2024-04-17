@@ -34,7 +34,7 @@
             .summary {
                 margin-bottom: 20px;
             }
-            .summary-item {
+            .summary_item {
                 margin-top: 10px;
                 display: flex;
                 justify-content: space-between;
@@ -42,7 +42,7 @@
                 padding: 10px;
                 border-radius: 4px;
             }
-            .summary-item label {
+            .summary_item label {
                 font-weight: bold;
             }
             table {
@@ -65,50 +65,49 @@
             <h1>食事記録</h1>
             
             <div class="summary">
-                <div class="summary-item">
-                    <label>摂取カロリー:</label>
-                    <span id="ingestion_cal">2200 kcal</span>
+                <div class="summary_item">
+                    <label>合計摂取カロリー:</label>
+                    <span id="ingestion_cal">{{ $ingestion_cal }} kcal</span>
                 </div>
-                <div class="summary-item">
+                <div class="summary_item">
                     <label>運動消費カロリー:</label>
-                    <span id="movement_consumption_cal">{{ $meal->movement_consumption_cal }} kcal</span>
+                    <span id="movement_consumption_cal">{{ $movement->movement_consumption_cal }} kcal</span>
                 </div>
-                <div class="summary-item">
+                <div class="summary_item">
                     <label>目標カロリー:</label>
-                    <span id="target_cal">{{ $meal->target_cal }} kcal</span>
+                    <span id="target_cal">{{ $user->target_cal }} kcal</span>
                 </div>
-                <div class="summary-item">
+                <div class="summary_item">
                     <label>残り摂取カロリー:</label>
-                    <span id="remaining_ingestion_cal">500 kcal</span>
+                    <span id="remaining_ingestion_cal">{{ $remaining_ingestion_cal }} kcal</span>
                 </div>
-                <div class="summary-item">
+                <div class="summary_item">
                     <div style="display: flex; flex-direction: column;">
                         <label>目標タンパク質:</label>
                         <div>
-                            <span id="sum_ingested_protein">140g(摂取)</span>
-                            <span id="target_protein">/ 200g(目標)</span>
-                            <span id="remaining_ingestion_protein">残り摂取：60g</span>
+                            <span id="sum_ingested_protein">{{ $sum_ingested_protein }}g(摂取)</span>
+                            <span id="target_protein">/ {{ $target_protein }}g(目標)</span>
+                            <span id="remaining_ingestion_protein">残り摂取：{{ $remaining_ingestion_protein }}g</span>
                         </div>
                     </div>
                     <div style="display: flex; flex-direction: column;">
                         <label>目標脂質:</label>
                         <div>
-                            <span id="sum_ingested_fat">70g(摂取)</span>
-                            <span id="target_fat">/ 100g(目標)</span>
-                            <span id="remeinng_ingestion_fat">残り摂取：30g</span>
+                            <span id="sum_ingested_fat">{{ $sum_ingested_fat }}g(摂取)</span>
+                            <span id="target_fat">/ {{ $target_fat }}g(目標)</span>
+                            <span id="remaining_ingestion_fat">残り摂取：{{ $remaining_ingestion_fat }}g</span>
                         </div>
                     </div>
                     <div style="display: flex; flex-direction: column;">
                         <label>目標炭水化物:</label>
                         <div>
-                            <span id="sum_ingested_carbo">100g(摂取)</span>
-                            <span id="target_carbo">/ 150g(目標)</span>
-                            <span id="remaining_ingestion_carbo">残り摂取：50g</span>
+                            <span id="sum_ingested_carbo">{{ $sum_ingested_carbo }}g(摂取)</span>
+                            <span id="target_carbo">/ {{ $target_carbo }}g(目標)</span>
+                            <span id="remaining_ingestion_carbo">残り摂取：{{ $remaining_ingestion_carbo }}g</span>
                         </div>
                     </div>
                 </div>
             </div>
-            
             <table>
                 <thead>
                     <tr>
@@ -121,23 +120,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>オムライス</td>
-                        <td>500</td>
-                        <td>20</td>
-                        <td>25</td>
-                        <td>50</td>
-                        <td>2024-04-12 12:30</td>
-                    </tr>
-                    <tr>
-                        <td>サラダ</td>
-                        <td>100</td>
-                        <td>5</td>
-                        <td>2</td>
-                        <td>10</td>
-                        <td>2024-04-12 18:00</td>
-                    </tr>
-                    <!-- 他の食事記録も同様に追加 -->
+                    @foreach($meals as $meal)
+                        <tr>
+                            <td>{{ $meal->record_menu }}</td>
+                            <td>{{ $meal->record_cal }}</td>
+                            <td>{{ $meal->record_protein }}</td>
+                            <td>{{ $meal->record_fat }}</td>
+                            <td>{{ $meal->record_carbo }}</td>
+                            <td>{{ $meal->meal_created_at }}</td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

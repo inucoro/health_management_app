@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Health_management_Controller;
+use App\Http\Controllers\Profile_Controller;
+use App\Http\Controllers\Meal_Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,11 +17,11 @@ use App\Http\Controllers\Health_management_Controller;
 
 
 // プロフィール表示画面のルート
-Route::get('/profile', [Health_Management_Controller::class, 'showProfile'])->name('profile.show');
+Route::get('/profile', [Profile_Controller::class, 'showProfile'])->name('profile.show');
 
 // プロフィール設定画面のルート
-Route::get('/profile/profile_setting', [Health_Management_Controller::class, 'updateProfile'])->name('profile.update');
-Route::put('/profile/profile_setting', [Health_Management_Controller::class, 'updatedProfile'])->name('profile.updated');
+Route::get('/profile/profile_setting', [Profile_Controller::class, 'updateProfile'])->name('profile.update');
+Route::put('/profile/profile_setting', [Profile_Controller::class, 'updatedProfile'])->name('profile.updated');
 
 
 // Route::get('/', function() {
@@ -28,6 +29,9 @@ Route::put('/profile/profile_setting', [Health_Management_Controller::class, 'up
 // });
 
 // 食事画面のルート
+Route::get('/profile/meal', [Meal_Controller::class, 'showMeal'])->name('meal.show');
+
+
 
 // Route::get('/', function() {
 //      return view('health_managements.meal_record');
