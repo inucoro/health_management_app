@@ -132,6 +132,7 @@
                     @endforeach
                 </tbody>
             </table>
+            <a href='/profile/meal/meal_record'>食事記録</a>
         </div>
     </body>
 </html>

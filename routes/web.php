@@ -23,15 +23,12 @@ Route::get('/profile', [Profile_Controller::class, 'showProfile'])->name('profil
 Route::get('/profile/profile_setting', [Profile_Controller::class, 'updateProfile'])->name('profile.update');
 Route::put('/profile/profile_setting', [Profile_Controller::class, 'updatedProfile'])->name('profile.updated');
 
-
-// Route::get('/', function() {
-//      return view('health_managements.meal');
-// });
-
 // 食事画面のルート
 Route::get('/profile/meal', [Meal_Controller::class, 'showMeal'])->name('meal.show');
 
-
+// 食事記録画面のルート
+Route::get('/profile/meal/meal_record', [Meal_Controller::class, 'createMeal'])->name('create.meal');
+Route::post('/profile/meal/meal_record', [Meal_Controller::class, 'storeMeal'])->name('store.meal');
 
 // Route::get('/', function() {
 //      return view('health_managements.meal_record');

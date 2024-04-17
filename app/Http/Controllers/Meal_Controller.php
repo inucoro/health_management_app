@@ -67,4 +67,35 @@ class Meal_Controller extends Controller
         'meals' => $meals
         ]);
     }
+    
+    public function createMeal()
+    {
+        return view('health_managements.meal_record');
+    }
+    
+    public function storeMeal(Request $request)
+    {
+        $user = User::first(); // とりあえず最初のユーザーを取得
+        
+        // フォームから送信されたデータを受け取る
+        $data = $request->validate([
+            'record_menu' => 'required|string',
+            'record_cal' => 'required|numeric',
+            'record_protein' => 'required|numeric',
+            'record_fat' => 'required|numeric',
+            'record_carbo' => 'required|numeric',
+        ]);
+    
+        // meal_created_at フィールドの値を設定
+        $data['meal_created_at'] = now(); // 現在の日時を使用する
+        
+        // 最初のユーザーのIDをデータに追加
+        $data['user_id'] = $user->id;
+    
+        // Mealモデルの新しいインスタンスを作成し、データを追加して保存
+        $meal = Meal::create($data);
+    
+        // 食事記録画面にリダイレクトする
+        return redirect()->route('meal.show');
+    }
 }
