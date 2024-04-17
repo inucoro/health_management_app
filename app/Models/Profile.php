@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Health_management extends Model
+class Profile extends Model
 {
     // モデルが関連付けられているテーブル名を指定する
     protected $table = 'users';

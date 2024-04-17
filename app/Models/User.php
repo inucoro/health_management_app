@@ -18,11 +18,24 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
+        'name',
+        'sex',
+        'height',
+        'body_weight',
+        'age',
+        'image_path',
+        'target_body_weight',
+        'target_cal',
+        'target_protein',
+        'target_fat',
+        'target_carbo',
+        'target_movement_consumption_cal',
+        'target_sleeping_time',
+        'user_created_at',
+        'user_updated_at'
     ];
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -41,4 +54,28 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
+    //Mealに対するリレーション
+    public function meals()   
+    {
+        return $this->hasMany(Meal::class);  
+    }
+    
+    //Movementに対するリレーション
+    public function movements()   
+    {
+        return $this->hasMany(Movement::class);  
+    }
+    
+    //Body_weightに対するリレーション
+    public function body_weights()   
+    {
+        return $this->hasMany(Body_weght::class);  
+    }
+    
+    //Sleepingに対するリレーション
+    public function sleepings()   
+    {
+        return $this->hasMany(Sleeping::class);  
+    }
 }
