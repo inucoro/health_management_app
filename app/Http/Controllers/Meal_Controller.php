@@ -83,7 +83,7 @@ class Meal_Controller extends Controller
             'record_cal' => 'required|numeric',
             'record_protein' => 'required|numeric',
             'record_fat' => 'required|numeric',
-            'record_carbo' => 'required|numeric',
+            'record_carbo' => 'required|numeric'
         ]);
     
         // meal_created_at フィールドの値を設定

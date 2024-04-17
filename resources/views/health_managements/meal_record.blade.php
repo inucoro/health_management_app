@@ -67,7 +67,7 @@
     </head>
     <body>
         <div class="container">
-            <h1>食事を記録する</h1>
+            <h1>食事記録</h1>
             <form action="/profile/meal/meal_record" method="POST">
                 @csrf
                 <label for="record_menu">メニュー</label>
@@ -80,9 +80,9 @@
                 <input type="number" id="record_fat" name="record_fat" min="0" required>
                 <label for="record_carbo">炭水化物(g)</label>
                 <input type="number" id="record_carbo" name="record_carbo" min="0" required>
-                <input type="submit" value="保存">
+                <input type="submit" value="記録する">
                 <div class="footer">
-                   <a href="/profile/meal">戻る</a>
+                    <a href="/profile/meal">戻る</a>
                 </div>
             </form>
         </div>
