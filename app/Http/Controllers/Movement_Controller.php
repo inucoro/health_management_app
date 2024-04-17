@@ -30,4 +30,36 @@ class Movement_Controller extends Controller
         'movements' => $movements
         ]);
     }
+    
+    public function createMovement()
+    {
+        return view('health_managements.movement_record');
+    }
+    
+    public function storeMovement(Request $request)
+    {
+        $user = User::first(); // とりあえず最初のユーザーを取得
+        
+        // フォームから送信されたデータを受け取る
+        $data = $request->validate([
+            'record_type' => 'required|string',
+            'record_weight' => 'required|numeric',
+            'record_times' => 'required|numeric',
+            'record_sets' => 'required|numeric',
+            'record_movement_times' => 'required|string',
+            'movement_consumption_cal' => 'required|string'
+        ]);
+    
+        // movement_created_at フィールドの値を設定
+        $data['movement_created_at'] = now(); // 現在の日時を使用する
+        
+        // 最初のユーザーのIDをデータに追加
+        $data['user_id'] = $user->id;
+    
+        // Movementモデルの新しいインスタンスを作成し、データを追加して保存
+        $movement = Movement::create($data);
+    
+        // 食事記録画面にリダイレクトする
+        return redirect()->route('movement.show');
+    }
 }

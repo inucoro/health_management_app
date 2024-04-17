@@ -62,7 +62,7 @@
     </head>
     <body>
         <div class="container">
-            <h1>運動記録</h1>
+            <h1>運動</h1>
             
             <div class="summary">
                 <div class="summary-item">
@@ -82,6 +82,7 @@
                         <th>挙上回数</th>
                         <th>セット数</th>
                         <th>運動時間</th>
+                        <th>運動消費カロリー</th>
                         <th>記録日時</th>
                     </tr>
                 </thead>
@@ -93,6 +94,7 @@
                             <td>{{ $movement->record_times }}</td>
                             <td>{{ $movement->record_sets }}</td>
                             <td>{{ $movement->record_movement_times }}</td>
+                            <td>{{ $movement->movement_consumption_cal }}</td>
                             <td>{{ $movement->movement_created_at }}</td>
                         </tr>
                     @endforeach

@@ -62,7 +62,7 @@
     </head>
     <body>
         <div class="container">
-            <h1>食事記録</h1>
+            <h1>食事</h1>
             
             <div class="summary">
                 <div class="summary_item">
