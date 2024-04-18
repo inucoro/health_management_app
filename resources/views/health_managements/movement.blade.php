@@ -34,7 +34,7 @@
             .summary {
                 margin-bottom: 20px;
             }
-            .summary-item {
+            .summary_item {
                 margin-top: 10px;
                 display: flex;
                 justify-content: space-between;
@@ -42,7 +42,7 @@
                 padding: 10px;
                 border-radius: 4px;
             }
-            .summary-item label {
+            .summary_item label {
                 font-weight: bold;
             }
             table {
@@ -65,11 +65,11 @@
             <h1>運動</h1>
             
             <div class="summary">
-                <div class="summary-item">
+                <div class="summary_item">
                     <label>合計運動消費カロリー:</label>
                     <span id="movement_consumption_cal">{{ $sum_movement_consumption_cal }} kcal</span>
                 </div>
-                <div class="summary-item">
+                <div class="summary_item">
                     <label>目標運動消費カロリー:</label>
                     <span id="target_movement_consumption_cal">{{ $target_movement_consumption_cal }} kcal</span>
                 </div>
@@ -78,12 +78,13 @@
                 <thead>
                     <tr>
                         <th>運動の種目</th>
-                        <th>扱った錘の重さ</th>
-                        <th>挙上回数</th>
+                        <th>扱った錘の重さ (kg)</th>
+                        <th>挙上回数 (Reps)</th>
                         <th>セット数</th>
-                        <th>運動時間</th>
-                        <th>運動消費カロリー</th>
+                        <th>運動時間 (分)</th>
+                        <th>運動消費カロリー (kcal)</th>
                         <th>記録日時</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -96,8 +97,10 @@
                             <td>{{ $movement->record_movement_times }}</td>
                             <td>{{ $movement->movement_consumption_cal }}</td>
                             <td>{{ $movement->movement_created_at }}</td>
+                            <td><a href='/profile/movement/edit_movement/{{ $movement->id }}'>編集</a></td>
                         </tr>
                     @endforeach
+                </tbody>
             </table>
             <a href='/profile'>プロフィール</a>
             <a href='/profile/movement/movement_record'>運動記録</a>

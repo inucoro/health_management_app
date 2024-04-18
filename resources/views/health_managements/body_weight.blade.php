@@ -31,59 +31,72 @@
                 margin-bottom: 20px;
                 text-align: center;
             }
-            .record {
-                border: 1px solid #ccc;
-                border-radius: 8px;
-                padding: 20px;
+            .summary {
                 margin-bottom: 20px;
             }
-            .record p {
-                margin: 0;
-            }
-            .record-info {
+            .summary_item {
+                margin-top: 10px;
                 display: flex;
                 justify-content: space-between;
-                margin-bottom: 10px;
+                border: 1px solid #ddd;
+                padding: 10px;
+                border-radius: 4px;
             }
-            .record-info p {
-                width: 45%;
+            .summary_item label {
+                font-weight: bold;
             }
-            .previous-weight {
-                text-align: center;
+            table {
+                width: 100%;
+                border-collapse: collapse;
                 margin-bottom: 20px;
+            }
+            th, td {
+                padding: 8px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+            th {
+                background-color: #f2f2f2;
             }
         </style>
     </head>
     <body>
         <div class="container">
-            <h1>体重記録</h1>
-            <!-- 前回の体重を表記 -->
-            <div class="previous-weight">
-                <p>前回の体重: 65 kg</p>
-            </div>
-            <div class="records">
-                <div class="record">
-                    <div class="record-info">
-                        <p>体重: 65 kg</p>
-                        <p>体脂肪率: 20%</p>
-                    </div>
-                    <div class="record-info">
-                        <p>メモ: なし</p>
-                        <p>記録日時: 2024-04-12 10:30</p>
-                    </div>
+            <h1>体重</h1>
+            <div class="summary">
+                <div class="summary_item">
+                    <label>前回の体重:</label>
+                    <span id="previous_body_weight">{{ $previous_record_body_weight }} kg</span>
                 </div>
-                <div class="record">
-                    <div class="record-info">
-                        <p>体重: 63 kg</p>
-                        <p>体脂肪率: 18%</p>
-                    </div>
-                    <div class="record-info">
-                        <p>メモ: ダイエット継続中</p>
-                        <p>記録日時: 2024-04-11 11:00</p>
-                    </div>
+                <div class="summary_item">
+                    <label>目標体重:</label>
+                    <span id="target_body_weight">{{ $target_body_weight }} kg</span>
                 </div>
-                <!-- 追加の体重記録をここに追加 -->
             </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>体重 (kg)</th>
+                        <th>体脂肪率 (％)</th>
+                        <th>メモ</th>
+                        <th>記録日時</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($body_weights as $body_weight)
+                        <tr>
+                            <td>{{ $body_weight->record_body_weight }}</td>
+                            <td>{{ $body_weight->record_body_fat }}</td>
+                            <td>{{ $body_weight->record_body_weight_memo }}</td>
+                            <td>{{ $body_weight->body_weight_created_at }}</td>
+                            <td><a href='/profile/body_weight/edit_body_weight/{{ $body_weight->id }}'>編集</a></td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <a href='/profile'>プロフィール</a>
+            <a href='/profile/body_weight/body_weight_record'>体重記録</a>
         </div>
     </body>
 </html>

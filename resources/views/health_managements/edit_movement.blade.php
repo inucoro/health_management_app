@@ -4,14 +4,14 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>体重記録</title>
+        <title>運動記録編集</title>
 
         <!-- Fonts -->
         <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
         <!-- Styles -->
         <style>
-            body {
+           body {
                 font-family: Arial, sans-serif;
                 margin: 0;
                 padding: 20px;
@@ -48,15 +48,6 @@
                 border-radius: 4px;
                 border: 1px solid #ccc;
             }
-            textarea {
-                width: 100%;
-                height: 100px;
-                padding: 10px;
-                margin: 5px 0 20px 0;
-                border-radius: 5px;
-                border: 1px solid #ccc;
-                box-sizing: border-box;
-            }
             input[type="submit"] {
                 width: 100%;
                 padding: 10px 20px;
@@ -73,21 +64,31 @@
     </head>
     <body>
         <div class="container">
-            <h1>体重記録</h1>
-            <form action="/profile/body_weight/body_weight_record" method="POST">
+            <h1>運動記録編集</h1>
+            <form action="/profile/movement/edit_movement" method="POST">
                 @csrf
-                <label for="record_body_weight">体重 (kg):</label>
-                <input type="number" step="0.1" id="record_body_weight" name="record_body_weight" required>
+                @method('PUT')
+                <label for="record_type">運動の種目:</label>
+                <input type="text" id="record_type" name="record_type" value="{{ $movement->record_type }}" required>
                 
-                <label for="record_body_fat">体脂肪率 (%):</label>
-                <input type="number" step="0.1" id="record_body_fat" name="record_body_fat" required>
+                <label for="record_weight">重量 (kg):</label>
+                <input type="number" id="record_weight" name="record_weight" value="{{ $movement->record_weight }}" required>
                 
-                <label for="record_body_weight_memo">メモ:</label>
-                <textarea id="record_body_weight_memo" name="record_body_weight_memo" placeholder="メモを入力してください"></textarea>
+                <label for="record_times">挙上回数 (Reps):</label>
+                <input type="number" id="record_times" name="record_times" value="{{ $movement->record_times }}" required>
                 
-                <input type="submit" value="記録する">
+                <label for="record_sets">セット数:</label>
+                <input type="number" id="record_sets" name="record_sets" value="{{ $movement->record_sets }}" required>
+                
+                <label for="record_movement_times">運動時間 (分):</label>
+                <input type="number" id="record_movement_times" name="record_movement_times" value="{{ $movement->record_movement_times }}" required>
+                
+                <label for="movement_consumption_cal">運動消費カロリー (kcal):</label>
+                <input type="number" id="movement_consumption_cal" name="movement_consumption_cal" value="{{ $movement->movement_consumption_cal }}" required>
+                
+                <input type="submit" value="更新する">
                 <div class="footer">
-                    <a href="/profile/body_weight">戻る</a>
+                    <a href="/profile/movement">戻る</a>
                 </div>
             </form>
         </div>

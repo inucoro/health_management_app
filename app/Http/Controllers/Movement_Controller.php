@@ -59,7 +59,37 @@ class Movement_Controller extends Controller
         // Movementモデルの新しいインスタンスを作成し、データを追加して保存
         $movement = Movement::create($data);
     
-        // 食事記録画面にリダイレクトする
+        // 運動記録画面にリダイレクトする
+        return redirect()->route('movement.show');
+    }
+    
+    public function editMovement($id)
+    {
+        // 特定のIDに対応する運動データを取得
+        $movement = Movement::findOrFail($id);
+    
+        // 編集画面にデータを渡して表示
+        return view('health_managements.edit_movement', ['movement' => $movement]);
+    }
+    
+    public function updateMovement(Request $request)
+    {
+        $user = User::first(); // とりあえず最初のユーザーを取得
+        
+        // フォームから送信されたデータを受け取る
+        $data = $request->validate([
+            'record_body_weight' => 'required|numeric',
+            'record_body_fat' => 'required|numeric',
+            'record_body_weight_memo' => 'string'
+        ]);
+        
+        // 最初のユーザーのIDをデータに追加
+        $data['user_id'] = $user->id;
+    
+        // 特定のIDに対応する運動データを取得し、更新する
+        $movement = Movement::where('id', $id)->where('user_id', $user->id)->update($data);
+    
+        // 運動表示画面にリダイレクトする
         return redirect()->route('movement.show');
     }
 }

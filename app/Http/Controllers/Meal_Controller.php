@@ -98,4 +98,36 @@ class Meal_Controller extends Controller
         // 食事記録画面にリダイレクトする
         return redirect()->route('meal.show');
     }
+    
+    public function editMeal($id)
+    {
+        // 特定のIDに対応する食事データを取得
+        $meal = Meal::findOrFail($id);
+    
+        // 編集画面にデータを渡して表示
+        return view('health_managements.edit_meal', ['meal' => $meal]);
+    }
+    
+    public function updateMeal(Request $request)
+    {
+        $user = User::first(); // とりあえず最初のユーザーを取得
+        
+        // フォームから送信されたデータを受け取る
+        $data = $request->validate([
+            'record_menu' => 'required|string',
+            'record_cal' => 'required|numeric',
+            'record_protein' => 'required|numeric',
+            'record_fat' => 'required|numeric',
+            'record_carbo' => 'required|numeric'
+        ]);
+        
+        // 最初のユーザーのIDをデータに追加
+        $data['user_id'] = $user->id;
+    
+        // 特定のIDに対応する食事データを取得し、更新する
+        $meal = Meal::where('id', $id)->where('user_id', $user->id)->update($data);
+    
+        // 食事表示画面にリダイレクトする
+        return redirect()->route('meal.show');
+    }
 }
