@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>体重記録</title>
+        <title>睡眠記録</title>
 
         <!-- Fonts -->
         <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -35,18 +35,15 @@
                 margin-bottom: 20px;
             }
             label {
-                display: block;
-                margin-bottom: 5px;
-                color: #333;
                 font-weight: bold;
             }
-            input[type="text"],
-            input[type="number"] {
+            input[type="time"] {
                 width: 100%;
                 padding: 10px;
-                margin-bottom: 10px;
-                border-radius: 4px;
+                margin: 5px 0 20px 0;
+                border-radius: 5px;
                 border: 1px solid #ccc;
+                box-sizing: border-box;
             }
             textarea {
                 width: 100%;
@@ -73,21 +70,19 @@
     </head>
     <body>
         <div class="container">
-            <h1>体重記録</h1>
-            <form action="/profile/body_weight/body_weight_record" method="POST">
+            <h1>睡眠記録</h1>
+            <form action="/profile/sleeping/edit_sleeping" method="POST">
                 @csrf
-                <label for="record_body_weight">体重 (kg):</label>
-                <input type="number" step="0.1" id="record_body_weight" name="record_body_weight" required>
+                @method('PUT')
+                <label for="record_sleeping_time">睡眠時間:</label>
+                <input type="time" id="record_sleeping_time" name="record_sleeping_time" value="{{ $sleeping->record_sleeping_time }}" required>
                 
-                <label for="record_body_fat">体脂肪率 (%):</label>
-                <input type="number" step="0.1" id="record_body_fat" name="record_body_fat" required>
+                <label for="record_sleeping_memo">メモ:</label>
+                <textarea id="record_sleeping_memo" name="record_sleeping_memo" placeholder="メモを入力してください">{{ old('record_sleeping_memo', $sleeping->record_sleeping_memo) }}</textarea>
                 
-                <label for="record_body_weight_memo">メモ:</label>
-                <textarea id="record_body_weight_memo" name="record_body_weight_memo" placeholder="メモを入力してください"></textarea>
-                
-                <input type="submit" value="記録する">
+                <input type="submit" value="更新する">
                 <div class="footer">
-                    <a href="/profile/body_weight">戻る</a>
+                    <a href="/profile/sleeping">戻る</a>
                 </div>
             </form>
         </div>

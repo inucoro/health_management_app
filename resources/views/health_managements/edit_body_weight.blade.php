@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>体重記録</title>
+        <title>体重記録編集</title>
 
         <!-- Fonts -->
         <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -73,19 +73,20 @@
     </head>
     <body>
         <div class="container">
-            <h1>体重記録</h1>
-            <form action="/profile/body_weight/body_weight_record" method="POST">
+            <h1>体重記録編集</h1>
+            <form action="/profile/body_weight/edit_body_weight" method="POST">
                 @csrf
+                @method('PUT')
                 <label for="record_body_weight">体重 (kg):</label>
-                <input type="number" step="0.1" id="record_body_weight" name="record_body_weight" required>
+                <input type="number" step="0.1" id="record_body_weight" name="record_body_weight" value="{{ $body_weight->record_body_weight }}" required>
                 
                 <label for="record_body_fat">体脂肪率 (%):</label>
-                <input type="number" step="0.1" id="record_body_fat" name="record_body_fat" required>
+                <input type="number" step="0.1" id="record_body_fat" name="record_body_fat" value="{{ $body_weight->record_body_fat }}" required>
                 
                 <label for="record_body_weight_memo">メモ:</label>
-                <textarea id="record_body_weight_memo" name="record_body_weight_memo" placeholder="メモを入力してください"></textarea>
+                <textarea id="record_body_weight_memo" name="record_body_weight_memo" placeholder="メモを入力してください">{{ old('record_body_weight_memo', $body_weight->record_body_weight_memo) }}</textarea>
                 
-                <input type="submit" value="記録する">
+                <input type="submit" value="更新する">
                 <div class="footer">
                     <a href="/profile/body_weight">戻る</a>
                 </div>

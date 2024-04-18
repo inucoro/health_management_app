@@ -32,36 +32,33 @@
                 text-align: center;
             }
             form {
-                display: flex;
-                flex-direction: column;
+                margin-bottom: 20px;
             }
             label {
-                font-weight: bold;
+                display: block;
                 margin-bottom: 5px;
                 color: #333;
+                font-weight: bold;
             }
             input[type="text"],
-            input[type="number"],
-            select {
-                padding: 8px;
-                margin-top: 5px;
-                border: 1px solid #ccc;
+            input[type="number"] {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 10px;
                 border-radius: 4px;
-                box-sizing: border-box;
-                font-size: 16px;
+                border: 1px solid #ccc;
             }
             input[type="submit"] {
-                background-color: #4CAF50;
-                color: white;
+                width: 100%;
                 padding: 10px 20px;
                 border: none;
                 border-radius: 4px;
+                background-color: #007bff;
+                color: #fff;
                 cursor: pointer;
-                font-size: 16px;
-                margin-top: 10px;
             }
             input[type="submit"]:hover {
-                background-color: #45a049;
+                background-color: #0056b3;
             }
         </style>
     </head>

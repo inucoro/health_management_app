@@ -117,6 +117,7 @@
                         <th>脂質(g)</th>
                         <th>炭水化物(g)</th>
                         <th>日時</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -128,6 +129,7 @@
                             <td>{{ $meal->record_fat }}</td>
                             <td>{{ $meal->record_carbo }}</td>
                             <td>{{ $meal->meal_created_at }}</td>
+                            <td><a href='/profile/meal/edit_meal/{{ $meal->id }}'>編集</a></td>
                         </tr>
                     @endforeach
                 </tbody>
