@@ -74,7 +74,7 @@
     <body>
         <div class="container">
             <h1>体重記録編集</h1>
-            <form action="/profile/body_weight/edit_body_weight" method="POST">
+            <form action="{{ route('body_weight.update', ['id' => $body_weight->id]) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <label for="record_body_weight">体重 (kg):</label>

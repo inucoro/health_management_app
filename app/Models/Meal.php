@@ -33,6 +33,13 @@ class Meal extends Model
         'remeinng_ingestion_carbo'
     ];
     
+    //ペジネーション
+    public function getPaginateByLimit(int $limit_count = 7)
+    {
+        // meal_created_atで降順に並べたあと、limitで件数制限をかける
+        return $this->orderBy('meal_created_at', 'DESC')->paginate($limit_count);
+    }
+    
     //Userに対するリレーション
     public function user()
     {

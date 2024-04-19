@@ -20,7 +20,7 @@ class Movement_Controller extends Controller
         $target_movement_consumption_cal = $user->target_movement_consumption_cal; //目標運動消費カロリーの取得
         
         //運動記録を取得
-        $movements = Movement::where('user_id', $userId)->get();
+        $movements = Movement::where('user_id', $userId)->orderBy('movement_created_at', 'desc')->paginate(7); // 7件ごとにページネーション;
         
         // ビューにデータを渡して表示
         return view('health_managements.movement', 
@@ -72,15 +72,18 @@ class Movement_Controller extends Controller
         return view('health_managements.edit_movement', ['movement' => $movement]);
     }
     
-    public function updateMovement(Request $request)
+    public function updateMovement(Request $request, $id)
     {
         $user = User::first(); // とりあえず最初のユーザーを取得
         
         // フォームから送信されたデータを受け取る
         $data = $request->validate([
-            'record_body_weight' => 'required|numeric',
-            'record_body_fat' => 'required|numeric',
-            'record_body_weight_memo' => 'string'
+            'record_type' => 'required|string',
+            'record_weight' => 'required|numeric',
+            'record_times' => 'required|numeric',
+            'record_sets' => 'required|numeric',
+            'record_movement_times' => 'required|string',
+            'movement_consumption_cal' => 'required|string'
         ]);
         
         // 最初のユーザーのIDをデータに追加
@@ -91,5 +94,14 @@ class Movement_Controller extends Controller
     
         // 運動表示画面にリダイレクトする
         return redirect()->route('movement.show');
+    }
+    
+    public function deleteMovement($id)
+    {
+        $movement = Movement::findOrFail($id);
+        $movement->delete();
+        
+        // 運動表示画面にリダイレクトする
+        return redirect()->route('movement.show')->with('success', '運動記録が削除されました');
     }
 }

@@ -85,6 +85,7 @@
                         <th>運動消費カロリー (kcal)</th>
                         <th>記録日時</th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -98,12 +99,31 @@
                             <td>{{ $movement->movement_consumption_cal }}</td>
                             <td>{{ $movement->movement_created_at }}</td>
                             <td><a href='/profile/movement/edit_movement/{{ $movement->id }}'>編集</a></td>
+                            <td>
+                                <form action="/profile/movement/{{ $movement->id }}" id="form_{{ $movement->id }}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" onclick="deleteMovement({{ $movement->id }})">削除</button>
+                                </form>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+            <div class='paginate'>
+                {{ $movements->links() }}
+            </div>
             <a href='/profile'>プロフィール</a>
             <a href='/profile/movement/movement_record'>運動記録</a>
         </div>
+        <script>
+            function deleteMovement(id) {
+                'use strict'
+        
+                if (confirm('削除すると復元できません。\n本当に削除しますか？')) {
+                    document.getElementById(`form_${id}`).submit();
+                }
+            }
+        </script>
     </body>
 </html>

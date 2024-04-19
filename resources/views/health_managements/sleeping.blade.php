@@ -66,7 +66,7 @@
              <div class="summary">
                 <div class="summary_item">
                     <label>前回の睡眠時間：</label>
-                    <span id="previous_sleeping">7時間</span>
+                    <span id="previous_sleeping">{{ $previous_record_sleeping_time }}</span>
                 </div>
             </div>
             <table>
@@ -75,6 +75,7 @@
                         <th>睡眠時間</th>
                         <th>メモ</th>
                         <th>記録日時</th>
+                        <th></th>
                         <th></th>
                     </tr>
                 </thead>
@@ -85,12 +86,31 @@
                             <td>{{ $sleeping->record_sleeping_memo }}</td>
                             <td>{{ $sleeping->sleeping_created_at }}</td>
                             <td><a href='/profile/sleeping/edit_sleeping/{{ $sleeping->id }}'>編集</a></td>
+                            <td>
+                                <form action="/profile/sleeping/{{ $sleeping->id }}" id="form_{{ $sleeping->id }}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" onclick="deleteSleeping({{ $sleeping->id }})">削除</button>
+                                </form>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+            <div class='paginate'>
+                {{ $sleepings->links() }}
+            </div>
             <a href='/profile'>プロフィール</a>
             <a href='/profile/sleeping/sleeping_record'>睡眠記録</a>
         </div>
+        <script>
+            function deleteSleeping(id) {
+                'use strict'
+        
+                if (confirm('削除すると復元できません。\n本当に削除しますか？')) {
+                    document.getElementById(`form_${id}`).submit();
+                }
+            }
+        </script>
     </body>
 </html>

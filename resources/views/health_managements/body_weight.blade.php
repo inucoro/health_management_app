@@ -81,6 +81,7 @@
                         <th>メモ</th>
                         <th>記録日時</th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -91,12 +92,31 @@
                             <td>{{ $body_weight->record_body_weight_memo }}</td>
                             <td>{{ $body_weight->body_weight_created_at }}</td>
                             <td><a href='/profile/body_weight/edit_body_weight/{{ $body_weight->id }}'>編集</a></td>
+                            <td>
+                                <form action="/profile/body_weight/{{ $body_weight->id }}" id="form_{{ $body_weight->id }}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" onclick="deleteBody_weight({{ $body_weight->id }})">削除</button>
+                                </form>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+            <div class='paginate'>
+                {{ $body_weights->links() }}
+            </div>
             <a href='/profile'>プロフィール</a>
             <a href='/profile/body_weight/body_weight_record'>体重記録</a>
         </div>
+        <script>
+            function deleteBody_weight(id) {
+                'use strict'
+        
+                if (confirm('削除すると復元できません。\n本当に削除しますか？')) {
+                    document.getElementById(`form_${id}`).submit();
+                }
+            }
+        </script>
     </body>
 </html>

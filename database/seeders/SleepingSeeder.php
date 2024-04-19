@@ -17,9 +17,9 @@ class SleepingSeeder extends Seeder
     public function run()
     {
         DB::table('sleepings')->insert([
-            'id' => '1',
+            'id' => '2',
             'user_id' => '1',
-            'record_sleeping_time' => '8',
+            'record_sleeping_time' => '12:10:00',
             'record_sleeping_memo' => '昨日の夜にスマホを触った。',
             'sleeping_created_at' => new DateTime(),
             'sleeping_updated_at' => new DateTime(),
