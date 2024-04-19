@@ -47,7 +47,8 @@ class Meal_Controller extends Controller
         $remaining_ingestion_carbo = $target_carbo - $sum_ingested_carbo; //残り炭水化物の計算
         
         //食事記録を取得
-        $meals = Meal::where('user_id', $userId)->get();
+        $meals = Meal::where('user_id', $userId)->orderBy('meal_created_at', 'desc')->paginate(7); // 7件ごとにページネーション;
+
 
         // ビューにデータを渡して表示
         return view('health_managements.meal', 
@@ -108,7 +109,7 @@ class Meal_Controller extends Controller
         return view('health_managements.edit_meal', ['meal' => $meal]);
     }
     
-    public function updateMeal(Request $request)
+    public function updateMeal(Request $request, $id)
     {
         $user = User::first(); // とりあえず最初のユーザーを取得
         
@@ -129,5 +130,14 @@ class Meal_Controller extends Controller
     
         // 食事表示画面にリダイレクトする
         return redirect()->route('meal.show');
+    }
+    
+    public function deleteMeal($id)
+    {
+        $meal = Meal::findOrFail($id);
+        $meal->delete();
+        
+        // 食事表示画面にリダイレクトする
+        return redirect()->route('meal.show')->with('success', '食事記録が削除されました');
     }
 }

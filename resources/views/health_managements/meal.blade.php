@@ -118,6 +118,7 @@
                         <th>炭水化物(g)</th>
                         <th>日時</th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -130,12 +131,31 @@
                             <td>{{ $meal->record_carbo }}</td>
                             <td>{{ $meal->meal_created_at }}</td>
                             <td><a href='/profile/meal/edit_meal/{{ $meal->id }}'>編集</a></td>
+                            <td>
+                                <form action="/profile/meal/{{ $meal->id }}" id="form_{{ $meal->id }}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" onclick="deleteMeal({{ $meal->id }})">削除</button>
+                                </form>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+            <div class='paginate'>
+                {{ $meals->links() }}
+            </div>
             <a href='/profile'>プロフィール</a>
             <a href='/profile/meal/meal_record'>食事記録</a>
         </div>
+        <script>
+            function deleteMeal(id) {
+                'use strict'
+        
+                if (confirm('削除すると復元できません。\n本当に削除しますか？')) {
+                    document.getElementById(`form_${id}`).submit();
+                }
+            }
+        </script>
     </body>
 </html>

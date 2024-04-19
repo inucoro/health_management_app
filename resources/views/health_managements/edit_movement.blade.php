@@ -65,7 +65,7 @@
     <body>
         <div class="container">
             <h1>運動記録編集</h1>
-            <form action="/profile/movement/edit_movement" method="POST">
+            <form action="{{ route('movement.update', ['id' => $movement->id]) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <label for="record_type">運動の種目:</label>

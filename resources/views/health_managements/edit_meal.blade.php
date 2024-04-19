@@ -65,7 +65,7 @@
     <body>
         <div class="container">
             <h1>食事記録編集</h1>
-            <form action="/profile/meal/edit_meal" method="POST">
+            <form action="{{ route('meal.update', ['id' => $meal->id]) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <label for="record_menu">メニュー</label>

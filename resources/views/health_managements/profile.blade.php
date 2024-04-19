@@ -136,6 +136,7 @@
             </div>
             <div class="profile_buttons">
                 <button onclick="location.href='/profile/profile_setting'">プロフィール設定</button>
+                <button onclick="location.href='/profile/calender'">カレンダー</button><br /><br />
                 <button onclick="location.href='/profile/meal/meal_record'">食事記録</button>
                 <button onclick="location.href='/profile/movement/movement_record'">運動記録</button>
                 <button onclick="location.href='/profile/body_weight/body_weight_record'">体重記録</button>

@@ -71,7 +71,7 @@
     <body>
         <div class="container">
             <h1>睡眠記録</h1>
-            <form action="/profile/sleeping/edit_sleeping" method="POST">
+            <form action="{{ route('sleeping.update', ['id' => $sleeping->id]) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <label for="record_sleeping_time">睡眠時間:</label>

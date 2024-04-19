@@ -26,6 +26,13 @@ class Movement extends Model
         'favorite_movement_times'
     ];
     
+    //ペジネーション
+    public function getPaginateByLimit(int $limit_count = 7)
+    {
+        // movement_created_atで降順に並べたあと、limitで件数制限をかける
+        return $this->orderBy('movement_created_at', 'DESC')->paginate($limit_count);
+    }
+    
     //Userに対するリレーション
     public function user()
     {

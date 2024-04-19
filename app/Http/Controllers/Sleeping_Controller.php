@@ -17,17 +17,20 @@ class Sleeping_Controller extends Controller
         
         $target_sleeping_time = $user->target_sleeping_time; //目標睡眠時間の取得
         
-        //睡眠記録を取得
-        $sleepings = Sleeping::where('user_id', $userId)->get();
+        // 最新の睡眠記録を取得
+        $sleepings = Sleeping::where('user_id', $userId)->orderBy('created_at', 'desc')->paginate(7); // 7件ごとにページネーション
         
-        //前回の睡眠時間を取得
-        // $previous_sleeping = Sleeping::
+        // 最新の睡眠記録以外を取得
+        $previous_sleeping_time = $sleepings->slice(1)->first();
+        $previous_record_sleeping_time = $previous_sleeping_time->record_sleeping_time;
         
         // ビューにデータを渡して表示
         return view('health_managements.sleeping', 
         ['user' => $user, 
         'target_sleeping_time' => $target_sleeping_time,
-        'sleepings' => $sleepings
+        'sleepings' => $sleepings,
+        'previous_sleeping_time' => $previous_sleeping_time,
+        'previous_record_sleeping_time' => $previous_record_sleeping_time
         ]);
     }
     
@@ -68,15 +71,14 @@ class Sleeping_Controller extends Controller
         return view('health_managements.edit_sleeping', ['sleeping' => $sleeping]);
     }
     
-    public function updateSleeping(Request $request)
+    public function updateSleeping(Request $request, $id)
     {
         $user = User::first(); // とりあえず最初のユーザーを取得
         
         // フォームから送信されたデータを受け取る
         $data = $request->validate([
-            'record_body_weight' => 'required|numeric',
-            'record_body_fat' => 'required|numeric',
-            'record_body_weight_memo' => 'string'
+            'record_sleeping_time' => 'required',
+            'record_sleeping_memo' => 'string'
         ]);
         
         // 最初のユーザーのIDをデータに追加
@@ -87,5 +89,14 @@ class Sleeping_Controller extends Controller
     
         // 睡眠表示画面にリダイレクトする
         return redirect()->route('sleeping.show');
+    }
+    
+    public function deleteSleeping($id)
+    {
+        $sleeping = Sleeping::findOrFail($id);
+        $sleeping->delete();
+        
+        // 睡眠表示画面にリダイレクトする
+        return redirect()->route('sleeping.show')->with('success', '睡眠記録が削除されました');
     }
 }
