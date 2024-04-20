@@ -73,8 +73,11 @@
             <h1>睡眠記録</h1>
             <form action="/profile/sleeping/sleeping_record" method="POST">
                 @csrf
-                <label for="record_sleeping_time">睡眠時間:</label>
-                <input type="time" id="record_sleeping_time" name="record_sleeping_time" required>
+                <label for="record_bedtime">就寝時間:</label>
+                <input type="time" id="record_bedtime" name="record_bedtime" required>
+                
+                <label for="record_wake_up_time">起床時間:</label>
+                <input type="time" id="record_waka_up_time" name="record_wake_up_time" required>
                 
                 <label for="record_sleeping_memo">メモ:</label>
                 <textarea id="record_sleeping_memo" name="record_sleeping_memo" placeholder="メモを入力してください"></textarea>

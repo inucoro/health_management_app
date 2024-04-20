@@ -47,7 +47,7 @@ class Body_weight_Controller extends Controller
         $data = $request->validate([
             'record_body_weight' => 'required|numeric',
             'record_body_fat' => 'required|numeric',
-            'record_body_weight_memo' => 'string'
+            'record_body_weight_memo' => 'nullable|string'
         ]);
     
         // body_weight_created_at フィールドの値を設定
@@ -80,7 +80,7 @@ class Body_weight_Controller extends Controller
         $data = $request->validate([
             'record_body_weight' => 'required|numeric',
             'record_body_fat' => 'required|numeric',
-            'record_body_weight_memo' => 'string'
+            'record_body_weight_memo' => 'nullable|string'
         ]);
         
         // 最初のユーザーのIDをデータに追加

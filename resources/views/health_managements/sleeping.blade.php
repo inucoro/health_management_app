@@ -65,14 +65,17 @@
             <h1>睡眠</h1>
              <div class="summary">
                 <div class="summary_item">
+                    <label>今日の睡眠時間：</label>
+                    <span id="today_sleeping_time">{{ $today_sleeping_time }}</span>
                     <label>前回の睡眠時間：</label>
-                    <span id="previous_sleeping">{{ $previous_record_sleeping_time }}</span>
+                    <span id="previous_record_sleeping_time">{{ $previous_record_sleeping_time }}</span>
                 </div>
             </div>
             <table>
                 <thead>
                     <tr>
-                        <th>睡眠時間</th>
+                        <th>就寝時間</th>
+                        <th>起床時間</th>
                         <th>メモ</th>
                         <th>記録日時</th>
                         <th></th>
@@ -82,7 +85,8 @@
                 <tbody>
                     @foreach($sleepings as $sleeping)
                         <tr>
-                            <td>{{ $sleeping->record_sleeping_time }}</td>
+                            <td>{{ $sleeping->record_bedtime }}</td>
+                            <td>{{ $sleeping->record_wake_up_time }}</td>
                             <td>{{ $sleeping->record_sleeping_memo }}</td>
                             <td>{{ $sleeping->sleeping_created_at }}</td>
                             <td><a href='/profile/sleeping/edit_sleeping/{{ $sleeping->id }}'>編集</a></td>
