@@ -12,6 +12,8 @@ class Sleeping extends Model
     protected $fillable = [
         'user_id',
         'record_sleeping_time',
+        'record_wake_up_time',
+        'record_bedtime',
         'record_sleeping_memo',
         'sleeping_created_at',
         'sleeping_updated_at'

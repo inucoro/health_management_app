@@ -74,8 +74,11 @@
             <form action="{{ route('sleeping.update', ['id' => $sleeping->id]) }}" method="POST">
                 @csrf
                 @method('PUT')
-                <label for="record_sleeping_time">睡眠時間:</label>
-                <input type="time" id="record_sleeping_time" name="record_sleeping_time" value="{{ $sleeping->record_sleeping_time }}" required>
+                <label for="record_bedtime">就寝時間:</label>
+                <input type="time" id="record_bedtime" name="record_bedtime" value="{{ $sleeping->record_bedtime }}" required>
+                
+                <label for="record_wake_up_time">起床時間:</label>
+                <input type="time" id="record_wake_up_time" name="record_wake_up_time" value="{{ $sleeping->record_wake_up_time }}" required>
                 
                 <label for="record_sleeping_memo">メモ:</label>
                 <textarea id="record_sleeping_memo" name="record_sleeping_memo" placeholder="メモを入力してください">{{ old('record_sleeping_memo', $sleeping->record_sleeping_memo) }}</textarea>
