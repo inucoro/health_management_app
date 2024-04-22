@@ -27,5 +27,17 @@ class Body_weightSeeder extends Seeder
             'created_at' => new DateTime(),
             'updated_at' => new DateTime(),
          ]);
+         
+         DB::table('body_weights')->insert([
+            'id' => '2',
+            'user_id' => '1',
+            'record_body_weight' => '63',
+            'record_body_fat' => '12',
+            'record_body_weight_memo' => '昨日は少し食べ過ぎた。',
+            'body_weight_created_at' => new DateTime(),
+            'body_weight_updated_at' => new DateTime(),
+            'created_at' => new DateTime(),
+            'updated_at' => new DateTime(),
+         ]);
     }
 }

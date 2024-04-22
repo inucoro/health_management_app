@@ -80,7 +80,7 @@
                 <input type="number" id="record_carbo" name="record_carbo" min="0" value="{{ $meal->record_carbo }}" required>
                 <input type="submit" value="更新する">
                 <div class="footer">
-                    <a href="/profile/meal">戻る</a>
+                    <a href="/myprofile/meal">戻る</a>
                 </div>
             </form>
         </div>

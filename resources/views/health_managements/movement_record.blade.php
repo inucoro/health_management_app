@@ -65,7 +65,7 @@
     <body>
         <div class="container">
             <h1>運動記録</h1>
-            <form action="/profile/movement/movement_record" method="POST">
+            <form action="/myprofile/movement/movement_record" method="POST">
                 @csrf
                 <label for="record_type">運動の種目:</label>
                 <input type="text" id="record_type" name="record_type" required>
@@ -87,7 +87,7 @@
                 
                 <input type="submit" value="記録する">
                 <div class="footer">
-                    <a href="/profile/movement">戻る</a>
+                    <a href="/myprofile/movement">戻る</a>
                 </div>
             </form>
         </div>

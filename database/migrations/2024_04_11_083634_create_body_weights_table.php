@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->integer('record_body_weight');
             $table->integer('record_body_fat');
-            $table->string('record_body_weight_memo');
+            $table->string('record_body_weight_memo')->nullable();
             $table->timestamp('body_weight_created_at')->nullable();
             $table->timestamp('body_weight_updated_at')->nullable();
             $table->timestamps();

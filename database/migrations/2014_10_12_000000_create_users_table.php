@@ -15,19 +15,19 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('sex');
-            $table->integer('height');
-            $table->integer('body_weight');
-            $table->integer('age');
+            $table->string('name')->default('太郎');
+            $table->string('sex')->default('male');
+            $table->integer('height')->default('170');
+            $table->integer('body_weight')->default('60');
+            $table->integer('age')->default('20');
             $table->string('image_path')->nullable();
-            $table->integer('target_body_weight');
-            $table->integer('target_cal');
-            $table->integer('target_protein');
-            $table->integer('target_fat');
-            $table->integer('target_carbo');
-            $table->integer('target_movement_comsumption_cal');
-            $table->integer('target_sleeping_time');
+            $table->integer('target_body_weight')->default('70');
+            $table->integer('target_cal')->default('2000');
+            $table->integer('target_protein')->default('130');
+            $table->integer('target_fat')->default('60');
+            $table->integer('target_carbo')->default('300');
+            $table->integer('target_movement_consumption_cal')->default('500');
+            $table->integer('target_sleeping_time')->default('8');
             $table->timestamp('user_created_at')->nullable();
             $table->timestamp('user_updated_at')->nullable();
             $table->string('email')->unique();

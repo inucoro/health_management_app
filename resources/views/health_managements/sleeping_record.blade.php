@@ -71,7 +71,7 @@
     <body>
         <div class="container">
             <h1>睡眠記録</h1>
-            <form action="/profile/sleeping/sleeping_record" method="POST">
+            <form action="/myprofile/sleeping/sleeping_record" method="POST">
                 @csrf
                 <label for="record_bedtime">就寝時間:</label>
                 <input type="time" id="record_bedtime" name="record_bedtime" required>
@@ -84,7 +84,7 @@
                 
                 <input type="submit" value="記録する">
                 <div class="footer">
-                    <a href="/profile/sleeping">戻る</a>
+                    <a href="/myprofile/sleeping">戻る</a>
                 </div>
             </form>
         </div>

@@ -89,9 +89,9 @@
                             <td>{{ $sleeping->record_wake_up_time }}</td>
                             <td>{{ $sleeping->record_sleeping_memo }}</td>
                             <td>{{ $sleeping->sleeping_created_at }}</td>
-                            <td><a href='/profile/sleeping/edit_sleeping/{{ $sleeping->id }}'>編集</a></td>
+                            <td><a href='/myprofile/sleeping/edit_sleeping/{{ $sleeping->id }}'>編集</a></td>
                             <td>
-                                <form action="/profile/sleeping/{{ $sleeping->id }}" id="form_{{ $sleeping->id }}" method="post">
+                                <form action="/myprofile/sleeping/{{ $sleeping->id }}" id="form_{{ $sleeping->id }}" method="post">
                                     @csrf
                                     @method('DELETE')
                                     <button type="button" onclick="deleteSleeping({{ $sleeping->id }})">削除</button>
@@ -104,8 +104,8 @@
             <div class='paginate'>
                 {{ $sleepings->links() }}
             </div>
-            <a href='/profile'>プロフィール</a>
-            <a href='/profile/sleeping/sleeping_record'>睡眠記録</a>
+            <a href='/myprofile'>プロフィール</a>
+            <a href='/myprofile/sleeping/sleeping_record'>睡眠記録</a>
         </div>
         <script>
             function deleteSleeping(id) {

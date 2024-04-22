@@ -5,26 +5,30 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Sleeping;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class Sleeping_Controller extends Controller
 {
     public function showSleeping()
     {
         // モデルを使用してデータを取得
-        $user = User::first(); // とりあえず最初のユーザーを取得
+        $user = Auth::user(); // ログインしているユーザーを取得
         
-        $userId = $user->id; //最初のユーザーidの取得
+        $userId = $user->id; //ログインユーザーidの取得
         
         $target_sleeping_time = $user->target_sleeping_time; //目標睡眠時間の取得
         
         // 最新の睡眠記録を取得
         $sleepings = Sleeping::where('user_id', $userId)->orderBy('created_at', 'desc')->paginate(7); // 7件ごとにページネーション
         
-        // 最新の睡眠記録以外を取得
-        $previous_sleeping_time = $sleepings->slice(1)->first();
-        
-        // 前回の睡眠時間をフォーマットする
-        $previous_record_sleeping_time = $this->formatSleepingTime($previous_sleeping_time->record_sleeping_time);
+        // 直近の睡眠記録を取得
+        $latest_sleeping_records = Sleeping::where('user_id', $userId)->orderBy('created_at', 'desc')->take(2)->get(); // 直近の2つの記録を取得
+
+        // 直近の一つ前の睡眠記録を取得
+        $previous_sleeping_record = $latest_sleeping_records->count() > 1 ? $latest_sleeping_records[1] : null;
+
+        // 直近の一つ前の睡眠時間をフォーマット
+        $previous_record_sleeping_time = $previous_sleeping_record ? $this->formatSleepingTime($previous_sleeping_record->record_sleeping_time) : '睡眠時間が記録されていません';
         
         // 今回の睡眠時間を計算
         $today_sleeping_time = $this->calculateTodaySleepingTime();
@@ -34,9 +38,8 @@ class Sleeping_Controller extends Controller
             'user' => $user, 
             'target_sleeping_time' => $target_sleeping_time,
             'sleepings' => $sleepings,
-            'previous_sleeping_time' => $previous_sleeping_time,
-            'previous_record_sleeping_time' => $previous_record_sleeping_time,
             'today_sleeping_time' => $today_sleeping_time,
+            'previous_record_sleeping_time' => $previous_record_sleeping_time,
         ]);
     }
     
@@ -57,7 +60,7 @@ class Sleeping_Controller extends Controller
     
     public function storeSleeping(Request $request)
     {
-        $user = User::first(); // とりあえず最初のユーザーを取得
+        $user = Auth::user(); // ログインしているユーザーを取得
         
         // フォームから送信されたデータを受け取る
         $data = $request->validate([
@@ -74,7 +77,7 @@ class Sleeping_Controller extends Controller
         // sleeping_created_at フィールドの値を設定
         $data['sleeping_created_at'] = now(); // 現在の日時を使用する
         
-        // 最初のユーザーのIDをデータに追加
+        // ログインユーザーのIDをデータに追加
         $data['user_id'] = $user->id;
         
         // 睡眠時間をデータに追加
@@ -98,7 +101,7 @@ class Sleeping_Controller extends Controller
     
     public function updateSleeping(Request $request, $id)
     {
-        $user = User::first(); // とりあえず最初のユーザーを取得
+        $user = Auth::user(); // ログインしているユーザーを取得
         
         // フォームから送信されたデータを受け取る
         $data = $request->validate([
@@ -112,7 +115,7 @@ class Sleeping_Controller extends Controller
         $bedtime = \Carbon\Carbon::createFromFormat('H:i', $data['record_bedtime']);
         $sleepingTime = $this->calculateSleepingTime($bedtime, $wakeUpTime); // 睡眠時間の計算
         
-         // 最初のユーザーのIDをデータに追加
+         // ログインユーザーのIDをデータに追加
         $data['user_id'] = $user->id;
         
         // 睡眠時間をデータに追加

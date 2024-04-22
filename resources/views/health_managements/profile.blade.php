@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <x-app-layout>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -77,10 +78,10 @@
         <div class="profile">
             <h2>プロフィール表示</h2>
             <div class="profile_buttons">
-                <button onclick="location.href='/profile/meal'">食事</button>
-                <button onclick="location.href='/profile/movement'">運動</button>
-                <button onclick="location.href='/profile/body_weight'">体重</button>
-                <button onclick="location.href='/profile/sleeping'">睡眠</button>
+                <button onclick="location.href='/myprofile/meal'">食事</button>
+                <button onclick="location.href='/myprofile/movement'">運動</button>
+                <button onclick="location.href='/myprofile/body_weight'">体重</button>
+                <button onclick="location.href='/myprofile/sleeping'">睡眠</button>
             </div>
             <div class="profile_img">
                 <img id="profile_img" src="{{ asset('image/IMG_3252.JPG') }}" alt="プロフィール写真">
@@ -135,13 +136,15 @@
                 <span id="target_sleeping_time">{{ $user->target_sleeping_time }}</span>
             </div>
             <div class="profile_buttons">
-                <button onclick="location.href='/profile/profile_setting'">プロフィール設定</button>
-                <button onclick="location.href='/profile/calender'">カレンダー</button><br /><br />
-                <button onclick="location.href='/profile/meal/meal_record'">食事記録</button>
-                <button onclick="location.href='/profile/movement/movement_record'">運動記録</button>
-                <button onclick="location.href='/profile/body_weight/body_weight_record'">体重記録</button>
-                <button onclick="location.href='/profile/sleeping/sleeping_record'">睡眠記録</button>
+                <button onclick="location.href='/myprofile/myprofile_setting'">プロフィール設定</button>
+                <button onclick="location.href='/myprofile/calender'">カレンダー</button><br /><br />
+                <button onclick="location.href='/myprofile/meal/meal_record'">食事記録</button>
+                <button onclick="location.href='/myprofile/movement/movement_record'">運動記録</button>
+                <button onclick="location.href='/myprofile/body_weight/body_weight_record'">体重記録</button>
+                <button onclick="location.href='/myprofile/sleeping/sleeping_record'">睡眠記録</button>
             </div>
         </div>
     </body>
+    </x-app-layout>
 </html>
+

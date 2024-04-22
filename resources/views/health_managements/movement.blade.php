@@ -86,6 +86,7 @@
                         <th>記録日時</th>
                         <th></th>
                         <th></th>
+                        <th>お気に入り</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -98,14 +99,15 @@
                             <td>{{ $movement->record_movement_times }}</td>
                             <td>{{ $movement->movement_consumption_cal }}</td>
                             <td>{{ $movement->movement_created_at }}</td>
-                            <td><a href='/profile/movement/edit_movement/{{ $movement->id }}'>編集</a></td>
+                            <td><a href='/myprofile/movement/edit_movement/{{ $movement->id }}'>編集</a></td>
                             <td>
-                                <form action="/profile/movement/{{ $movement->id }}" id="form_{{ $movement->id }}" method="post">
+                                <form action="/myprofile/movement/{{ $movement->id }}" id="form_{{ $movement->id }}" method="post">
                                     @csrf
                                     @method('DELETE')
                                     <button type="button" onclick="deleteMovement({{ $movement->id }})">削除</button>
                                 </form>
                             </td>
+                            <td><a href='/myprofile/movement/favorite_movement_record/{{ $movement->id }}'>追加</a></td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -113,8 +115,9 @@
             <div class='paginate'>
                 {{ $movements->links() }}
             </div>
-            <a href='/profile'>プロフィール</a>
-            <a href='/profile/movement/movement_record'>運動記録</a>
+            <a href='/myprofile'>プロフィール</a>
+            <a href='/myprofile/movement/movement_record'>運動記録</a>
+            <a href='/myprofile/movement/favorite_movement'>お気に入り</a>
         </div>
         <script>
             function deleteMovement(id) {

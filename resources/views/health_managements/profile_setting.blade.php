@@ -82,7 +82,7 @@
     <body>
         <div class="profile">
             <h2>プロフィール更新</h2>
-            <form action="/profile/profile_setting" method="POST">
+            <form action="/myprofile/myprofile_setting" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="profile_img">
@@ -143,7 +143,7 @@
                     <input type="submit" value="更新">
                 </div>
                 <div class="footer">
-                   <a href="/profile">戻る</a>
+                   <a href="/myprofile">戻る</a>
                 </div>
             </form>
         </div>

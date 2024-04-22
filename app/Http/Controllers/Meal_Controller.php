@@ -6,15 +6,16 @@ use Illuminate\Http\Request;
 use App\Models\Meal;
 use App\Models\User;
 use App\Models\Movement;
+use Illuminate\Support\Facades\Auth;
 
 class Meal_Controller extends Controller
 {
     public function showMeal()
     {
         // モデルを使用してデータを取得
-        $user = User::first(); // とりあえず最初のユーザーを取得
+        $user = Auth::user(); // ログインしているユーザーを取得
         
-        $userId = $user->id; //最初のユーザーidの取得
+        $userId = $user->id; //ログインユーザーidの取得
         
         $sum_movement_consumption_cal = Movement::where('user_id', $userId)->sum('movement_consumption_cal'); //合計運動消費カロリーの計算
         
@@ -76,7 +77,7 @@ class Meal_Controller extends Controller
     
     public function storeMeal(Request $request)
     {
-        $user = User::first(); // とりあえず最初のユーザーを取得
+        $user = Auth::user(); // ログインしているユーザーを取得
         
         // フォームから送信されたデータを受け取る
         $data = $request->validate([
@@ -90,7 +91,7 @@ class Meal_Controller extends Controller
         // meal_created_at フィールドの値を設定
         $data['meal_created_at'] = now(); // 現在の日時を使用する
         
-        // 最初のユーザーのIDをデータに追加
+        // ログインユーザーのIDをデータに追加
         $data['user_id'] = $user->id;
     
         // Mealモデルの新しいインスタンスを作成し、データを追加して保存
@@ -111,7 +112,7 @@ class Meal_Controller extends Controller
     
     public function updateMeal(Request $request, $id)
     {
-        $user = User::first(); // とりあえず最初のユーザーを取得
+        $user = Auth::user(); // ログインしているユーザーを取得
         
         // フォームから送信されたデータを受け取る
         $data = $request->validate([
@@ -122,7 +123,7 @@ class Meal_Controller extends Controller
             'record_carbo' => 'required|numeric'
         ]);
         
-        // 最初のユーザーのIDをデータに追加
+        // ログインユーザーのIDをデータに追加
         $data['user_id'] = $user->id;
     
         // 特定のIDに対応する食事データを取得し、更新する
@@ -139,5 +140,95 @@ class Meal_Controller extends Controller
         
         // 食事表示画面にリダイレクトする
         return redirect()->route('meal.show')->with('success', '食事記録が削除されました');
+    }
+    
+    
+    //お気に入り一覧
+    public function showfavoriteMeal()
+    {
+        $user = Auth::user(); // ログインしているユーザーを取得
+        
+        $userId = $user->id; //ログインユーザーidの取得
+        
+        //食事記録を取得
+        $meals = Meal::where('user_id', $userId)->orderBy('meal_created_at', 'desc')->paginate(7); // 7件ごとにページネーション
+        
+        return view('health_managements.favorite_meal', ['meals' => $meals]);
+    }
+    
+    //お気に入り記録画面
+    public function showrecordfavoriteMeal($id)
+    {
+        // 特定のIDに対応する食事データを取得
+        $meal = Meal::findOrFail($id);
+    
+        // 編集画面にデータを渡して表示
+        return view('health_managements.favorite_meal_record', ['meal' => $meal]);
+    }
+    
+    //お気に入り追加
+    public function addfavoriteMeal(Request $request, $id)
+    {
+        $user = Auth::user(); // ログインしているユーザーを取得
+        
+        // フォームから送信されたデータを受け取る
+        $data = $request->validate([
+            'record_menu' => 'required|string',
+            'record_cal' => 'required|numeric',
+            'record_protein' => 'required|numeric',
+            'record_fat' => 'required|numeric',
+            'record_carbo' => 'required|numeric'
+        ]);
+    
+        // meal_created_at フィールドの値を設定
+        $data['meal_created_at'] = now(); // 現在の日時を使用する
+        
+        // ログインユーザーのIDをデータに追加
+        $data['user_id'] = $user->id;
+        
+        $data['favorite_menu'] = $data['record_menu'];
+        $data['favorite_cal'] = $data['record_cal'];
+        $data['favorite_protein'] = $data['record_protein'];
+        $data['favorite_fat'] = $data['record_fat'];
+        $data['favorite_carbo'] = $data['record_carbo'];
+    
+        // 特定のIDに対応する食事データを取得し、更新する
+        $meal = Meal::where('id', $id)->where('user_id', $user->id)->update($data);
+    
+        // お気に入り食事画面にリダイレクトする
+        return redirect()->route('meal.favoriteshow');
+    }
+    
+    //お気に入り画面から値を取得し、記録
+    public function savefavoriteMeal(Request $request)
+    {
+        $user = Auth::user(); // ログインしているユーザーを取得
+        
+        // フォームから送信されたデータを受け取る
+        $data = $request->validate([
+            'favorite_menu' => 'required|string',
+            'favorite_cal' => 'required|numeric',
+            'favorite_protein' => 'required|numeric',
+            'favorite_fat' => 'required|numeric',
+            'favorite_carbo' => 'required|numeric'
+        ]);
+    
+        // meal_created_at フィールドの値を設定
+        $data['meal_created_at'] = now(); // 現在の日時を使用する
+        
+        // ログインユーザーのIDをデータに追加
+        $data['user_id'] = $user->id;
+        
+        $data['record_menu'] = $data['favorite_menu'];
+        $data['record_cal'] = $data['favorite_cal'];
+        $data['record_protein'] = $data['favorite_protein'];
+        $data['record_fat'] = $data['favorite_fat'];
+        $data['record_carbo'] = $data['favorite_carbo'];
+    
+        // Mealモデルの新しいインスタンスを作成し、データを追加して保存
+        $meal = Meal::create($data);
+    
+        // 食事記録画面にリダイレクトする
+        return redirect()->route('meal.show');
     }
 }

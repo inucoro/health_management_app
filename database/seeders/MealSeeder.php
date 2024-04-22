@@ -17,7 +17,7 @@ class MealSeeder extends Seeder
     public function run()
     {
          DB::table('meals')->insert([
-            'id' => '2',
+            'id' => '1',
             'user_id' => '1',
             'record_menu' => '味噌汁',
             'record_cal' => '20',
@@ -36,7 +36,7 @@ class MealSeeder extends Seeder
          ]);
          
          DB::table('meals')->insert([
-            'id' => '3',
+            'id' => '2',
             'user_id' => '1',
             'record_menu' => 'パスタ',
             'record_cal' => '350',

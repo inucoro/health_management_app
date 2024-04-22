@@ -119,6 +119,7 @@
                         <th>日時</th>
                         <th></th>
                         <th></th>
+                        <th>お気に入り</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -130,14 +131,15 @@
                             <td>{{ $meal->record_fat }}</td>
                             <td>{{ $meal->record_carbo }}</td>
                             <td>{{ $meal->meal_created_at }}</td>
-                            <td><a href='/profile/meal/edit_meal/{{ $meal->id }}'>編集</a></td>
+                            <td><a href='/myprofile/meal/edit_meal/{{ $meal->id }}'>編集</a></td>
                             <td>
-                                <form action="/profile/meal/{{ $meal->id }}" id="form_{{ $meal->id }}" method="post">
+                                <form action="/myprofile/meal/{{ $meal->id }}" id="form_{{ $meal->id }}" method="post">
                                     @csrf
                                     @method('DELETE')
                                     <button type="button" onclick="deleteMeal({{ $meal->id }})">削除</button>
                                 </form>
                             </td>
+                            <td><a href='/myprofile/meal/favorite_meal_record/{{ $meal->id }}'>追加</a></td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -145,8 +147,9 @@
             <div class='paginate'>
                 {{ $meals->links() }}
             </div>
-            <a href='/profile'>プロフィール</a>
-            <a href='/profile/meal/meal_record'>食事記録</a>
+            <a href='/myprofile'>プロフィール</a>
+            <a href='/myprofile/meal/meal_record'>食事記録</a>
+            <a href='/myprofile/meal/favorite_meal'>お気に入り</a>
         </div>
         <script>
             function deleteMeal(id) {

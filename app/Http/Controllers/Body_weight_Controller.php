@@ -5,15 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Body_weight;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class Body_weight_Controller extends Controller
 {
     public function showBody_weight()
     {
         // モデルを使用してデータを取得
-        $user = User::first(); // とりあえず最初のユーザーを取得
+        $user = Auth::user(); // ログインしているユーザーを取得
         
-        $userId = $user->id; //最初のユーザーidの取得
+        $userId = $user->id; //ログインユーザーidの取得
         
         $target_body_weight = $user->target_body_weight; //目標体重の取得
         
@@ -41,7 +42,7 @@ class Body_weight_Controller extends Controller
     
     public function storeBody_weight(Request $request)
     {
-        $user = User::first(); // とりあえず最初のユーザーを取得
+        $user = Auth::user(); // ログインしているユーザーを取得
         
         // フォームから送信されたデータを受け取る
         $data = $request->validate([
@@ -53,7 +54,7 @@ class Body_weight_Controller extends Controller
         // body_weight_created_at フィールドの値を設定
         $data['body_weight_created_at'] = now(); // 現在の日時を使用する
         
-        // 最初のユーザーのIDをデータに追加
+        // ログインユーザーのIDをデータに追加
         $data['user_id'] = $user->id;
     
         // Body_weightモデルの新しいインスタンスを作成し、データを追加して保存
@@ -74,7 +75,7 @@ class Body_weight_Controller extends Controller
     
     public function updateBody_weight(Request $request, $id)
     {
-        $user = User::first(); // とりあえず最初のユーザーを取得
+        $user = Auth::user(); // ログインしているユーザーを取得
         
         // フォームから送信されたデータを受け取る
         $data = $request->validate([
@@ -83,7 +84,7 @@ class Body_weight_Controller extends Controller
             'record_body_weight_memo' => 'nullable|string'
         ]);
         
-        // 最初のユーザーのIDをデータに追加
+        // ログインユーザーのIDをデータに追加
         $data['user_id'] = $user->id;
     
         // 特定のIDに対応する体重データを取得し、更新する
