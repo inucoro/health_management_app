@@ -17,7 +17,7 @@ class MovementSeeder extends Seeder
     public function run()
     {
         DB::table('movements')->insert([
-            'id' => '2',
+            'id' => '1',
             'user_id' => '1',
             'movement_consumption_cal' => '200',
             'record_type' => 'サイドレイズ',
@@ -37,7 +37,7 @@ class MovementSeeder extends Seeder
          ]);
          
          DB::table('movements')->insert([
-            'id' => '3',
+            'id' => '2',
             'user_id' => '1',
             'movement_consumption_cal' => '600',
             'record_type' => 'ランニング',

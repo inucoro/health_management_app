@@ -5,15 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Movement;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class Movement_Controller extends Controller
 {
     public function showMovement()
     {
         // モデルを使用してデータを取得
-        $user = User::first(); // とりあえず最初のユーザーを取得
+        $user = Auth::user(); // ログインしているユーザーを取得
         
-        $userId = $user->id; //最初のユーザーidの取得
+        $userId = $user->id; //ログインユーザーidの取得
         
         $sum_movement_consumption_cal = Movement::where('user_id', $userId)->sum('movement_consumption_cal'); //合計運動消費カロリーの計算
         
@@ -38,7 +39,7 @@ class Movement_Controller extends Controller
     
     public function storeMovement(Request $request)
     {
-        $user = User::first(); // とりあえず最初のユーザーを取得
+        $user = Auth::user(); // ログインしているユーザーを取得
         
         // フォームから送信されたデータを受け取る
         $data = $request->validate([
@@ -53,7 +54,7 @@ class Movement_Controller extends Controller
         // movement_created_at フィールドの値を設定
         $data['movement_created_at'] = now(); // 現在の日時を使用する
         
-        // 最初のユーザーのIDをデータに追加
+        // ログインユーザーのIDをデータに追加
         $data['user_id'] = $user->id;
     
         // Movementモデルの新しいインスタンスを作成し、データを追加して保存
@@ -74,7 +75,7 @@ class Movement_Controller extends Controller
     
     public function updateMovement(Request $request, $id)
     {
-        $user = User::first(); // とりあえず最初のユーザーを取得
+        $user = Auth::user(); // ログインしているユーザーを取得
         
         // フォームから送信されたデータを受け取る
         $data = $request->validate([
@@ -86,7 +87,7 @@ class Movement_Controller extends Controller
             'movement_consumption_cal' => 'required|string'
         ]);
         
-        // 最初のユーザーのIDをデータに追加
+        // ログインユーザーのIDをデータに追加
         $data['user_id'] = $user->id;
     
         // 特定のIDに対応する運動データを取得し、更新する
@@ -103,5 +104,98 @@ class Movement_Controller extends Controller
         
         // 運動表示画面にリダイレクトする
         return redirect()->route('movement.show')->with('success', '運動記録が削除されました');
+    }
+    
+    //お気に入り一覧
+    public function showfavoriteMovement()
+    {
+        $user = Auth::user(); // ログインしているユーザーを取得
+        
+        $userId = $user->id; //ログインユーザーidの取得
+        
+        //運動記録を取得
+        $movements = Movement::where('user_id', $userId)->orderBy('movement_created_at', 'desc')->paginate(7); // 7件ごとにページネーション
+        
+        return view('health_managements.favorite_movement', ['movements' => $movements]);
+    }
+    
+    //お気に入り記録画面
+    public function showrecordfavoriteMovement($id)
+    {
+        // 特定のIDに対応する運動データを取得
+        $movement = Movement::findOrFail($id);
+    
+        // 編集画面にデータを渡して表示
+        return view('health_managements.favorite_movement_record', ['movement' => $movement]);
+    }
+    
+    //お気に入り追加
+    public function addfavoriteMovement(Request $request, $id)
+    {
+        $user = Auth::user(); // ログインしているユーザーを取得
+        
+        // フォームから送信されたデータを受け取る
+        $data = $request->validate([
+            'record_type' => 'required|string',
+            'record_weight' => 'required|numeric',
+            'record_times' => 'required|numeric',
+            'record_sets' => 'required|numeric',
+            'record_movement_times' => 'required|numeric',
+            'movement_consumption_cal' => 'required|numeric',
+        ]);
+    
+        // movement_created_at フィールドの値を設定
+        $data['movement_created_at'] = now(); // 現在の日時を使用する
+        
+        // ログインユーザーのIDをデータに追加
+        $data['user_id'] = $user->id;
+        
+        $data['favorite_type'] = $data['record_type'];
+        $data['favorite_weight'] = $data['record_weight'];
+        $data['favorite_times'] = $data['record_times'];
+        $data['favorite_sets'] = $data['record_sets'];
+        $data['favorite_movement_times'] = $data['record_movement_times'];
+        $data['favorite_movement_consumption_cal'] = $data['movement_consumption_cal'];
+    
+        // 特定のIDに対応する運動データを取得し、更新する
+        $movement = Movement::where('id', $id)->where('user_id', $user->id)->update($data);
+    
+        // お気に入り運動画面にリダイレクトする
+        return redirect()->route('movement.favoriteshow');
+    }
+    
+    //お気に入り画面から値を取得し、記録
+    public function savefavoriteMovement(Request $request)
+    {
+        $user = Auth::user(); // ログインしているユーザーを取得
+        
+        // フォームから送信されたデータを受け取る
+        $data = $request->validate([
+            'favorite_type' => 'required|string',
+            'favorite_weight' => 'required|numeric',
+            'favorite_times' => 'required|numeric',
+            'favorite_sets' => 'required|numeric',
+            'favorite_movement_times' => 'required|numeric',
+            'favorite_movement_consumption_cal' => 'required|numeric',
+        ]);
+    
+        // movement_created_at フィールドの値を設定
+        $data['movement_created_at'] = now(); // 現在の日時を使用する
+        
+        // ログインユーザーのIDをデータに追加
+        $data['user_id'] = $user->id;
+        
+        $data['record_type'] = $data['favorite_type'];
+        $data['record_weight'] = $data['favorite_weight'];
+        $data['record_times'] = $data['favorite_times'];
+        $data['record_sets'] = $data['favorite_sets'];
+        $data['record_movement_times'] = $data['favorite_movement_times'];
+        $data['movement_consumption_cal'] = $data['favorite_movement_consumption_cal'];
+        
+        // Movementモデルの新しいインスタンスを作成し、データを追加して保存
+        $movement = Movement::create($data);
+    
+        // 運動記録画面にリダイレクトする
+        return redirect()->route('movement.show');
     }
 }

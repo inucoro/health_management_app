@@ -91,9 +91,9 @@
                             <td>{{ $body_weight->record_body_fat }}</td>
                             <td>{{ $body_weight->record_body_weight_memo }}</td>
                             <td>{{ $body_weight->body_weight_created_at }}</td>
-                            <td><a href='/profile/body_weight/edit_body_weight/{{ $body_weight->id }}'>編集</a></td>
+                            <td><a href='/myprofile/body_weight/edit_body_weight/{{ $body_weight->id }}'>編集</a></td>
                             <td>
-                                <form action="/profile/body_weight/{{ $body_weight->id }}" id="form_{{ $body_weight->id }}" method="post">
+                                <form action="/myprofile/body_weight/{{ $body_weight->id }}" id="form_{{ $body_weight->id }}" method="post">
                                     @csrf
                                     @method('DELETE')
                                     <button type="button" onclick="deleteBody_weight({{ $body_weight->id }})">削除</button>
@@ -106,8 +106,8 @@
             <div class='paginate'>
                 {{ $body_weights->links() }}
             </div>
-            <a href='/profile'>プロフィール</a>
-            <a href='/profile/body_weight/body_weight_record'>体重記録</a>
+            <a href='/myprofile'>プロフィール</a>
+            <a href='/myprofile/body_weight/body_weight_record'>体重記録</a>
         </div>
         <script>
             function deleteBody_weight(id) {

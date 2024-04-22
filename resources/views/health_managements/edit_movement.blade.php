@@ -88,7 +88,7 @@
                 
                 <input type="submit" value="更新する">
                 <div class="footer">
-                    <a href="/profile/movement">戻る</a>
+                    <a href="/myprofile/movement">戻る</a>
                 </div>
             </form>
         </div>

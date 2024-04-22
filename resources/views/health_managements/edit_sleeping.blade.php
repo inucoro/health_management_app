@@ -85,7 +85,7 @@
                 
                 <input type="submit" value="更新する">
                 <div class="footer">
-                    <a href="/profile/sleeping">戻る</a>
+                    <a href="/myprofile/sleeping">戻る</a>
                 </div>
             </form>
         </div>

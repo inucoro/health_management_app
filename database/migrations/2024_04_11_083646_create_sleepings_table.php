@@ -17,9 +17,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->integer('record_sleeping_time');
-            $table->string('record_sleeping_memo');
+            $table->string('record_sleeping_memo')->nullable();
             $table->timestamp('sleeping_created_at')->nullable();
             $table->timestamp('sleeping_updated_at')->nullable();
+            $table->time('record_wake_up_time');
+            $table->time('record_bedtime');
             $table->timestamps();
         });
     }

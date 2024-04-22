@@ -203,7 +203,7 @@
             });
         </script>
         <div class="footer">
-           <a href="/profile">戻る</a>
+           <a href="/myprofile">戻る</a>
         </div>
     </body>
 </html>

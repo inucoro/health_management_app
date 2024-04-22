@@ -88,7 +88,7 @@
                 
                 <input type="submit" value="更新する">
                 <div class="footer">
-                    <a href="/profile/body_weight">戻る</a>
+                    <a href="/myprofile/body_weight">戻る</a>
                 </div>
             </form>
         </div>
