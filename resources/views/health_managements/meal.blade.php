@@ -151,6 +151,11 @@
             <a href='/myprofile/meal/meal_record'>食事記録</a>
             <a href='/myprofile/meal/favorite_meal'>お気に入り</a>
             <a href='/myprofile/meal/meal_chart'>グラフ</a>
+             @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
         </div>
         <script>
             function deleteMeal(id) {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Movement;
 use App\Models\User;
+use App\Models\Favorite_movement;
 use Illuminate\Support\Facades\Auth;
 
 class Movement_Controller extends Controller
@@ -114,9 +115,9 @@ class Movement_Controller extends Controller
         $userId = $user->id; //ログインユーザーidの取得
         
         //運動記録を取得
-        $movements = Movement::where('user_id', $userId)->orderBy('movement_created_at', 'desc')->paginate(7); // 7件ごとにページネーション
+        $favorite_movements = Favorite_movement::where('user_id', $userId)->orderBy('favorite_movement_created_at', 'desc')->paginate(7); // 7件ごとにページネーション
         
-        return view('health_managements.favorite_movement', ['movements' => $movements]);
+        return view('health_managements.favorite_movement', ['favorite_movements' => $favorite_movements]);
     }
     
     //お気に入り記録画面
@@ -144,21 +145,21 @@ class Movement_Controller extends Controller
             'movement_consumption_cal' => 'required|numeric',
         ]);
     
-        // movement_created_at フィールドの値を設定
-        $data['movement_created_at'] = now(); // 現在の日時を使用する
+        //favorite_ movement_created_at フィールドの値を設定
+        $favorite_data['favorite_movement_created_at'] = now(); // 現在の日時を使用する
         
         // ログインユーザーのIDをデータに追加
-        $data['user_id'] = $user->id;
+        $favorite_data['user_id'] = $user->id;
         
-        $data['favorite_type'] = $data['record_type'];
-        $data['favorite_weight'] = $data['record_weight'];
-        $data['favorite_times'] = $data['record_times'];
-        $data['favorite_sets'] = $data['record_sets'];
-        $data['favorite_movement_times'] = $data['record_movement_times'];
-        $data['favorite_movement_consumption_cal'] = $data['movement_consumption_cal'];
+        $favorite_data['favorite_type'] = $data['record_type'];
+        $favorite_data['favorite_weight'] = $data['record_weight'];
+        $favorite_data['favorite_times'] = $data['record_times'];
+        $favorite_data['favorite_sets'] = $data['record_sets'];
+        $favorite_data['favorite_movement_times'] = $data['record_movement_times'];
+        $favorite_data['favorite_movement_consumption_cal'] = $data['movement_consumption_cal'];
     
-        // 特定のIDに対応する運動データを取得し、更新する
-        $movement = Movement::where('id', $id)->where('user_id', $user->id)->update($data);
+        // 特定のIDに対応する運動データを取得し、作成する
+        $favorite_movements = Favorite_movement::create($favorite_data);
     
         // お気に入り運動画面にリダイレクトする
         return redirect()->route('movement.favoriteshow');
@@ -170,7 +171,7 @@ class Movement_Controller extends Controller
         $user = Auth::user(); // ログインしているユーザーを取得
         
         // フォームから送信されたデータを受け取る
-        $data = $request->validate([
+        $favorite_data = $request->validate([
             'favorite_type' => 'required|string',
             'favorite_weight' => 'required|numeric',
             'favorite_times' => 'required|numeric',
@@ -185,17 +186,27 @@ class Movement_Controller extends Controller
         // ログインユーザーのIDをデータに追加
         $data['user_id'] = $user->id;
         
-        $data['record_type'] = $data['favorite_type'];
-        $data['record_weight'] = $data['favorite_weight'];
-        $data['record_times'] = $data['favorite_times'];
-        $data['record_sets'] = $data['favorite_sets'];
-        $data['record_movement_times'] = $data['favorite_movement_times'];
-        $data['movement_consumption_cal'] = $data['favorite_movement_consumption_cal'];
+        $data['record_type'] = $favorite_data['favorite_type'];
+        $data['record_weight'] = $favorite_data['favorite_weight'];
+        $data['record_times'] = $favorite_data['favorite_times'];
+        $data['record_sets'] = $favorite_data['favorite_sets'];
+        $data['record_movement_times'] = $favorite_data['favorite_movement_times'];
+        $data['movement_consumption_cal'] = $favorite_data['favorite_movement_consumption_cal'];
         
         // Movementモデルの新しいインスタンスを作成し、データを追加して保存
         $movement = Movement::create($data);
     
         // 運動記録画面にリダイレクトする
         return redirect()->route('movement.show');
+    }
+    
+    //お気に入りの削除
+    public function deleteFavoritemovement($id)
+    {
+        $favorite_movement = Favorite_movement::findOrFail($id);
+        $favorite_movement->delete();
+        
+        // 運動表示画面にリダイレクトする
+        return redirect()->route('movement.show')->with('success', 'お気に入りが削除されました');
     }
 }

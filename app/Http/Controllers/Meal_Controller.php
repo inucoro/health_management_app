@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Meal;
 use App\Models\User;
 use App\Models\Movement;
+use App\Models\Favorite_meal;
 use Illuminate\Support\Facades\Auth;
 
 class Meal_Controller extends Controller
@@ -151,9 +152,9 @@ class Meal_Controller extends Controller
         $userId = $user->id; //ログインユーザーidの取得
         
         //食事記録を取得
-        $meals = Meal::where('user_id', $userId)->orderBy('meal_created_at', 'desc')->paginate(7); // 7件ごとにページネーション
+        $favorite_meals = Favorite_meal::where('user_id', $userId)->orderBy('favorite_meal_created_at', 'desc')->paginate(7); // 7件ごとにページネーション
         
-        return view('health_managements.favorite_meal', ['meals' => $meals]);
+        return view('health_managements.favorite_meal', ['favorite_meals' => $favorite_meals]);
     }
     
     //お気に入り記録画面
@@ -180,20 +181,19 @@ class Meal_Controller extends Controller
             'record_carbo' => 'required|numeric'
         ]);
     
-        // meal_created_at フィールドの値を設定
-        $data['meal_created_at'] = now(); // 現在の日時を使用する
+        // favorite_meal_created_at フィールドの値を設定
+        $favorite_data['favorite_meal_created_at'] = now(); // 現在の日時を使用する
         
         // ログインユーザーのIDをデータに追加
-        $data['user_id'] = $user->id;
-        
-        $data['favorite_menu'] = $data['record_menu'];
-        $data['favorite_cal'] = $data['record_cal'];
-        $data['favorite_protein'] = $data['record_protein'];
-        $data['favorite_fat'] = $data['record_fat'];
-        $data['favorite_carbo'] = $data['record_carbo'];
+        $favorite_data['user_id'] = $user->id;
+        $favorite_data['favorite_menu'] = $data['record_menu'];
+        $favorite_data['favorite_cal'] = $data['record_cal'];
+        $favorite_data['favorite_protein'] = $data['record_protein'];
+        $favorite_data['favorite_fat'] = $data['record_fat'];
+        $favorite_data['favorite_carbo'] = $data['record_carbo'];
     
-        // 特定のIDに対応する食事データを取得し、更新する
-        $meal = Meal::where('id', $id)->where('user_id', $user->id)->update($data);
+        // 特定のIDに対応する食事データを取得し、作成する
+        $favorite_meals = Favorite_meal::create($favorite_data);
     
         // お気に入り食事画面にリダイレクトする
         return redirect()->route('meal.favoriteshow');
@@ -205,7 +205,7 @@ class Meal_Controller extends Controller
         $user = Auth::user(); // ログインしているユーザーを取得
         
         // フォームから送信されたデータを受け取る
-        $data = $request->validate([
+        $favorite_data = $request->validate([
             'favorite_menu' => 'required|string',
             'favorite_cal' => 'required|numeric',
             'favorite_protein' => 'required|numeric',
@@ -219,17 +219,27 @@ class Meal_Controller extends Controller
         // ログインユーザーのIDをデータに追加
         $data['user_id'] = $user->id;
         
-        $data['record_menu'] = $data['favorite_menu'];
-        $data['record_cal'] = $data['favorite_cal'];
-        $data['record_protein'] = $data['favorite_protein'];
-        $data['record_fat'] = $data['favorite_fat'];
-        $data['record_carbo'] = $data['favorite_carbo'];
+        $data['record_menu'] = $favorite_data['favorite_menu'];
+        $data['record_cal'] = $favorite_data['favorite_cal'];
+        $data['record_protein'] = $favorite_data['favorite_protein'];
+        $data['record_fat'] = $favorite_data['favorite_fat'];
+        $data['record_carbo'] = $favorite_data['favorite_carbo'];
     
         // Mealモデルの新しいインスタンスを作成し、データを追加して保存
         $meal = Meal::create($data);
     
         // 食事記録画面にリダイレクトする
         return redirect()->route('meal.show');
+    }
+    
+    //お気に入りの削除
+    public function deleteFavoritemeal($id)
+    {
+        $favorite_meal = Favorite_meal::findOrFail($id);
+        $favorite_meal->delete();
+        
+        // 食事表示画面にリダイレクトする
+        return redirect()->route('meal.show')->with('success', 'お気に入りが削除されました');
     }
     
     //グラフ画面の表示

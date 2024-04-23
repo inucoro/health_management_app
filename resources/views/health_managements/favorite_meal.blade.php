@@ -89,25 +89,33 @@
                             <th>脂質(g)</th>
                             <th>炭水化物(g)</th>
                             <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($meals as $meal)
+                        @foreach($favorite_meals as $favorite_meal)
                             <tr>
-                                <td>{{ $meal->favorite_menu }}</td>
-                                <td>{{ $meal->favorite_cal }}</td>
-                                <td>{{ $meal->favorite_protein }}</td>
-                                <td>{{ $meal->favorite_fat }}</td>
-                                <td>{{ $meal->favorite_carbo }}</td>
+                                <td>{{ $favorite_meal->favorite_menu }}</td>
+                                <td>{{ $favorite_meal->favorite_cal }}</td>
+                                <td>{{ $favorite_meal->favorite_protein }}</td>
+                                <td>{{ $favorite_meal->favorite_fat }}</td>
+                                <td>{{ $favorite_meal->favorite_carbo }}</td>
+                                <td>
+                                    <form action="/myprofile/meal/favorite_meal/{{ $favorite_meal->id }}" id="form_{{ $favorite_meal->id }}" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" onclick="deleteFavoritemeal({{ $favorite_meal->id }})">削除</button>
+                                    </form>
+                                </td>
                                 <td>
                                     <form action="{{ route('meal.favoritesave') }}" method="POST">
                                         @csrf
                                         <!-- お気に入りメニューの情報を送信 -->
-                                        <input type="hidden" name="favorite_menu" value="{{ $meal->favorite_menu }}">
-                                        <input type="hidden" name="favorite_cal" value="{{ $meal->favorite_cal }}">
-                                        <input type="hidden" name="favorite_protein" value="{{ $meal->favorite_protein }}">
-                                        <input type="hidden" name="favorite_fat" value="{{ $meal->favorite_fat }}">
-                                        <input type="hidden" name="favorite_carbo" value="{{ $meal->favorite_carbo }}">
+                                        <input type="hidden" name="favorite_menu" value="{{ $favorite_meal->favorite_menu }}">
+                                        <input type="hidden" name="favorite_cal" value="{{ $favorite_meal->favorite_cal }}">
+                                        <input type="hidden" name="favorite_protein" value="{{ $favorite_meal->favorite_protein }}">
+                                        <input type="hidden" name="favorite_fat" value="{{ $favorite_meal->favorite_fat }}">
+                                        <input type="hidden" name="favorite_carbo" value="{{ $favorite_meal->favorite_carbo }}">
                                         <input type="submit" value="記録する">
                                     </form>
                                 </td>
@@ -116,12 +124,21 @@
                     </tbody>
                 </table>
                 <div class='paginate'>
-                    {{ $meals->links() }}
+                    {{ $favorite_meals->links() }}
                 </div>
                 <div class="footer">
                     <a href="/myprofile/meal">戻る</a>
                 </div>
             </form>
         </div>
+        <script>
+            function deleteFavoritemeal(id) {
+                'use strict'
+        
+                if (confirm('削除すると復元できません。\n本当に削除しますか？')) {
+                    document.getElementById(`form_${id}`).submit();
+                }
+            }
+        </script>
     </body>
 </html>

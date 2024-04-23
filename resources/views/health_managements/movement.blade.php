@@ -118,6 +118,11 @@
             <a href='/myprofile'>プロフィール</a>
             <a href='/myprofile/movement/movement_record'>運動記録</a>
             <a href='/myprofile/movement/favorite_movement'>お気に入り</a>
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
         </div>
         <script>
             function deleteMovement(id) {
