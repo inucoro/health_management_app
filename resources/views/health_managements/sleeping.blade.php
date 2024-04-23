@@ -106,6 +106,7 @@
             </div>
             <a href='/myprofile'>プロフィール</a>
             <a href='/myprofile/sleeping/sleeping_record'>睡眠記録</a>
+            <a href='/myprofile/sleeping/sleeping_chart'>グラフ</a>
         </div>
         <script>
             function deleteSleeping(id) {

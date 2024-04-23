@@ -102,4 +102,45 @@ class Body_weight_Controller extends Controller
         // 体重表示画面にリダイレクトする
         return redirect()->route('body_weight.show')->with('success', '体重記録が削除されました');
     }
+    
+    //グラフ画面の表示
+    public function showBody_weightchart()
+    {
+        return view('health_managements.body_weight_chart');
+    }
+    
+    //目標体重を取得
+    public function getTargetBody_weight()
+    {
+        $user = Auth::user();
+        return response()->json($user->target_body_weight);
+    }
+        
+    //体重の履歴を取得
+    public function getBody_WeightChartData()
+    {
+        $user = Auth::user();
+        $userId = $user->id;
+        
+        $body_weights = Body_weight::select('body_weight_created_at', 'record_body_weight')
+                     ->where('user_id', $userId)
+                     ->orderBy('body_weight_created_at')
+                     ->get();
+    
+        return response()->json($body_weights);
+    }
+    
+    //体脂肪の履歴を取得
+    public function getBody_FatChartData()
+    {
+        $user = Auth::user();
+        $userId = $user->id;
+        
+        $body_weights = Body_weight::select('body_weight_created_at', 'record_body_fat')
+                     ->where('user_id', $userId)
+                     ->orderBy('body_weight_created_at')
+                     ->get();
+    
+        return response()->json($body_weights);
+    }
 }

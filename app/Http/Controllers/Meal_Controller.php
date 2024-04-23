@@ -231,4 +231,94 @@ class Meal_Controller extends Controller
         // 食事記録画面にリダイレクトする
         return redirect()->route('meal.show');
     }
+    
+    //グラフ画面の表示
+    public function showMealchart()
+    {
+        return view('health_managements.meal_chart');
+    }
+    
+    //目標カロリーを取得
+    public function getTargetCalories()
+    {
+        $user = Auth::user();
+        return response()->json($user->target_cal);
+    }
+        
+    //食事カロリーの履歴を取得
+    public function getMealCalorieChartData()
+    {
+        $user = Auth::user();
+        $userId = $user->id;
+        
+        $meals = Meal::select('meal_created_at', 'record_cal')
+                     ->where('user_id', $userId)
+                     ->orderBy('meal_created_at')
+                     ->get();
+    
+        return response()->json($meals);
+    }
+    
+    //タンパク質の履歴を取得
+    public function getProteinChartData()
+    {
+        $user = Auth::user();
+        $userId = $user->id;
+        
+        $meals = Meal::select('meal_created_at', 'record_protein')
+                     ->where('user_id', $userId)
+                     ->orderBy('meal_created_at')
+                     ->get();
+    
+        return response()->json($meals);
+    }
+    
+    //目標タンパク質を取得
+    public function getTargetProtein()
+    {
+        $user = Auth::user();
+        return response()->json($user->target_protein);
+    }
+    
+    //脂質の履歴を取得
+    public function getFatChartData()
+    {
+        $user = Auth::user();
+        $userId = $user->id;
+        
+        $meals = Meal::select('meal_created_at', 'record_fat')
+                     ->where('user_id', $userId)
+                     ->orderBy('meal_created_at')
+                     ->get();
+    
+        return response()->json($meals);
+    }
+    
+    //目標脂質を取得
+    public function getTargetFat()
+    {
+        $user = Auth::user();
+        return response()->json($user->target_fat);
+    }
+    
+    //炭水化物の履歴を取得
+    public function getCarboChartData()
+    {
+        $user = Auth::user();
+        $userId = $user->id;
+        
+        $meals = Meal::select('meal_created_at', 'record_carbo')
+                     ->where('user_id', $userId)
+                     ->orderBy('meal_created_at')
+                     ->get();
+    
+        return response()->json($meals);
+    }
+    
+    //目標炭水化物を取得
+    public function getTargetCarbo()
+    {
+        $user = Auth::user();
+        return response()->json($user->target_carbo);
+    }
 }
