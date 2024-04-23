@@ -67,6 +67,19 @@ Route::middleware('auth')->group(function () {
     Route::put('/myprofile/meal/favorite_meal_record/{id}', [Meal_Controller::class, 'addfavoriteMeal'])->name('meal.favoriteadd');
     Route::post('/myprofile/meal/favorite_meal', [Meal_Controller::class, 'savefavoriteMeal'])->name('meal.favoritesave');
     
+    // 食事グラフ画面のルート
+    Route::get('/myprofile/meal/meal_chart', [Meal_Controller::class, 'showMealchart'])->name('mealchart.show');
+    Route::get('/get_meal_calorie_chart_data', [Meal_Controller::class, 'getMealCalorieChartData'])->name('mealcalorieschart.get');
+    Route::get('/get_protein_chart_data', [Meal_Controller::class, 'getProteinChartData'])->name('mealproteinchart.get');
+    Route::get('/get_fat_chart_data', [Meal_Controller::class, 'getFatChartData'])->name('mealfatchart.get');
+    Route::get('/get_carbo_chart_data', [Meal_Controller::class, 'getCarboChartData'])->name('mealcarbochart.get');
+    //目標値
+    Route::get('/get_target_cal', [Meal_Controller::class, 'getTargetCalories'])->name('targetcal.get');
+    Route::get('/get_target_protein', [Meal_Controller::class, 'getTargetProtein'])->name('targetprotein.get');
+    Route::get('/get_target_fat', [Meal_Controller::class, 'getTargetFat'])->name('targetfat.get');
+    Route::get('/get_target_carbo', [Meal_Controller::class, 'getTargetCarbo'])->name('targetcarbo.get');
+    
+    
     
     
     // 運動画面のルート
@@ -105,6 +118,16 @@ Route::middleware('auth')->group(function () {
     //体重記録消去のルート
     Route::delete('/myprofile/body_weight/{body_weight}', [Body_weight_Controller::class, 'deleteBody_weight'])->name('body_weight.delete');
     
+    // 体重グラフ画面のルート
+    Route::get('/myprofile/body_weight/body_weight_chart', [Body_weight_Controller::class, 'showBody_weightchart'])->name('body_weightchart.show');
+    Route::get('/get_body_weight_chart_data', [Body_weight_Controller::class, 'getBody_WeightChartData'])->name('body_weightchart.get');
+    Route::get('/get_body_fat_chart_data', [Body_weight_Controller::class, 'getBody_FatChartData'])->name('body_fatchart.get');
+    //目標値
+    Route::get('/get_target_body_weight', [Body_weight_Controller::class, 'getTargetBody_weight'])->name('targetbody_weight.get');
+
+
+    
+    
     
     
     // 睡眠画面のルート
@@ -120,6 +143,12 @@ Route::middleware('auth')->group(function () {
     
     //睡眠記録消去のルート
     Route::delete('/myprofile/sleeping/{sleeping}', [Sleeping_Controller::class, 'deleteSleeping'])->name('sleeping.delete');
+    
+    // 睡眠グラフ画面のルート
+    Route::get('/myprofile/sleeping/sleeping_chart', [Sleeping_Controller::class, 'showSleepingchart'])->name('sleepingchart.show');
+    Route::get('/get_sleeping_chart_data', [Sleeping_Controller::class, 'getSleepingChartData'])->name('sleepingchart.get');
+    //目標値
+    Route::get('/get_target_sleeping', [Sleeping_Controller::class, 'getTargetSleeping'])->name('targetsleeping.get');
     
     
     

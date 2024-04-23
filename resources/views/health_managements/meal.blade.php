@@ -150,6 +150,7 @@
             <a href='/myprofile'>プロフィール</a>
             <a href='/myprofile/meal/meal_record'>食事記録</a>
             <a href='/myprofile/meal/favorite_meal'>お気に入り</a>
+            <a href='/myprofile/meal/meal_chart'>グラフ</a>
         </div>
         <script>
             function deleteMeal(id) {

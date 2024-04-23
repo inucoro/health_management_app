@@ -108,6 +108,7 @@
             </div>
             <a href='/myprofile'>プロフィール</a>
             <a href='/myprofile/body_weight/body_weight_record'>体重記録</a>
+            <a href='/myprofile/body_weight/body_weight_chart'>グラフ</a>
         </div>
         <script>
             function deleteBody_weight(id) {

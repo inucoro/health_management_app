@@ -164,4 +164,36 @@ class Sleeping_Controller extends Controller
 
         return '睡眠時間が記録されていません';
     }
+    
+     //グラフ画面の表示
+    public function showSleepingchart()
+    {
+        return view('health_managements.sleeping_chart');
+    }
+    
+    //目標睡眠を取得
+    public function getTargetSleeping()
+    {
+        $user = Auth::user();
+        return response()->json($user->target_sleeping_time);
+    }
+        
+    //睡眠の履歴を取得
+    public function getSleepingChartData()
+    {
+        $user = Auth::user();
+        $userId = $user->id;
+        
+        $sleepings = Sleeping::select('sleeping_created_at', 'record_sleeping_time')
+                     ->where('user_id', $userId)
+                     ->orderBy('sleeping_created_at')
+                     ->get();
+                     
+         // record_sleeping_timeを分表記に変換する
+        foreach ($sleepings as $sleeping) {
+            $sleeping['record_sleeping_time'] = floor($sleeping['record_sleeping_time'] / 60); // 分に変換
+        }
+        
+        return response()->json($sleepings);
+    }
 }
