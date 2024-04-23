@@ -78,4 +78,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(Sleeping::class);  
     }
+    
+    //Favorite_mealに対するリレーション
+    public function favorite_meals()   
+    {
+        return $this->hasMany(Favorite_meal::class);  
+    }
+    
+    //Favorite_movementsに対するリレーション
+    public function favorite_movements()   
+    {
+        return $this->hasMany(Favorite_movements::class);  
+    }
 }

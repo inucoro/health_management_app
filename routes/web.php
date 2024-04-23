@@ -66,6 +66,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/myprofile/meal/favorite_meal_record/{id}', [Meal_Controller::class, 'showrecordfavoriteMeal'])->name('meal.favoriterecordshow');
     Route::put('/myprofile/meal/favorite_meal_record/{id}', [Meal_Controller::class, 'addfavoriteMeal'])->name('meal.favoriteadd');
     Route::post('/myprofile/meal/favorite_meal', [Meal_Controller::class, 'savefavoriteMeal'])->name('meal.favoritesave');
+     //食事お気に入り消去のルート
+    Route::delete('/myprofile/meal/favorite_meal/{favorite_meal}', [Meal_Controller::class, 'deleteFavoritemeal'])->name('favoritemeal.delete');
     
     // 食事グラフ画面のルート
     Route::get('/myprofile/meal/meal_chart', [Meal_Controller::class, 'showMealchart'])->name('mealchart.show');
@@ -101,6 +103,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/myprofile/movement/favorite_movement_record/{id}', [Movement_Controller::class, 'showrecordfavoriteMovement'])->name('movement.favoriterecordshow');
     Route::put('/myprofile/movement/favorite_movement_record/{id}', [Movement_Controller::class, 'addfavoriteMovement'])->name('movement.favoriteadd');
     Route::post('/myprofile/movement/favorite_movement', [Movement_Controller::class, 'savefavoriteMovement'])->name('movement.favoritesave');
+    
+    //食事お気に入り消去のルート
+    Route::delete('/myprofile/movement/favorite_movement/{favorite_movement}', [Movement_Controller::class, 'deleteFavoritemovement'])->name('favoritemovement.delete');
     
     
     
