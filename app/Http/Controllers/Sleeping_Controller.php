@@ -62,6 +62,17 @@ class Sleeping_Controller extends Controller
     {
         $user = Auth::user(); // ログインしているユーザーを取得
         
+        // 今日の日付で既に睡眠が記録されているかを確認します
+        $existingRecord = Sleeping::where('user_id', $user->id)
+                                      ->whereDate('sleeping_created_at', now()->toDateString())
+                                      ->first();
+    
+        // 既に今日の日付に記録がある場合は、ユーザーに更新するよう促す
+        if ($existingRecord) {
+            return redirect()->route('sleeping.edit', ['id' => $existingRecord->id])
+                             ->with('info', '今日はすでに睡眠時間を記録しています。今日の睡眠時間を更新しますか？');
+        }
+        
         // フォームから送信されたデータを受け取る
         $data = $request->validate([
             'record_wake_up_time' => 'required',
@@ -87,7 +98,7 @@ class Sleeping_Controller extends Controller
         $sleeping = Sleeping::create($data);
 
         // 睡眠記録画面にリダイレクトする
-        return redirect()->route('sleeping.show');
+        return redirect()->route('sleeping.show')->with('success', '睡眠時間を記録しました。');
     }
     
     public function editSleeping($id)
@@ -125,7 +136,7 @@ class Sleeping_Controller extends Controller
         $sleeping = Sleeping::where('id', $id)->where('user_id', $user->id)->update($data);
     
         // 睡眠表示画面にリダイレクトする
-        return redirect()->route('sleeping.show');
+        return redirect()->route('sleeping.show')->with('success', '睡眠時間の記録を更新しました。');
     }
     
     public function deleteSleeping($id)
@@ -189,9 +200,9 @@ class Sleeping_Controller extends Controller
                      ->orderBy('sleeping_created_at')
                      ->get();
                      
-         // record_sleeping_timeを分表記に変換する
         foreach ($sleepings as $sleeping) {
-            $sleeping['record_sleeping_time'] = floor($sleeping['record_sleeping_time'] / 60); // 分に変換
+            // 分から時間に変換
+            $sleeping['record_sleeping_time'] = $sleeping['record_sleeping_time'] / 60; // 時間単位に変換
         }
         
         return response()->json($sleepings);

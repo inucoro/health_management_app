@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Movement;
 use App\Models\User;
+use App\Models\Daily_record;
+use Carbon\Carbon;
 use App\Models\Favorite_movement;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,9 +19,26 @@ class Movement_Controller extends Controller
         
         $userId = $user->id; //ログインユーザーidの取得
         
-        $sum_movement_consumption_cal = Movement::where('user_id', $userId)->sum('movement_consumption_cal'); //合計運動消費カロリーの計算
+        $today = Carbon::today();
+        
+        // 今日のデイリーレコードを取得
+        $dailyRecord = Daily_record::where('user_id', $userId)
+                                    ->where('date', $today)
+                                    ->first();
+                                    
+        // デイリーレコードが存在しない場合は作成する
+        if (!$dailyRecord) {
+            $this->calculate(); // calculateメソッドを呼び出してデイリーレコードを作成
+            $dailyRecord = Daily_record::where('user_id', $userId)
+                                        ->where('date', $today)
+                                        ->first();
+        }
+        
+        $sum_movement_consumption_cal = $dailyRecord->sum_movement_consumption_cal; //一日の合計運動消費カロリーの取得
         
         $target_movement_consumption_cal = $user->target_movement_consumption_cal; //目標運動消費カロリーの取得
+        
+        $consumed_cal_up_to_target = $target_movement_consumption_cal - $sum_movement_consumption_cal; //残り運動消費カロリーの計算
         
         //運動記録を取得
         $movements = Movement::where('user_id', $userId)->orderBy('movement_created_at', 'desc')->paginate(7); // 7件ごとにページネーション;
@@ -29,8 +48,30 @@ class Movement_Controller extends Controller
         ['user' => $user, 
         'sum_movement_consumption_cal' => $sum_movement_consumption_cal,
         'target_movement_consumption_cal' => $target_movement_consumption_cal,
-        'movements' => $movements
+        'movements' => $movements,
+        'consumed_cal_up_to_target' => $consumed_cal_up_to_target,
         ]);
+    }
+    
+    public function calculate()
+    {
+        $users = User::all();
+        $today = Carbon::today();
+    
+        foreach ($users as $user) {
+            $userId = $user->id;
+    
+            // 合計運動消費カロリーの計算
+            $sum_movement_consumption_cal = Movement::where('user_id', $userId)->whereDate('movement_created_at', $today)->sum('movement_consumption_cal');
+            
+            // Daily_record を作成または更新する
+            Daily_record::updateOrCreate([
+                'user_id' => $userId,
+                'date' => $today,
+            ], [
+                'sum_movement_consumption_cal' => $sum_movement_consumption_cal,
+            ]);
+        }
     }
     
     public function createMovement()
@@ -60,9 +101,12 @@ class Movement_Controller extends Controller
     
         // Movementモデルの新しいインスタンスを作成し、データを追加して保存
         $movement = Movement::create($data);
+        
+        // calculateメソッドを再度呼び出して、新しいデータを含む合計値を更新する
+        $this->calculate();
     
         // 運動記録画面にリダイレクトする
-        return redirect()->route('movement.show');
+        return redirect()->route('movement.show')->with('success', '運動を記録しました。');
     }
     
     public function editMovement($id)
@@ -93,15 +137,21 @@ class Movement_Controller extends Controller
     
         // 特定のIDに対応する運動データを取得し、更新する
         $movement = Movement::where('id', $id)->where('user_id', $user->id)->update($data);
+        
+        // calculateメソッドを再度呼び出して、新しいデータを含む合計値を更新する
+        $this->calculate();
     
         // 運動表示画面にリダイレクトする
-        return redirect()->route('movement.show');
+        return redirect()->route('movement.show')->with('success', '運動の記録を更新しました。');
     }
     
     public function deleteMovement($id)
     {
         $movement = Movement::findOrFail($id);
         $movement->delete();
+        
+        // calculateメソッドを再度呼び出して、新しいデータを含む合計値を更新する
+        $this->calculate();
         
         // 運動表示画面にリダイレクトする
         return redirect()->route('movement.show')->with('success', '運動記録が削除されました');
@@ -162,7 +212,7 @@ class Movement_Controller extends Controller
         $favorite_movements = Favorite_movement::create($favorite_data);
     
         // お気に入り運動画面にリダイレクトする
-        return redirect()->route('movement.favoriteshow');
+        return redirect()->route('movement.favoriteshow')->with('success', 'お気に入りに追加しました。');
     }
     
     //お気に入り画面から値を取得し、記録
@@ -196,6 +246,9 @@ class Movement_Controller extends Controller
         // Movementモデルの新しいインスタンスを作成し、データを追加して保存
         $movement = Movement::create($data);
     
+        // calculateメソッドを再度呼び出して、新しいデータを含む合計値を更新する
+        $this->calculate();
+        
         // 運動記録画面にリダイレクトする
         return redirect()->route('movement.show');
     }

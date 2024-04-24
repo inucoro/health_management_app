@@ -87,6 +87,11 @@
                 <textarea id="record_body_weight_memo" name="record_body_weight_memo" placeholder="メモを入力してください">{{ old('record_body_weight_memo', $body_weight->record_body_weight_memo) }}</textarea>
                 
                 <input type="submit" value="更新する">
+                @if (session('info'))
+                    <div class="alert alert-info">
+                        {{ session('info') }}
+                    </div>
+                @endif
                 <div class="footer">
                     <a href="/myprofile/body_weight">戻る</a>
                 </div>

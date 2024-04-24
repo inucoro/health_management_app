@@ -129,6 +129,11 @@
                 <div class='paginate'>
                     {{ $favorite_movements->links() }}
                 </div>
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
                 <div class="footer">
                     <a href="/myprofile/movement">戻る</a>
                 </div>

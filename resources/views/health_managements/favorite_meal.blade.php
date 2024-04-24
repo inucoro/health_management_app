@@ -126,6 +126,11 @@
                 <div class='paginate'>
                     {{ $favorite_meals->links() }}
                 </div>
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
                 <div class="footer">
                     <a href="/myprofile/meal">戻る</a>
                 </div>

@@ -84,6 +84,11 @@
                 <textarea id="record_sleeping_memo" name="record_sleeping_memo" placeholder="メモを入力してください">{{ old('record_sleeping_memo', $sleeping->record_sleeping_memo) }}</textarea>
                 
                 <input type="submit" value="更新する">
+                @if (session('info'))
+                    <div class="alert alert-info">
+                        {{ session('info') }}
+                    </div>
+                @endif
                 <div class="footer">
                     <a href="/myprofile/sleeping">戻る</a>
                 </div>

@@ -45,6 +45,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/myprofile/myprofile_setting', [Profile_Controller::class, 'updateProfile'])->name('myprofile.update');
     Route::put('/myprofile/myprofile_setting', [Profile_Controller::class, 'updatedProfile'])->name('myprofile.updated');
     
+    //　プロフィール画像のルート
+    // Route::get('/posts/create', [Profile_Controller::class, 'create']);  //投稿フォームの表示
+    // Route::post('/posts', [Profile_Controller::class, 'store']);  //画像を含めた投稿の保存処理
+    // Route::get('/posts/{post}', [Profile_Controller::class, 'show']); //投稿詳細画面の表示
+    
     
     
     // 食事画面のルート

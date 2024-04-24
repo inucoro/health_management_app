@@ -19,21 +19,42 @@ class Body_weight_Controller extends Controller
         $target_body_weight = $user->target_body_weight; //目標体重の取得
         
         // 最新の体重記録を取得
-        $body_weights = Body_weight::where('user_id', $userId)->orderBy('body_weight_created_at', 'desc')->paginate(7); // 7件ごとにページネーション
+        $latest_body_weight_record = Body_weight::where('user_id', $userId)
+                                          ->orderByDesc('body_weight_created_at')
+                                          ->first();
+        
+        $latest_body_weight = $latest_body_weight_record ? $latest_body_weight_record->record_body_weight : null;
         
         // 最新の体重記録以外を取得
-        $previous_body_weight = $body_weights->slice(1)->first();
-        $previous_record_body_weight = $previous_body_weight->record_body_weight;
+        $previous_body_weight = null;
+        $previous_record_body_weight = null;
+        
+        if ($latest_body_weight_record) {
+            $previous_body_weight = Body_weight::where('user_id', $userId)
+                                                ->where('id', '<>', $latest_body_weight_record->id)
+                                                ->orderByDesc('body_weight_created_at')
+                                                ->first();
+            
+            $previous_record_body_weight = $previous_body_weight ? $previous_body_weight->record_body_weight : null;
+        }
+        
+        $weight_up_to_target = $target_body_weight - $latest_body_weight; //目標体重までの計算
+        
+        // 最新の体重記録を含むすべての体重記録を取得
+        $body_weights = Body_weight::where('user_id', $userId)->orderBy('body_weight_created_at', 'desc')->paginate(7); // 7件ごとにページネーション
         
         // ビューにデータを渡して表示
         return view('health_managements.body_weight', [
             'user' => $user, 
             'target_body_weight' => $target_body_weight,
+            'latest_body_weight' => $latest_body_weight,
             'body_weights' => $body_weights,
             'previous_body_weight' => $previous_body_weight,
-            'previous_record_body_weight' => $previous_record_body_weight
+            'previous_record_body_weight' => $previous_record_body_weight,
+            'weight_up_to_target' => $weight_up_to_target,
         ]);
     }
+
     
     public function createBody_weight()
     {
@@ -44,7 +65,18 @@ class Body_weight_Controller extends Controller
     {
         $user = Auth::user(); // ログインしているユーザーを取得
         
-        // フォームから送信されたデータを受け取る
+        // 今日の日付で既に体重が記録されているかを確認します
+        $existingRecord = Body_weight::where('user_id', $user->id)
+                                      ->whereDate('body_weight_created_at', now()->toDateString())
+                                      ->first();
+    
+        // 既に今日の日付に記録がある場合は、ユーザーに更新するよう促す
+        if ($existingRecord) {
+            return redirect()->route('body_weight.edit', ['id' => $existingRecord->id])
+                             ->with('info', '今日はすでに体重を記録しています。今日の体重を更新しますか？');
+        }
+    
+        // 今日の日付に記録がない場合は、体重を記録
         $data = $request->validate([
             'record_body_weight' => 'required|numeric',
             'record_body_fat' => 'required|numeric',
@@ -61,7 +93,7 @@ class Body_weight_Controller extends Controller
         $body_weight = Body_weight::create($data);
     
         // 体重記録画面にリダイレクトする
-        return redirect()->route('body_weight.show');
+        return redirect()->route('body_weight.show')->with('success', '体重を記録しました。');
     }
     
     public function editBody_weight($id)
@@ -91,7 +123,7 @@ class Body_weight_Controller extends Controller
         $body_weight = Body_weight::where('id', $id)->where('user_id', $user->id)->update($data);
         
         // 体重表示画面にリダイレクトする
-        return redirect()->route('body_weight.show');
+        return redirect()->route('body_weight.show')->with('success', '体重の記録を更新しました。');
     }
     
     public function deleteBody_weight($id)

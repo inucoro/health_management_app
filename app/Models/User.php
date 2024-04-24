@@ -90,4 +90,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Favorite_movements::class);  
     }
+    
+    //Daily_recordsに対するリレーション
+    public function daily_records()   
+    {
+        return $this->hasMany(Daily_records::class);  
+    }
 }
