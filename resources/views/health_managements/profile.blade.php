@@ -84,7 +84,7 @@
                 <button onclick="location.href='/myprofile/sleeping'">睡眠</button>
             </div>
             <div class="profile_img">
-                <img id="profile_img" src="{{ asset('image/IMG_3252.JPG') }}" alt="プロフィール写真">
+                <img id="profile_img" src="{{ $user->image_path }}" alt="画像が読み込めません">
             </div>
             <div class="profile_info">
                 <label>名前</label>
@@ -135,6 +135,11 @@
                 <label>目標睡眠時間(h)</label>
                 <span id="target_sleeping_time">{{ $user->target_sleeping_time }}</span>
             </div>
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
             <div class="profile_buttons">
                 <button onclick="location.href='/myprofile/myprofile_setting'">プロフィール設定</button>
                 <button onclick="location.href='/myprofile/calender'">カレンダー</button><br /><br />

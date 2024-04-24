@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('favorite_movements', function (Blueprint $table) {
+        Schema::create('daily_records', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
         });
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('favorite_movements');
+        Schema::dropIfExists('daily_records');
     }
 };

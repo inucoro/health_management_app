@@ -73,6 +73,10 @@
                     <label>目標運動消費カロリー:</label>
                     <span id="target_movement_consumption_cal">{{ $target_movement_consumption_cal }} kcal</span>
                 </div>
+                <div class="summary_item">
+                    <label>目標まであと</label>
+                    <span id="consumed_cal_up_to_target">{{ $consumed_cal_up_to_target }} kcal</span>
+                </div>
             </div>
             <table>
                 <thead>

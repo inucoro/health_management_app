@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Meal;
 use App\Models\User;
 use App\Models\Movement;
+use App\Models\Daily_record;
+use Carbon\Carbon;
 use App\Models\Favorite_meal;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,31 +20,46 @@ class Meal_Controller extends Controller
         
         $userId = $user->id; //ログインユーザーidの取得
         
-        $sum_movement_consumption_cal = Movement::where('user_id', $userId)->sum('movement_consumption_cal'); //合計運動消費カロリーの計算
+        $today = Carbon::today();
+        
+        // 今日のデイリーレコードを取得
+        $dailyRecord = Daily_record::where('user_id', $userId)
+                                    ->where('date', $today)
+                                    ->first();
+                                    
+        // デイリーレコードが存在しない場合は作成する
+        if (!$dailyRecord) {
+            $this->calculate(); // calculateメソッドを呼び出してデイリーレコードを作成
+            $dailyRecord = Daily_record::where('user_id', $userId)
+                                        ->where('date', $today)
+                                        ->first();
+        }
+            
+        $sum_movement_consumption_cal = $dailyRecord->sum_movement_consumption_cal; //一日の合計運動消費カロリーの取得
         
         //カロリー
-        $ingestion_cal = Meal::where('user_id', $userId)->sum('record_cal'); //合計摂取カロリーの計算
+        $ingestion_cal = $dailyRecord->ingestion_cal; // 一日の合計摂取カロリーを取得
         
         $target_cal = $user->target_cal; //目標カロリーの取得
         
         $remaining_ingestion_cal = $target_cal - $ingestion_cal; //残り摂取カロリーの計算
         
         //タンパク質
-        $sum_ingested_protein =  Meal::where('user_id', $userId)->sum('record_protein'); //摂取タンパク質の計算
+        $sum_ingested_protein = $dailyRecord->sum_ingested_protein; //一日の摂取タンパク質の取得
         
         $target_protein = $user->target_protein; //目標タンパク質の取得
         
         $remaining_ingestion_protein = $target_protein - $sum_ingested_protein; //残りタンパク質の計算
         
         //脂質
-        $sum_ingested_fat =  Meal::where('user_id', $userId)->sum('record_fat'); //摂取脂質の計算
+        $sum_ingested_fat = $dailyRecord->sum_ingested_fat; //一日の摂取脂質の取得
         
         $target_fat = $user->target_fat; //目標脂質の取得
         
         $remaining_ingestion_fat = $target_fat - $sum_ingested_fat; //残り脂質の計算
         
         //炭水化物
-        $sum_ingested_carbo =  Meal::where('user_id', $userId)->sum('record_carbo'); //摂取炭水化物の計算
+        $sum_ingested_carbo = $dailyRecord->sum_ingested_carbo; //一日の摂取炭水化物の取得
         
         $target_carbo = $user->target_carbo; //目標炭水化物の取得
         
@@ -71,8 +88,48 @@ class Meal_Controller extends Controller
         ]);
     }
     
+    
+    public function calculate()
+    {
+        $users = User::all();
+        $today = Carbon::today();
+    
+        foreach ($users as $user) {
+            $userId = $user->id;
+    
+            // 合計摂取カロリーの計算
+            $ingestion_cal = Meal::where('user_id', $userId)->whereDate('meal_created_at', $today)->sum('record_cal');
+    
+            // 合計運動消費カロリーの計算
+            $sum_movement_consumption_cal = Movement::where('user_id', $userId)->whereDate('movement_created_at', $today)->sum('movement_consumption_cal');
+    
+            // 合計タンパク質の計算
+            $sum_ingested_protein =  Meal::where('user_id', $userId)->whereDate('meal_created_at', $today)->sum('record_protein');
+    
+            // 合計脂質の計算
+            $sum_ingested_fat =  Meal::where('user_id', $userId)->whereDate('meal_created_at', $today)->sum('record_fat');
+    
+            // 合計炭水化物の計算
+            $sum_ingested_carbo =  Meal::where('user_id', $userId)->whereDate('meal_created_at', $today)->sum('record_carbo');
+    
+            // Daily_record を作成または更新する
+            Daily_record::updateOrCreate([
+                'user_id' => $userId,
+                'date' => $today,
+            ], [
+                'ingestion_cal' => $ingestion_cal,
+                'movement_consumption_cal' => $sum_movement_consumption_cal,
+                'sum_ingested_protein' => $sum_ingested_protein,
+                'sum_ingested_fat' => $sum_ingested_fat,
+                'sum_ingested_carbo' => $sum_ingested_carbo,
+            ]);
+        }
+    }
+    
     public function createMeal()
     {
+        $this->calculate(); // calculateメソッドを呼び出してデイリーレコードを作成
+        
         return view('health_managements.meal_record');
     }
     
@@ -97,9 +154,12 @@ class Meal_Controller extends Controller
     
         // Mealモデルの新しいインスタンスを作成し、データを追加して保存
         $meal = Meal::create($data);
+        
+        // calculateメソッドを再度呼び出して、新しいデータを含む合計値を更新する
+        $this->calculate();
     
         // 食事記録画面にリダイレクトする
-        return redirect()->route('meal.show');
+        return redirect()->route('meal.show')->with('success', '食事を記録しました。');
     }
     
     public function editMeal($id)
@@ -129,15 +189,21 @@ class Meal_Controller extends Controller
     
         // 特定のIDに対応する食事データを取得し、更新する
         $meal = Meal::where('id', $id)->where('user_id', $user->id)->update($data);
+        
+        // calculateメソッドを再度呼び出して、新しいデータを含む合計値を更新する
+        $this->calculate();
     
         // 食事表示画面にリダイレクトする
-        return redirect()->route('meal.show');
+        return redirect()->route('meal.show')->with('success', '食事の記録を更新しました。');
     }
     
     public function deleteMeal($id)
     {
         $meal = Meal::findOrFail($id);
         $meal->delete();
+        
+        // calculateメソッドを再度呼び出して、新しいデータを含む合計値を更新する
+        $this->calculate();
         
         // 食事表示画面にリダイレクトする
         return redirect()->route('meal.show')->with('success', '食事記録が削除されました');
@@ -196,7 +262,7 @@ class Meal_Controller extends Controller
         $favorite_meals = Favorite_meal::create($favorite_data);
     
         // お気に入り食事画面にリダイレクトする
-        return redirect()->route('meal.favoriteshow');
+        return redirect()->route('meal.favoriteshow')->with('success', 'お気に入りに追加しました。');
     }
     
     //お気に入り画面から値を取得し、記録
@@ -227,6 +293,9 @@ class Meal_Controller extends Controller
     
         // Mealモデルの新しいインスタンスを作成し、データを追加して保存
         $meal = Meal::create($data);
+        
+        // calculateメソッドを再度呼び出して、新しいデータを含む合計値を更新する
+        $this->calculate();
     
         // 食事記録画面にリダイレクトする
         return redirect()->route('meal.show');
@@ -261,9 +330,9 @@ class Meal_Controller extends Controller
         $user = Auth::user();
         $userId = $user->id;
         
-        $meals = Meal::select('meal_created_at', 'record_cal')
+        $meals = Daily_record::select('created_at', 'ingestion_cal')
                      ->where('user_id', $userId)
-                     ->orderBy('meal_created_at')
+                     ->orderBy('created_at')
                      ->get();
     
         return response()->json($meals);
@@ -275,9 +344,9 @@ class Meal_Controller extends Controller
         $user = Auth::user();
         $userId = $user->id;
         
-        $meals = Meal::select('meal_created_at', 'record_protein')
+        $meals = Daily_record::select('created_at', 'sum_ingested_protein')
                      ->where('user_id', $userId)
-                     ->orderBy('meal_created_at')
+                     ->orderBy('created_at')
                      ->get();
     
         return response()->json($meals);
@@ -296,9 +365,9 @@ class Meal_Controller extends Controller
         $user = Auth::user();
         $userId = $user->id;
         
-        $meals = Meal::select('meal_created_at', 'record_fat')
+        $meals = Daily_record::select('created_at', 'sum_ingested_fat')
                      ->where('user_id', $userId)
-                     ->orderBy('meal_created_at')
+                     ->orderBy('created_at')
                      ->get();
     
         return response()->json($meals);
@@ -317,9 +386,9 @@ class Meal_Controller extends Controller
         $user = Auth::user();
         $userId = $user->id;
         
-        $meals = Meal::select('meal_created_at', 'record_carbo')
+        $meals = Daily_record::select('created_at', 'sum_ingested_carbo')
                      ->where('user_id', $userId)
-                     ->orderBy('meal_created_at')
+                     ->orderBy('created_at')
                      ->get();
     
         return response()->json($meals);

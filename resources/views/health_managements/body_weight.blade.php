@@ -65,12 +65,20 @@
             <h1>体重</h1>
             <div class="summary">
                 <div class="summary_item">
+                    <label>今回の体重:</label>
+                    <span id="latest_body_weight">{{ $latest_body_weight }} kg</span>
+                </div>
+                <div class="summary_item">
                     <label>前回の体重:</label>
                     <span id="previous_body_weight">{{ $previous_record_body_weight }} kg</span>
                 </div>
                 <div class="summary_item">
                     <label>目標体重:</label>
                     <span id="target_body_weight">{{ $target_body_weight }} kg</span>
+                </div>
+                <div class="summary_item">
+                    <label>目標まであと</label>
+                    <span id="weight_up_to_target">{{ $weight_up_to_target }} kg</span>
                 </div>
             </div>
             <table>
@@ -109,6 +117,11 @@
             <a href='/myprofile'>プロフィール</a>
             <a href='/myprofile/body_weight/body_weight_record'>体重記録</a>
             <a href='/myprofile/body_weight/body_weight_chart'>グラフ</a>
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
         </div>
         <script>
             function deleteBody_weight(id) {

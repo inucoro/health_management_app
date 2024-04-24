@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Profile;
 use Illuminate\Support\Facades\Auth;
+use Cloudinary;
 
 class Profile_Controller extends Controller
 {
@@ -27,11 +28,15 @@ class Profile_Controller extends Controller
         $user = Auth::user(); // ログインしているユーザーを取得
         
         // フォームから送信されたデータを受け取る
-        $data = $request->only(['name', 'sex', 'height', 'body_weight', 'age', 'target_body_weight', 'target_cal', 'target_protein', 'target_fat', 'target_carbo', 'target_movement_consumption_cal', 'target_sleeping_time']);
-
+        $data = $request->all();
+        
+        //cloudinaryへ画像を送信し、画像のURLを$image_pathに代入している
+        $image_path = Cloudinary::upload($request->file('image')->getRealPath())->getSecurePath();
+        $data['image_path'] = $image_path;
+        
         $user->update($data);
-
+    
         // プロフィール表示ページにリダイレクトする
-        return redirect()->route('myprofile.show');
+        return redirect()->route('myprofile.show')->with('success', 'プロフィールを更新しました。');
     }
 }

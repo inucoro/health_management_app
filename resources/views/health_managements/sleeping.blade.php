@@ -69,6 +69,8 @@
                     <span id="today_sleeping_time">{{ $today_sleeping_time }}</span>
                     <label>前回の睡眠時間：</label>
                     <span id="previous_record_sleeping_time">{{ $previous_record_sleeping_time }}</span>
+                    <label>目標睡眠時間：</label>
+                    <span id="target_sleeping_time">{{ $target_sleeping_time }}時間</span>
                 </div>
             </div>
             <table>
@@ -107,6 +109,11 @@
             <a href='/myprofile'>プロフィール</a>
             <a href='/myprofile/sleeping/sleeping_record'>睡眠記録</a>
             <a href='/myprofile/sleeping/sleeping_chart'>グラフ</a>
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
         </div>
         <script>
             function deleteSleeping(id) {

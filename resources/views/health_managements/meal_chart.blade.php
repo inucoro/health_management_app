@@ -53,10 +53,10 @@
                         var mealCalorieChart = new Chart(ctx, {
                             type: 'line',
                             data: {
-                                labels: data.map(item => item.meal_created_at),
+                                labels: data.map(item => item.created_at),
                                 datasets: [{
                                     label: '食事カロリー',
-                                    data: data.map(item => item.record_cal),
+                                    data: data.map(item => item.ingestion_cal),
                                     borderColor: 'rgb(75, 192, 192)',
                                     tension: 0.1
                                 }]
@@ -117,10 +117,10 @@
                         var proteinChart = new Chart(ctx, {
                             type: 'line',
                             data: {
-                                labels: data.map(item => item.meal_created_at),
+                                labels: data.map(item => item.created_at),
                                 datasets: [{
                                     label: 'タンパク質',
-                                    data: data.map(item => item.record_protein),
+                                    data: data.map(item => item.sum_ingested_protein),
                                     borderColor: 'rgb(255, 99, 132)',
                                     tension: 0.1
                                 }]
@@ -172,10 +172,10 @@
                         var fatChart = new Chart(ctx, {
                             type: 'line',
                             data: {
-                                labels: data.map(item => item.meal_created_at),
+                                labels: data.map(item => item.created_at),
                                 datasets: [{
                                     label: '脂質',
-                                    data: data.map(item => item.record_fat),
+                                    data: data.map(item => item.sum_ingested_fat),
                                     borderColor: 'rgb(54, 162, 235)',
                                     tension: 0.1
                                 }]
@@ -227,10 +227,10 @@
                         var carbohydrateChart = new Chart(ctx, {
                             type: 'line',
                             data: {
-                                labels: data.map(item => item.meal_created_at),
+                                labels: data.map(item => item.created_at),
                                 datasets: [{
                                     label: '炭水化物',
-                                    data: data.map(item => item.record_carbo),
+                                    data: data.map(item => item.sum_ingested_carbo),
                                     borderColor: 'rgb(255, 205, 86)',
                                     tension: 0.1
                                 }]

@@ -82,11 +82,12 @@
     <body>
         <div class="profile">
             <h2>プロフィール更新</h2>
-            <form action="/myprofile/myprofile_setting" method="POST">
+            <form action="/myprofile/myprofile_setting" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                <div class="profile_img">
-                    <img src="default_profile.jpg" alt="プロフィール写真">
+                <div class="image">
+                    <label for="name">プロフィール写真</label>
+                    <input type="file" name="image">
                 </div>
                 <div class="profile_info">
                     <label for="name">名前</label>
