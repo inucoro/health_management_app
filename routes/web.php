@@ -162,9 +162,7 @@ Route::middleware('auth')->group(function () {
     
     
     
-    // カレンダー表示画面のルート
-    Route::get('/myprofile/calender', function() {
-        return view('health_managements.calender');
-    });
+    //  カレンダー表示画面のルート
+    Route::get('/myprofile/calender', [Movement_Controller::class, 'showMovement_calender'])->name('movementcalender.show');
 });
 
