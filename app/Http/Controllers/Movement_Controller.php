@@ -262,4 +262,26 @@ class Movement_Controller extends Controller
         // 運動表示画面にリダイレクトする
         return redirect()->route('movement.show')->with('success', 'お気に入りが削除されました');
     }
+    
+    // カレンダーに運動した日にスタンプを表示
+    public function showMovement_calender()
+    {
+        $user = Auth::user(); // ログインしているユーザーを取得
+        $userId = $user->id; // ログインユーザーidの取得
+    
+        // 現在の年と月を取得
+        $currentYear = Carbon::now()->year;
+        $currentMonth = Carbon::now()->month;
+    
+        // 全年、全月に関しての運動記録の日付の配列を取得
+        $recordedDates = Movement::where('user_id', $userId)
+                                 ->pluck('movement_created_at')
+                                 ->map(function ($date) {
+                                     return Carbon::parse($date)->format('Y-m-d');
+                                 })
+                                 ->toArray();
+    
+        // Bladeテンプレートを返す
+        return view('health_managements.calender', compact('currentYear', 'currentMonth', 'recordedDates'));
+    }
 }

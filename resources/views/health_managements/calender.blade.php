@@ -1,73 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Improved Calendar</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 20px;
-        background-color: #f5f5f5;
-    }
-    h2 {
-        text-align: center;
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-    th, td {
-        padding: 10px;
-        border: 1px solid #ccc;
-        text-align: center;
-        font-size: 18px;
-        position: relative;
-    }
-    th {
-        height: 30px; /* 曜日の枠の高さ */
-    }
-    td {
-        height: 60px; /* 日付の枠の高さ */
-    }
-    td:hover {
-        background-color: #e0e0e0;
-        cursor: pointer;
-    }
-    .btn-container {
-        text-align: center;
-        margin-top: 20px;
-    }
-    .btn {
-        padding: 10px 20px;
-        margin: 0 10px;
-        border: none;
-        border-radius: 4px;
-        background-color: #007bff;
-        color: #fff;
-        cursor: pointer;
-    }
-    .sunday {
-        color: red;
-    }
-    .saturday {
-        color: blue;
-    }
-    .holiday {
-        color: red;
-        font-weight: bold;
-    }
-    .date {
-        position: absolute;
-        top: 5px; /* 日付の枠の上側からの位置 */
-        left: 5px; /* 日付の枠の左側からの位置 */
-        font-size: 20px;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Improved Calendar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h2 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+            font-size: 18px;
+            width: calc(100% / 7); /* セルの幅を7分割して均等に */
+            position: relative;
+        }
+        th {
+            height: 30px; /* 曜日の枠の高さ */
+        }
+        td {
+            height: 60px; /* 日付の枠の高さ */
+            position: relative; /* スタンプの位置を調整するために必要 */
+        }
+        td:hover {
+            background-color: #e0e0e0;
+            cursor: pointer;
+        }
+        .btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .btn {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        .sunday {
+            color: red;
+        }
+        .saturday {
+            color: blue;
+        }
+        .holiday {
+            color: red;
+            font-weight: bold;
+        }
+        .date {
+            position: absolute;
+            top: 5px; /* 日付の枠の上側からの位置 */
+            left: 5px; /* 日付の枠の左側からの位置 */
+            font-size: 20px;
+        }
+        /* 今日の日付のセルを薄い青色で塗りつぶす */
+        .today {
+            background-color: #cce5ff; /* 薄い青色 */
+        }
+        /* 今日の日付を太字にする */
+        .bold {
+            font-weight: bold;
+        }
+         /* スタンプのスタイル */
+        .stamp {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px; /* スタンプの幅 */
+            height: 40px; /* スタンプの高さ */
+            background: url('/image/IMG_3252.JPG') no-repeat center center; /*アイコンの画像をURLから取得 */
+            background-size: cover; /* 画像をセル内でカバー */
+            z-index: 1;
+        }
+    </style>
 </head>
     <body>
         <h2 id="monthYear">カレンダー</h2>
@@ -94,22 +116,26 @@
         </table>
         
         <script>
+            // 運動が記録された日付の配列
+            const recordedDates = {!! json_encode($recordedDates) !!}; // recordedDatesをJSON形式にエンコードしてJavaScriptに渡す
+    
             // カレンダーの日付データを作成する関数
             function createCalendar(year, month) {
                 const tbody = document.querySelector('#calendar tbody');
                 tbody.innerHTML = ''; // 一旦tbodyを空にする
-        
+            
                 const lastDay = new Date(year, month + 1, 0).getDate(); // 月の最終日を取得
                 const firstDayOfWeek = new Date(year, month, 1).getDay(); // 月の最初の曜日を取得
-        
+                const todayDate = new Date().getDate(); // 今日の日付を取得
+            
                 let date = 1;
-        
+            
                 for (let i = 0; i < 6; i++) {
                     const row = document.createElement('tr');
-        
+            
                     for (let j = 0; j < 7; j++) {
                         const cell = document.createElement('td');
-        
+            
                         if (i === 0 && j < firstDayOfWeek) {
                             // 最初の行で、月の最初の曜日より前のセルは空白にする
                             cell.textContent = '';
@@ -121,31 +147,44 @@
                             dateText.textContent = date;
                             dateText.classList.add('date');
                             cell.appendChild(dateText);
-        
+            
                             // 日曜日と土曜日、祝日のスタイルを適用
                             if (j === 0) {
                                 cell.classList.add('sunday');
                             } else if (j === 6) {
                                 cell.classList.add('saturday');
                             }
-        
+            
                             if (isHoliday(year, month, date)) {
                                 cell.classList.add('holiday');
                             }
-        
+            
+                            // 今日の日付のセルにクラスを追加して薄い青色で塗りつぶし、太字にする
+                            if (date === todayDate) {
+                                cell.classList.add('today');
+                                cell.classList.add('bold');
+                            }
+            
+                            // 運動が記録された日のセルにスタンプを表示する
+                            if (recordedDates.some(dateStr => dateStr === `${year}-${('0' + (month + 1)).slice(-2)}-${('0' + date).slice(-2)}`)) {
+                                const stamp = document.createElement('div');
+                                stamp.classList.add('stamp');
+                                cell.appendChild(stamp);
+                            }
+            
                             date++;
                         }
-        
+            
                         row.appendChild(cell);
                     }
-        
+            
                     tbody.appendChild(row);
                 }
-        
+            
                 // カレンダーの月と年を更新
                 document.getElementById('monthYear').textContent = `${year}年${month + 1}月`;
             }
-        
+    
             // 祝日の判定関数（国民の祝日法に基づいて祝日を判定）
             function isHoliday(year, month, date) {
                 const holidays = {
@@ -170,17 +209,17 @@
                     // 12月
                     12: [23], // 天皇誕生日
                 };
-        
+    
                 return holidays[month + 1] && holidays[month + 1].includes(date);
             }
-        
+    
             // 現在の年と月を取得
             const today = new Date();
             let currentYear = today.getFullYear();
             let currentMonth = today.getMonth();
-        
+    
             createCalendar(currentYear, currentMonth);
-        
+    
             // 前の月へ移動するボタン
             document.getElementById('prev').addEventListener('click', function() {
                 currentMonth--;
@@ -190,13 +229,12 @@
                 }
                 createCalendar(currentYear, currentMonth);
             });
-        
+    
             // 次の月へ移動するボタン
             document.getElementById('next').addEventListener('click', function() {
                 currentMonth++;
                 if (currentMonth > 11) {
                     currentMonth = 0;
-                    currentYear++;
                     currentYear++;
                 }
                 createCalendar(currentYear, currentMonth);
