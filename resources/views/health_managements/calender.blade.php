@@ -85,7 +85,7 @@
             transform: translate(-50%, -50%);
             width: 40px; /* スタンプの幅 */
             height: 40px; /* スタンプの高さ */
-            background: url('/image/IMG_3252.JPG') no-repeat center center; /*アイコンの画像をURLから取得 */
+            background: url('/image/IMG_running_V2.jpg') no-repeat center center; /*アイコンの画像をURLから取得 */
             background-size: cover; /* 画像をセル内でカバー */
             z-index: 1;
         }

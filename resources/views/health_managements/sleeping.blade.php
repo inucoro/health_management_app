@@ -73,6 +73,75 @@
                     <span id="target_sleeping_time">{{ $target_sleeping_time }}時間</span>
                 </div>
             </div>
+            
+            @if ($today_sleeping_time < 5)
+                <style>
+                    #message {
+                        position: fixed;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        background-color: #fff;
+                        border: 1px solid #ccc;
+                        padding: 20px;
+                        border-radius: 8px;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                        z-index: 9999;
+                    }
+            
+                    #message button {
+                        margin-top: 10px;
+                        padding: 8px 16px;
+                        background-color: #007bff;
+                        color: #fff;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                    }
+                </style>
+            
+                <script>
+                    window.onload = function() {
+                        var message = document.createElement('div');
+                        message.id = 'message';
+                        message.innerHTML = 'あまり睡眠時間がとれていません。体調に気を付けてください。<br><button onclick="hideMessage_sleeping()">OK</button><label><input type="checkbox" id="hideForeverCheckbox">二度と表示しない</label>';
+                        document.body.appendChild(message);
+                        checkAndHideMessage(); // ページ読み込み時にローカルストレージをチェックして非表示にする
+                    };
+                
+                    function hideMessage_sleeping() {
+                        var message = document.getElementById('message');
+                        if (message) {
+                            var hideForeverCheckbox = document.getElementById('hideForeverCheckbox');
+                            if (hideForeverCheckbox.checked) {
+                                localStorage.setItem('hideMessage_sleeping', true);
+                            }
+                            message.style.display = 'none';
+                        }
+                    }
+                
+                    function checkAndHideMessage() {
+                        if (localStorage.getItem('hideMessage_sleeping')) {
+                            var message = document.getElementById('message');
+                            if (message) {
+                                message.style.display = 'none';
+                            }
+                        }
+                    }
+                
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var form = document.querySelector('form');
+                        
+                        form.addEventListener('submit', function() {
+                            var hideForeverCheckbox = document.getElementById('hideForeverCheckbox');
+                            if (hideForeverCheckbox.checked) {
+                                localStorage.setItem('hideMessage_sleeping', true);
+                            }
+                        });
+                    });
+                </script>
+            @endif
+            
             <table>
                 <thead>
                     <tr>

@@ -78,73 +78,71 @@
     <body>
         <div class="container">
             <h1>お気に入り</h1>
-            <form action="/myprofile/movement/favorite_movement" method="POST">
-                @csrf
-                <table>
-                    <thead>
+            <table>
+                <thead>
+                    <tr>
+                        <th>運動の種目</th>
+                        <th>扱った錘の重さ (kg)</th>
+                        <th>挙上回数 (Reps)</th>
+                        <th>セット数</th>
+                        <th>運動時間 (分)</th>
+                        <th>運動消費カロリー (kcal)</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($favorite_movements as $favorite_movement)
                         <tr>
-                            <th>運動の種目</th>
-                            <th>扱った錘の重さ (kg)</th>
-                            <th>挙上回数 (Reps)</th>
-                            <th>セット数</th>
-                            <th>運動時間 (分)</th>
-                            <th>運動消費カロリー (kcal)</th>
-                            <th></th>
-                            <th></th>
+                            <td>{{ $favorite_movement->favorite_type }}</td>
+                            <td>{{ $favorite_movement->favorite_weight }}</td>
+                            <td>{{ $favorite_movement->favorite_times }}</td>
+                            <td>{{ $favorite_movement->favorite_sets }}</td>
+                            <td>{{ $favorite_movement->favorite_movement_times }}</td>
+                            <td>{{ $favorite_movement->favorite_movement_consumption_cal }}</td>
+                            <td>
+                                <form action="/myprofile/movement/favorite_movement/{{ $favorite_movement->id }}" class="form_{{ $favorite_movement->id }}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" onclick="deleteFavoritemovement({{ $favorite_movement->id }})">削除</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="{{ route('movement.favoritesave') }}" method="POST">
+                                    @csrf
+                                    <!-- お気に入りメニューの情報を送信 -->
+                                    <input type="hidden" name="favorite_type" value="{{ $favorite_movement->favorite_type }}">
+                                    <input type="hidden" name="favorite_weight" value="{{ $favorite_movement->favorite_weight }}">
+                                    <input type="hidden" name="favorite_times" value="{{ $favorite_movement->favorite_times }}">
+                                    <input type="hidden" name="favorite_sets" value="{{ $favorite_movement->favorite_sets }}">
+                                    <input type="hidden" name="favorite_movement_times" value="{{ $favorite_movement->favorite_movement_times }}">
+                                    <input type="hidden" name="favorite_movement_consumption_cal" value="{{ $favorite_movement->favorite_movement_consumption_cal }}">
+                                    <input type="submit" value="記録する">
+                                </form>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($favorite_movements as $favorite_movement)
-                            <tr>
-                                <td>{{ $favorite_movement->favorite_type }}</td>
-                                <td>{{ $favorite_movement->favorite_weight }}</td>
-                                <td>{{ $favorite_movement->favorite_times }}</td>
-                                <td>{{ $favorite_movement->favorite_sets }}</td>
-                                <td>{{ $favorite_movement->favorite_movement_times }}</td>
-                                <td>{{ $favorite_movement->favorite_movement_consumption_cal }}</td>
-                                <td>
-                                    <form action="/myprofile/movement/favorite_movement/{{ $favorite_movement->id }}" id="form_{{ $favorite_movement->id }}" method="post">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button" onclick="deleteFavoritemovement({{ $favorite_movement->id }})">削除</button>
-                                    </form>
-                                </td>
-                                <td>
-                                    <form action="{{ route('movement.favoritesave') }}" method="POST">
-                                        @csrf
-                                        <!-- お気に入りメニューの情報を送信 -->
-                                        <input type="hidden" name="favorite_type" value="{{ $favorite_movement->favorite_type }}">
-                                        <input type="hidden" name="favorite_weight" value="{{ $favorite_movement->favorite_weight }}">
-                                        <input type="hidden" name="favorite_times" value="{{ $favorite_movement->favorite_times }}">
-                                        <input type="hidden" name="favorite_sets" value="{{ $favorite_movement->favorite_sets }}">
-                                        <input type="hidden" name="favorite_movement_times" value="{{ $favorite_movement->favorite_movement_times }}">
-                                        <input type="hidden" name="favorite_movement_consumption_cal" value="{{ $favorite_movement->favorite_movement_consumption_cal }}">
-                                        <input type="submit" value="記録する">
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                <div class='paginate'>
-                    {{ $favorite_movements->links() }}
+                    @endforeach
+                </tbody>
+            </table>
+            <div class='paginate'>
+                {{ $favorite_movements->links() }}
+            </div>
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
                 </div>
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-                <div class="footer">
-                    <a href="/myprofile/movement">戻る</a>
-                </div>
-            </form>
+            @endif
+            <div class="footer">
+                <a href="/myprofile/movement">戻る</a>
+            </div>
         </div>
         <script>
             function deleteFavoritemovement(id) {
                 'use strict'
         
                 if (confirm('削除すると復元できません。\n本当に削除しますか？')) {
-                    document.getElementById(`form_${id}`).submit();
+                    const testEl = document.getElementById(id);
+                    document.querySelector(`.form_${id}`).submit();
                 }
             }
         </script>
