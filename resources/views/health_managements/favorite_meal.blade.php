@@ -78,63 +78,60 @@
     <body>
         <div class="container">
             <h1>お気に入り</h1>
-            <form action="/myprofile/meal/favorite_meal" method="POST">
-                @csrf
-                <table>
-                    <thead>
+            <table>
+                <thead>
+                    <tr>
+                        <th>メニュー</th>
+                        <th>カロリー(kcal)</th>
+                        <th>タンパク質(g)</th>
+                        <th>脂質(g)</th>
+                        <th>炭水化物(g)</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($favorite_meals as $favorite_meal)
                         <tr>
-                            <th>メニュー</th>
-                            <th>カロリー(kcal)</th>
-                            <th>タンパク質(g)</th>
-                            <th>脂質(g)</th>
-                            <th>炭水化物(g)</th>
-                            <th></th>
-                            <th></th>
+                            <td>{{ $favorite_meal->favorite_menu }}</td>
+                            <td>{{ $favorite_meal->favorite_cal }}</td>
+                            <td>{{ $favorite_meal->favorite_protein }}</td>
+                            <td>{{ $favorite_meal->favorite_fat }}</td>
+                            <td>{{ $favorite_meal->favorite_carbo }}</td>
+                            <td>
+                                <form action="/myprofile/meal/favorite_meal/{{ $favorite_meal->id }}" id="form_{{ $favorite_meal->id }}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" onclick="deleteFavoritemeal({{ $favorite_meal->id }})">削除</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="{{ route('meal.favoritesave') }}" method="POST">
+                                    @csrf
+                                    <!-- お気に入りメニューの情報を送信 -->
+                                    <input type="hidden" name="favorite_menu" value="{{ $favorite_meal->favorite_menu }}">
+                                    <input type="hidden" name="favorite_cal" value="{{ $favorite_meal->favorite_cal }}">
+                                    <input type="hidden" name="favorite_protein" value="{{ $favorite_meal->favorite_protein }}">
+                                    <input type="hidden" name="favorite_fat" value="{{ $favorite_meal->favorite_fat }}">
+                                    <input type="hidden" name="favorite_carbo" value="{{ $favorite_meal->favorite_carbo }}">
+                                    <input type="submit" value="記録する">
+                                </form>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($favorite_meals as $favorite_meal)
-                            <tr>
-                                <td>{{ $favorite_meal->favorite_menu }}</td>
-                                <td>{{ $favorite_meal->favorite_cal }}</td>
-                                <td>{{ $favorite_meal->favorite_protein }}</td>
-                                <td>{{ $favorite_meal->favorite_fat }}</td>
-                                <td>{{ $favorite_meal->favorite_carbo }}</td>
-                                <td>
-                                    <form action="/myprofile/meal/favorite_meal/{{ $favorite_meal->id }}" id="form_{{ $favorite_meal->id }}" method="post">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button" onclick="deleteFavoritemeal({{ $favorite_meal->id }})">削除</button>
-                                    </form>
-                                </td>
-                                <td>
-                                    <form action="{{ route('meal.favoritesave') }}" method="POST">
-                                        @csrf
-                                        <!-- お気に入りメニューの情報を送信 -->
-                                        <input type="hidden" name="favorite_menu" value="{{ $favorite_meal->favorite_menu }}">
-                                        <input type="hidden" name="favorite_cal" value="{{ $favorite_meal->favorite_cal }}">
-                                        <input type="hidden" name="favorite_protein" value="{{ $favorite_meal->favorite_protein }}">
-                                        <input type="hidden" name="favorite_fat" value="{{ $favorite_meal->favorite_fat }}">
-                                        <input type="hidden" name="favorite_carbo" value="{{ $favorite_meal->favorite_carbo }}">
-                                        <input type="submit" value="記録する">
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                <div class='paginate'>
-                    {{ $favorite_meals->links() }}
+                    @endforeach
+                </tbody>
+            </table>
+            <div class='paginate'>
+                {{ $favorite_meals->links() }}
+            </div>
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
                 </div>
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-                <div class="footer">
-                    <a href="/myprofile/meal">戻る</a>
-                </div>
-            </form>
+            @endif
+            <div class="footer">
+                <a href="/myprofile/meal">戻る</a>
+            </div>
         </div>
         <script>
             function deleteFavoritemeal(id) {

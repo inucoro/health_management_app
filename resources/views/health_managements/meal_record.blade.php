@@ -83,5 +83,15 @@
                 </div>
             </form>
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var form = document.querySelector('form[action="/myprofile/meal/meal_record"]'); // フォームのIDを取得
+        
+                form.addEventListener('submit', function() {
+                    // ローカルストレージから情報を削除
+                    localStorage.removeItem('hideMessage_meal');
+                });
+            });
+        </script>
     </body>
 </html>

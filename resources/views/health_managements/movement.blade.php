@@ -78,6 +78,75 @@
                     <span id="consumed_cal_up_to_target">{{ $consumed_cal_up_to_target }} kcal</span>
                 </div>
             </div>
+            
+            @if ($sum_movement_consumption_cal > $target_movement_consumption_cal)
+                <style>
+                    #message {
+                        position: fixed;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        background-color: #fff;
+                        border: 1px solid #ccc;
+                        padding: 20px;
+                        border-radius: 8px;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                        z-index: 9999;
+                    }
+            
+                    #message button {
+                        margin-top: 10px;
+                        padding: 8px 16px;
+                        background-color: #007bff;
+                        color: #fff;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                    }
+                </style>
+            
+                <script>
+                    window.onload = function() {
+                        var message = document.createElement('div');
+                        message.id = 'message';
+                        message.innerHTML = '目標運動消費カロリーを超えました！いい心掛けですね！<br><button onclick="hideMessage_movement()">OK</button><label><input type="checkbox" id="hideForeverCheckbox">二度と表示しない</label>';
+                        document.body.appendChild(message);
+                        checkAndHideMessage(); // ページ読み込み時にローカルストレージをチェックして非表示にする
+                    };
+                
+                    function hideMessage_movement() {
+                        var message = document.getElementById('message');
+                        if (message) {
+                            var hideForeverCheckbox = document.getElementById('hideForeverCheckbox');
+                            if (hideForeverCheckbox.checked) {
+                                localStorage.setItem('hideMessage_movement', true);
+                            }
+                            message.style.display = 'none';
+                        }
+                    }
+                
+                    function checkAndHideMessage() {
+                        if (localStorage.getItem('hideMessage_movement')) {
+                            var message = document.getElementById('message');
+                            if (message) {
+                                message.style.display = 'none';
+                            }
+                        }
+                    }
+                
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var form = document.querySelector('form');
+                        
+                        form.addEventListener('submit', function() {
+                            var hideForeverCheckbox = document.getElementById('hideForeverCheckbox');
+                            if (hideForeverCheckbox.checked) {
+                                localStorage.setItem('hideMessage_movement', true);
+                            }
+                        });
+                    });
+                </script>
+            @endif
+            
             <table>
                 <thead>
                     <tr>

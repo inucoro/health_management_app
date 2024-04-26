@@ -88,5 +88,15 @@
                 </div>
             </form>
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var form = document.querySelector('form[action="/myprofile/sleeping/sleeping_record"]'); // フォームのIDを取得
+        
+                form.addEventListener('submit', function() {
+                    // ローカルストレージから情報を削除
+                    localStorage.removeItem('hideMessage_sleeping');
+                });
+            });
+        </script>
     </body>
 </html>
