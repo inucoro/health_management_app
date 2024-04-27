@@ -1,19 +1,49 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="header bg-white border-b border-gray-100 h-16 p-0">
+    
+	<style>
+		.header {
+            width: 100%;
+            margin: 0 auto;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    
+    
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-                    </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('myprofile.show')" :active="request()->routeIs('dashboard')">
-                        {{ __('Profile') }}
+                        {{ __('プロフィール') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('meal.show')" :active="request()->routeIs('dashboard')">
+                        {{ __('食事') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('movement.show')" :active="request()->routeIs('dashboard')">
+                        {{ __('運動') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('body_weight.show')" :active="request()->routeIs('dashboard')">
+                        {{ __('体重') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('sleeping.show')" :active="request()->routeIs('dashboard')">
+                        {{ __('睡眠') }}
                     </x-nav-link>
                 </div>
             </div>

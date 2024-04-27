@@ -30,9 +30,12 @@ class Profile_Controller extends Controller
         // フォームから送信されたデータを受け取る
         $data = $request->all();
         
-        //cloudinaryへ画像を送信し、画像のURLを$image_pathに代入している
-        $image_path = Cloudinary::upload($request->file('image')->getRealPath())->getSecurePath();
-        $data['image_path'] = $image_path;
+        if($request->file('image')){ //画像ファイルが送られた時だけ処理が実行される
+            //cloudinaryへ画像を送信し、画像のURLを$image_pathに代入している
+            $image_path = Cloudinary::upload($request->file('image')->getRealPath())->getSecurePath();
+            $data['image_path'] = $image_path;
+        }
+        
         
         $user->update($data);
     
