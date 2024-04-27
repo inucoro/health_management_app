@@ -14,7 +14,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased">
+    <body class="font-sans antialiased p-[20px] bg-gray-100">
         <div class="min-h-screen bg-gray-100">
             @include('layouts.navigation')
 
@@ -28,8 +28,17 @@
             @endif
 
             <!-- Page Content -->
-            <main>
-                {{ $slot }}
+            <main class="py-6">
+                <div class="max-w-full mx-auto">
+                    <div class="flex w-full flex-col lg:flex-row justify-between">
+                        <div class="w-[20%]">
+                            @include('layouts.sidebar')
+                        </div>
+                        <div class="w-[77%]">
+                            {{ $slot }}
+                        </div>
+                    </div>
+                </div>
             </main>
         </div>
     </body>

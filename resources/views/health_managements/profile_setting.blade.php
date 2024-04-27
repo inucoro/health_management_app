@@ -1,152 +1,86 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>プロフィールの設定画面</title>
-
-        <!-- Fonts -->
-        <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-
-        <!-- Styles -->
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 20px;
-                background-color: #f5f5f5;
-            }
-            .profile {
-                max-width: 600px;
-                margin: 0 auto;
-                padding: 20px;
-                border-radius: 8px;
-                background-color: #fff;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
-            .profile_img {
-                text-align: center;
-                margin-bottom: 20px;
-            }
-            .profile_img img {
-                width: 200px;
-                height: 200px;
-                border-radius: 50%;
-                object-fit: cover;
-                border: 4px solid #fff;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            }
-            .profile_info {
-                margin-bottom: 20px;
-            }
-            .profile_info label {
-                font-weight: bold;
-                display: block;
-                margin-bottom: 5px;
-                color: #333;
-            }
-            .profile_info input[type="text"],
-            .profile_info input[type="number"],
-            .profile_info select {
-                width: 100%;
-                padding: 8px;
-                margin-top: 5px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                box-sizing: border-box;
-                font-size: 16px;
-            }
-            .profile_info select {
-                width: 100%;
-            }
-            .profile_info input[type="submit"] {
-                background-color: #4CAF50;
-                color: white;
-                padding: 10px 20px;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                font-size: 16px;
-            }
-            .profile_info input[type="submit"]:hover {
-                background-color: #45a049;
-            }
-            h2 {
-                color: #333;
-                margin-top: 0;
-                margin-bottom: 20px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="profile">
-            <h2>プロフィール更新</h2>
-            <form action="/myprofile/myprofile_setting" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-                <div class="image">
-                    <label for="name">プロフィール写真</label>
-                    <input type="file" name="image">
-                </div>
-                <div class="profile_info">
-                    <label for="name">名前</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="profile_info">
-                    <label for="sex">性別</label>
-                    <select id="sex" name="sex">
-                        <option value="male">男性</option>
-                        <option value="female">女性</option>
-                    </select>
-                </div>
-                <div class="profile_info">
-                    <label for="height">身長(cm)</label>
-                    <input type="number" id="height" name="height" min="0" required>
-                </div>
-                <div class="profile_info">
-                    <label for="body_weight">体重(kg)</label>
-                    <input type="number" id="body_weight" name="body_weight" min="0" required>
-                </div>
-                <div class="profile_info">
-                    <label for="age">年齢</label>
-                    <input type="number" id="age" name="age" min="0" required>
-                </div>
-                <div class="profile_info">
-                    <label for="target_body_weight">目標体重(kg)</label>
-                    <input type="number" id="target_body_weight" name="target_body_weight" min="0" required>
-                </div>
-                <div class="profile_info">
-                    <label for="target_cal">目標カロリー(kcal)</label>
-                    <input type="number" id="target_cal" name="target_cal" min="0" required>
-                </div>
-                <div class="profile_info">
-                    <label for="target_protein">目標タンパク質(g)</label>
-                    <input type="number" id="target_protein" name="target_protein" min="0" required>
-                </div>
-                <div class="profile_info">
-                    <label for="target_fat">目標脂質(g)</label>
-                    <input type="number" id="target_fat" name="target_fat" min="0" required>
-                </div>
-                <div class="profile_info">
-                    <label for="target_carbo">目標炭水化物(g)</label>
-                    <input type="number" id="target_carbo" name="target_carbo" min="0" required>
-                </div>
-                <div class="profile_info">
-                    <label for="target_movement_consumption_cal">目標運動消費カロリー(kcal)</label>
-                    <input type="number" id="target_movement_consumption_cal" name="target_movement_consumption_cal" min="0" required>
-                </div>
-                <div class="profile_info">
-                    <label for="target_sleeping_time">目標睡眠時間(hours)</label>
-                    <input type="number" id="target_sleeping_time" name="target_sleeping_time" min="0" required>
-                </div>
-                <div class="profile_info">
-                    <input type="submit" value="更新">
-                </div>
-                <div class="footer">
-                   <a href="/myprofile">戻る</a>
-                </div>
-            </form>
-        </div>
-    </body>
-</html>
+<x-app-layout>   
+    <section class="w-full p-6 dark:bg-gray-100 dark:text-gray-900">
+    	<form action="/myprofile/myprofile_setting" method="POST" enctype="multipart/form-data" class="container flex flex-col mx-auto space-y-12">
+    	    @csrf
+            @method('PUT')
+    		<fieldset class="grid grid-cols-4 gap-6 p-6 rounded-md shadow-sm bg-white header">
+    			<div class="space-y-2 col-span-full lg:col-span-1">
+    				<p class="font-medium">プロフィール</p>
+    				<p class="text-xs">あなたの現在の体型からアドバイスします。</p>
+    			</div>
+    			<div class="grid grid-cols-6 gap-4 col-span-full lg:col-span-3">
+                    <div class="col-span-full sm:col-span-3">
+    					<label for="name" class="text-sm">名前</label>
+    					<input id="name" name="name" type="text" placeholder="名前" class="w-full rounded-md focus:ring focus:ring-opacity-75 dark:text-gray-50 focus:dark:ring-violet-600 dark:border-gray-300">
+    				</div>
+    				<div class="col-span-full sm:col-span-3">
+    					<label for="sex" class="text-sm">性別</label>
+    					<input id="sex" name="sex" type="text" placeholder="性別" class="w-full rounded-md focus:ring focus:ring-opacity-75 dark:text-gray-50 focus:dark:ring-violet-600 dark:border-gray-300">
+    				</div>
+    				<div class="col-span-full sm:col-span-2">
+    					<label for="height" class="text-sm">身長(cm)</label>
+    					<input id="height" name="height" type="number" placeholder="身長(cm)" class="w-full rounded-md focus:ring focus:ring-opacity-75 dark:text-gray-50 focus:dark:ring-violet-600 dark:border-gray-300">
+    				</div>
+    				<div class="col-span-full sm:col-span-2">
+    					<label for="body_weight" class="text-sm">体重(kg)</label>
+    					<input id="body_weight" name="body_weight" type="number" placeholder="体重(kg)" class="w-full rounded-md focus:ring focus:ring-opacity-75 dark:text-gray-50 focus:dark:ring-violet-600 dark:border-gray-300">
+    				</div>
+    				<div class="col-span-full sm:col-span-2">
+    					<label for="age" class="text-sm">年齢</label>
+    					<input id="age" name="age" type="number" placeholder="年齢" class="w-full rounded-md focus:ring focus:ring-opacity-75 dark:text-gray-50 focus:dark:ring-violet-600 dark:border-gray-300">
+    				</div>
+    			</div>
+    		</fieldset>
+    		<fieldset class="grid grid-cols-4 gap-6 p-6 rounded-md shadow-sm bg-white header">
+    			<div class="space-y-2 col-span-full lg:col-span-1">
+    				<p class="font-medium">目標設定</p>
+    				<p class="text-xs">あなたが目指す目標に応じて設定してください。</p>
+    			</div>
+    			<div class="grid grid-cols-6 gap-4 col-span-full lg:col-span-3">
+    				<div class="col-span-full sm:col-span-3">
+    					<label for="target_body_weight" class="text-sm">目標体重(kg)</label>
+    					<input id="target_body_weight" name="target_body_weight" type="number" placeholder="目標体重(kg)" class="w-full rounded-md focus:ring focus:ring-opacity-75 dark:text-gray-50 focus:dark:ring-violet-600 dark:border-gray-300">
+    				</div>
+    				<div class="col-span-full sm:col-span-3">
+    					<label for="target_cal" class="text-sm">目標摂取カロリー(kcal)</label>
+    					<input id="target_cal" name="target_cal" type="number" placeholder="目標摂取カロリー(kcal)" class="w-full rounded-md focus:ring focus:ring-opacity-75 dark:text-gray-50 focus:dark:ring-violet-600 dark:border-gray-300">
+    				</div>
+    				<div class="col-span-full sm:col-span-2">
+    					<label for="target_protein" class="text-sm">目標摂取タンパク質(g)</label>
+    					<input id="target_protein" name="target_protein" type="number" placeholder="目標摂取タンパク質(g)" class="w-full rounded-md focus:ring focus:ring-opacity-75 dark:text-gray-50 focus:dark:ring-violet-600 dark:border-gray-300">
+    				</div>
+    				<div class="col-span-full sm:col-span-2">
+    					<label for="target_fat" class="text-sm">目標摂取脂質(g)</label>
+    					<input id="target_fat" name="target_fat" type="number" placeholder="目標摂取脂質(g)" class="w-full rounded-md focus:ring focus:ring-opacity-75 dark:text-gray-50 focus:dark:ring-violet-600 dark:border-gray-300">
+    				</div>
+    				<div class="col-span-full sm:col-span-2">
+    					<label for="target_carbo" class="text-sm">目標摂取炭水化物(g)</label>
+    					<input id="target_carbo" name="target_carbo" type="number" placeholder="目標摂取炭水化物(g)" class="w-full rounded-md focus:ring focus:ring-opacity-75 dark:text-gray-50 focus:dark:ring-violet-600 dark:border-gray-300">
+    				</div>
+    				<div class="col-span-full sm:col-span-3">
+    					<label for="target_movement_consumption_cal" class="text-sm">目標運動消費カロリー(kcal)</label>
+    					<input id="target_movement_consumption_cal" name="target_movement_consumption_cal" type="number" placeholder="目標運動消費カロリー(kcal)" class="w-full rounded-md focus:ring focus:ring-opacity-75 dark:text-gray-50 focus:dark:ring-violet-600 dark:border-gray-300">
+    				</div>
+    				<div class="col-span-full sm:col-span-3">
+    					<label for="target_sleeping_time" class="text-sm">目標睡眠時間(hours)</label>
+    					<input id="target_sleeping_time" name="target_sleeping_time" type="number" placeholder="目標睡眠時間(hours)" class="w-full rounded-md focus:ring focus:ring-opacity-75 dark:text-gray-50 focus:dark:ring-violet-600 dark:border-gray-300">
+    				</div>
+    				<div class="col-span-full">
+    					<label for="image" class="text-sm">プロフィール写真</label>
+    					<div class="flex items-center space-x-2">
+    						<img src="{{ Auth::user()->image_path }}" alt="画像が読み込めません" class="w-10 h-10 dark:bg-gray-500 rounded-full dark:bg-gray-300">
+    						<input type="file" name="image">
+    					</div>
+    				</div>
+    			</div>
+    		</fieldset>
+    		<div class="profile_info">
+                <input type="submit" value="更新">
+            </div>
+            <div class="footer">
+               <a href="/myprofile">戻る</a>
+            </div>
+    	</form>
+    </section>
+</x-app-layout>   
