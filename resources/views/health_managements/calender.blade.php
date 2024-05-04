@@ -1,20 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Improved Calendar</title>
+<x-app-layout>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
             background-color: #f5f5f5;
-        }
-        h2 {
-            text-align: center;
-            font-size: 24px;
-            margin-bottom: 20px;
         }
         table {
             width: 100%;
@@ -38,19 +29,6 @@
         }
         td:hover {
             background-color: #e0e0e0;
-            cursor: pointer;
-        }
-        .btn-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .btn {
-            padding: 10px 20px;
-            margin: 0 10px;
-            border: none;
-            border-radius: 4px;
-            background-color: #007bff;
-            color: #fff;
             cursor: pointer;
         }
         .sunday {
@@ -83,20 +61,28 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 40px; /* スタンプの幅 */
-            height: 40px; /* スタンプの高さ */
-            background: url('/image/IMG_running_V2.jpg') no-repeat center center; /*アイコンの画像をURLから取得 */
+            width: 30px; /* スタンプの幅 */
+            height: 30px; /* スタンプの高さ */
+            background: url('/image/movement.svg') no-repeat center center; /*アイコンの画像をURLから取得 */
             background-size: cover; /* 画像をセル内でカバー */
             z-index: 1;
         }
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
     </style>
-</head>
-    <body>
-        <h2 id="monthYear">カレンダー</h2>
+    
+    <div class="container">
+        <h2 id="monthYear" class="mb-4 text-2xl font-semibold leading-tight text-center">カレンダー</h2>
         
-        <div class="btn-container">
-            <button class="btn" id="prev">前の月</button>
-            <button class="btn" id="next">次の月</button>
+        <div class="m-3 flex justify-between">
+            <button id="prev" class="shadow-lg px-3 py-1 bg-blue-400 text-lg text-white font-semibold rounded hover:bg-blue-500 hover:shadow-sm hover:translate-y-0.5 transform transition mr-2">Last Month</button>
+            <button id="next" class="shadow-lg px-3 py-1 bg-red-400 text-lg text-white font-semibold rounded hover:bg-red-500 hover:shadow-sm hover:translate-y-0.5 transform transition">Next Month</button>
         </div>
         
         <table id="calendar">
@@ -118,6 +104,12 @@
         <script>
             // 運動が記録された日付の配列
             const recordedDates = {!! json_encode($recordedDates) !!}; // recordedDatesをJSON形式にエンコードしてJavaScriptに渡す
+
+            // 日付が現在の年と月と一致するかどうかをチェックする関数
+            function isCurrentMonth(year, month, date) {
+                const today = new Date();
+                return year === today.getFullYear() && month === today.getMonth() && date === today.getDate();
+            }
     
             // カレンダーの日付データを作成する関数
             function createCalendar(year, month) {
@@ -160,7 +152,7 @@
                             }
             
                             // 今日の日付のセルにクラスを追加して薄い青色で塗りつぶし、太字にする
-                            if (date === todayDate) {
+                            if (isCurrentMonth(year, month, date)) {
                                 cell.classList.add('today');
                                 cell.classList.add('bold');
                             }
@@ -240,8 +232,6 @@
                 createCalendar(currentYear, currentMonth);
             });
         </script>
-        <div class="footer">
-           <a href="/myprofile">戻る</a>
-        </div>
-    </body>
-</html>
+    </div>
+    
+</x-app-layout>
