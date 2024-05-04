@@ -1,129 +1,98 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>運動お気に入り</title>
-
-        <!-- Fonts -->
-        <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-
-        <!-- Styles -->
-        <style>
-           body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 20px;
-                background-color: #f5f5f5;
-            }
-            .container {
-                max-width: 600px;
-                margin: 0 auto;
-                padding: 20px;
-                border-radius: 8px;
-                background-color: #fff;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
-            h1 {
-                color: #333;
-                margin-top: 0;
-                margin-bottom: 20px;
-                text-align: center;
-            }
-            form {
-                margin-bottom: 20px;
-            }
-            label {
-                display: block;
-                margin-bottom: 5px;
-                color: #333;
-                font-weight: bold;
-            }
-            input[type="text"],
-            input[type="number"] {
-                width: 100%;
-                padding: 10px;
-                margin-bottom: 10px;
-                border-radius: 4px;
-                border: 1px solid #ccc;
-            }
-            input[type="submit"] {
-                width: 100%;
-                padding: 10px 20px;
-                border: none;
-                border-radius: 4px;
-                background-color: #007bff;
-                color: #fff;
-                cursor: pointer;
-            }
-            input[type="submit"]:hover {
-                background-color: #0056b3;
-            }
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-bottom: 20px;
-            }
-            th, td {
-                padding: 8px;
-                text-align: left;
-                border-bottom: 1px solid #ddd;
-            }
-            th {
-                background-color: #f2f2f2;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>お気に入り</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>運動の種目</th>
-                        <th>扱った錘の重さ (kg)</th>
-                        <th>挙上回数 (Reps)</th>
-                        <th>セット数</th>
-                        <th>運動時間 (分)</th>
-                        <th>運動消費カロリー (kcal)</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($favorite_movements as $favorite_movement)
-                        <tr>
-                            <td>{{ $favorite_movement->favorite_type }}</td>
-                            <td>{{ $favorite_movement->favorite_weight }}</td>
-                            <td>{{ $favorite_movement->favorite_times }}</td>
-                            <td>{{ $favorite_movement->favorite_sets }}</td>
-                            <td>{{ $favorite_movement->favorite_movement_times }}</td>
-                            <td>{{ $favorite_movement->favorite_movement_consumption_cal }}</td>
-                            <td>
+<x-app-layout>
+    <!-- Styles -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+        
+    <div class="container p-2 mx-auto sm:p-4 dark:text-gray-800">
+    	<h2 class="mb-4 text-2xl font-semibold leading-tight">Favorite Movement Table</h2>
+    	<div class="overflow-x-auto">
+    		<table class="min-w-full text-xs">
+    			<colgroup>
+    				<col>
+    				<col>
+    				<col>
+    				<col>
+    				<col>
+    				<col>
+    				<col>
+    				<col class="w-24">
+    			</colgroup>
+    			<thead class="dark:bg-gray-300">
+    				<tr class="text-left">
+    					<th class="p-3">運動種目</th>
+    					<th class="p-3">錘の重量(kg)</th>
+    					<th class="p-3">挙上回数(Reps)</th>
+    					<th class="p-3">セット数</th>
+    					<th class="p-3">運動時間(min)</th>
+    					<th class="p-3">運動消費カロリー(kcal)</th>
+    					<th class="p-3">削除</th>
+    					<th class="p-3">記録</th>
+    				</tr>
+    			</thead>
+    			<tbody>
+    				@foreach($favorite_movements as $favorite_movement)
+                    <tr class="border-b border-opacity-20 dark:border-gray-300 dark:bg-gray-50">
+                        <td class="text-center">{{ $favorite_movement->favorite_type }}</td>
+                        <td class="text-center">{{ $favorite_movement->favorite_weight }}</td>
+                        <td class="text-center">{{ $favorite_movement->favorite_times }}</td>
+                        <td class="text-center">{{ $favorite_movement->favorite_sets }}</td>
+                        <td class="text-center">{{ $favorite_movement->favorite_movement_times }}</td>
+                        <td class="text-center">{{ $favorite_movement->favorite_movement_consumption_cal }}</td>
+                        <td class="text-center">
+                            <div>
                                 <form action="/myprofile/movement/favorite_movement/{{ $favorite_movement->id }}" class="form_{{ $favorite_movement->id }}" method="post">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="button" onclick="deleteFavoritemovement({{ $favorite_movement->id }})">削除</button>
+                                    <button type="button" onclick="deleteFavoritemovement({{ $favorite_movement->id }})" class="shadow-lg px-2 py-1  bg-red-500 text-white font-semibold rounded  hover:bg-red-700 hover:shadow-sm hover:translate-y-0.5 transform transition ">削除</button>
                                 </form>
-                            </td>
-                            <td>
-                                <form action="{{ route('movement.favoritesave') }}" method="POST">
-                                    @csrf
-                                    <!-- お気に入りメニューの情報を送信 -->
-                                    <input type="hidden" name="favorite_type" value="{{ $favorite_movement->favorite_type }}">
-                                    <input type="hidden" name="favorite_weight" value="{{ $favorite_movement->favorite_weight }}">
-                                    <input type="hidden" name="favorite_times" value="{{ $favorite_movement->favorite_times }}">
-                                    <input type="hidden" name="favorite_sets" value="{{ $favorite_movement->favorite_sets }}">
-                                    <input type="hidden" name="favorite_movement_times" value="{{ $favorite_movement->favorite_movement_times }}">
-                                    <input type="hidden" name="favorite_movement_consumption_cal" value="{{ $favorite_movement->favorite_movement_consumption_cal }}">
-                                    <input type="submit" value="記録する">
-                                </form>
-                            </td>
-                        </tr>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <form action="{{ route('movement.favoritesave') }}" method="POST">
+                                @csrf
+                                <!-- お気に入りメニューの情報を送信 -->
+                                <input type="hidden" name="favorite_type" value="{{ $favorite_movement->favorite_type }}">
+                                <input type="hidden" name="favorite_weight" value="{{ $favorite_movement->favorite_weight }}">
+                                <input type="hidden" name="favorite_times" value="{{ $favorite_movement->favorite_times }}">
+                                <input type="hidden" name="favorite_sets" value="{{ $favorite_movement->favorite_sets }}">
+                                <input type="hidden" name="favorite_movement_times" value="{{ $favorite_movement->favorite_movement_times }}">
+                                <input type="hidden" name="favorite_movement_consumption_cal" value="{{ $favorite_movement->favorite_movement_consumption_cal }}">
+                                <input type="submit" value="記録" class="shadow-lg px-2 py-1  bg-blue-500 text-white font-semibold rounded  hover:bg-blue-700 hover:shadow-sm hover:translate-y-0.5 transform transition ">
+                            </form>
+                        </td>
+                    </tr>
                     @endforeach
-                </tbody>
-            </table>
+    			</tbody>
+    		</table>
+
             <div class='paginate'>
                 {{ $favorite_movements->links() }}
             </div>
@@ -132,19 +101,21 @@
                     {{ session('success') }}
                 </div>
             @endif
-            <div class="footer">
-                <a href="/myprofile/movement">戻る</a>
+            <div class="m-3">
+                <button onclick="location.href='/myprofile/movement'" class="px-3 py-1  bg-blue-500 text-s text-white font-semibold rounded-full hover:bg-blue-700">戻る</button>
             </div>
         </div>
-        <script>
-            function deleteFavoritemovement(id) {
-                'use strict'
-        
-                if (confirm('削除すると復元できません。\n本当に削除しますか？')) {
-                    const testEl = document.getElementById(id);
-                    document.querySelector(`.form_${id}`).submit();
-                }
+    </div>
+    
+    <script>
+        function deleteFavoritemovement(id) {
+            'use strict'
+    
+            if (confirm('削除すると復元できません。\n本当に削除しますか？')) {
+                const testEl = document.getElementById(id);
+                document.querySelector(`.form_${id}`).submit();
             }
-        </script>
-    </body>
-</html>
+        }
+    </script>
+
+</x-app-layout>

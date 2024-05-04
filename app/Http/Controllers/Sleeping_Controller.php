@@ -33,6 +33,13 @@ class Sleeping_Controller extends Controller
         // 今回の睡眠時間を計算
         $today_sleeping_time = $this->calculateTodaySleepingTime();
         
+        // 今日の睡眠時間を取得し、時間と分に分割する
+        $sleeping_time_parts = explode('時間', str_replace('分', '', $today_sleeping_time));
+        $hours = $sleeping_time_parts[0];
+        $minutes = $sleeping_time_parts[1];
+        // 5時間未満の場合にはtrue、そうでない場合にはfalseを返す
+        $is_less_than_5_hours = ($hours < 5 || ($hours == 5 && $minutes < 0));
+        
         // ビューにデータを渡して表示
         return view('health_managements.sleeping', [
             'user' => $user, 
@@ -40,6 +47,7 @@ class Sleeping_Controller extends Controller
             'sleepings' => $sleepings,
             'today_sleeping_time' => $today_sleeping_time,
             'previous_record_sleeping_time' => $previous_record_sleeping_time,
+            'is_less_than_5_hours' => $is_less_than_5_hours,
         ]);
     }
     
@@ -114,19 +122,34 @@ class Sleeping_Controller extends Controller
     {
         $user = Auth::user(); // ログインしているユーザーを取得
         
+        // 特定のIDに対応する睡眠データを取得
+        $sleeping = Sleeping::where('id', $id)->where('user_id', $user->id)->firstOrFail();
+        
         // フォームから送信されたデータを受け取る
         $data = $request->validate([
             'record_wake_up_time' => 'required',
             'record_bedtime' => 'required',
             'record_sleeping_memo' => 'nullable|string'
         ]);
+    
+        // データが編集されたかどうかを確認
+        $wake_up_time_Edited = ($sleeping->record_wake_up_time != $data['record_wake_up_time']);
         
+        // データが編集されたかどうかを確認
+        $bedtime_Edited = ($sleeping->record_bedtime != $data['record_bedtime']);
+    
+        // もしデータが編集されていなければH:i:s形式で保存
+        $wake_up_time_format = ($wake_up_time_Edited) ? 'H:i' : 'H:i:s';
+        
+        // もしデータが編集されていなければH:i:s形式で保存
+        $bedtime_format = ($bedtime_Edited) ? 'H:i' : 'H:i:s';
+    
         // 睡眠時間の計算
-        $wakeUpTime = \Carbon\Carbon::createFromFormat('H:i', $data['record_wake_up_time']);
-        $bedtime = \Carbon\Carbon::createFromFormat('H:i', $data['record_bedtime']);
+        $wakeUpTime = \Carbon\Carbon::createFromFormat($wake_up_time_format, $data['record_wake_up_time']);
+        $bedtime = \Carbon\Carbon::createFromFormat($bedtime_format, $data['record_bedtime']);
         $sleepingTime = $this->calculateSleepingTime($bedtime, $wakeUpTime); // 睡眠時間の計算
         
-         // ログインユーザーのIDをデータに追加
+        // ログインユーザーのIDをデータに追加
         $data['user_id'] = $user->id;
         
         // 睡眠時間をデータに追加
