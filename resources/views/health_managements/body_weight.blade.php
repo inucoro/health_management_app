@@ -2,12 +2,6 @@
 <x-app-layout>
     <!-- Styles -->
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
         .container {
             max-width: 100%;
             margin: 0 auto;
@@ -45,7 +39,7 @@
         }
     </style>
     <div class="container">
-        <h2 class="mb-4 text-2xl font-semibold leading-tight text-center">体重</h2>
+        <h2 class="mb-4 text-3xl font-semibold leading-tight text-center">Body Weight Management</h2>
         <div class="summary">
             <div class="summary_item">
                 <label>今回の体重:</label>
@@ -114,7 +108,7 @@
     			</tbody>
     		</table>
     	    <div class='paginate'>
-                {{ $body_weights->links() }}
+                {{ $body_weights->links('vendor.pagination.tailwind2') }}
             </div>
     	</div>
 	    @if (session('success'))
@@ -125,10 +119,6 @@
     </div>
     
     
-    
-        
-        
-        
     @if ($latest_body_weight < ($target_body_weight + 1) && $latest_body_weight > ($target_body_weight - 1))
         <style>
             #message {
@@ -145,13 +135,19 @@
             }
     
             #message button {
-                margin-top: 10px;
-                padding: 8px 16px;
-                background-color: #007bff;
-                color: #fff;
                 border: none;
-                border-radius: 4px;
                 cursor: pointer;
+            }
+            
+            #message label + button {
+                margin-top: 10px;
+            }
+            
+            #message .button-container {
+                margin-top: 20px;
+                display: flex;
+                justify-content: space-between; /* OKボタンとチェックボックスの間にスペースを追加 */
+                width: 100%; /* 親要素の幅いっぱいに広げる */
             }
         </style>
     
@@ -159,7 +155,7 @@
             window.onload = function() {
                 var message = document.createElement('div');
                 message.id = 'message';
-                message.innerHTML = '目標体重までもう少しです！<br><button onclick="hideMessage_body_weight()">OK</button><label><input type="checkbox" id="hideForeverCheckbox">二度と表示しない</label>';
+                message.innerHTML = '目標体重までもう少しです！<br><div class="button-container"><label><input type="checkbox" id="hideForeverCheckbox">二度と表示しない</label><button onclick="hideMessage_meal()" class="shadow-lg px-5 py-1 bg-blue-500 text-white font-semibold rounded hover:bg-blue-700 hover:shadow-sm hover:translate-y-0.5 transform transition">OK</button></div>';
                 document.body.appendChild(message);
                 checkAndHideMessage(); // ページ読み込み時にローカルストレージをチェックして非表示にする
             };
@@ -196,6 +192,7 @@
             });
         </script>
     @endif
+
     
     <script>
         function deleteBody_weight(id) {

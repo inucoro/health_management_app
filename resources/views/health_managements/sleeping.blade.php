@@ -40,7 +40,7 @@
     </style>
 
     <div class="container">
-        <h2 class="mb-4 text-2xl font-semibold leading-tight text-center">睡眠</h2>
+        <h2 class="mb-4 text-3xl font-semibold leading-tight text-center">Sleeping Management</h2>
          <div class="summary">
             <div class="summary_item">
                 <label>今日の睡眠時間：</label>
@@ -101,7 +101,7 @@
     			</tbody>
     		</table>
     	    <div class='paginate'>
-                {{ $sleepings->links() }}
+                {{ $sleepings->links('vendor.pagination.tailwind2') }}
             </div>
     	</div>
 	    @if (session('success'))
@@ -112,73 +112,81 @@
     </div>
         
     
-    @if ($is_less_than_5_hours)
-        <style>
-            #message {
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background-color: #fff;
-                border: 1px solid #ccc;
-                padding: 20px;
-                border-radius: 8px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                z-index: 9999;
+@if ($is_less_than_5_hours)
+    <style>
+        #message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 9999;
+        }
+
+        #message button {
+            border: none;
+            cursor: pointer;
+        }
+        
+        #message label + button {
+            margin-top: 10px;
+        }
+        
+        #message .button-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between; /* OKボタンとチェックボックスの間にスペースを追加 */
+            width: 100%; /* 親要素の幅いっぱいに広げる */
+        }
+        
+    </style>
+
+    <script>
+        window.onload = function() {
+            var message = document.createElement('div');
+            message.id = 'message';
+            message.innerHTML = '今日はあまり睡眠時間がとれていません。体調に気を付けてください。<br><div class="button-container"><label><input type="checkbox" id="hideForeverCheckbox">二度と表示しない</label><button onclick="hideMessage_sleeping()" class="shadow-lg px-5 py-1 bg-blue-500 text-white font-semibold rounded-full hover:bg-blue-700 hover:shadow-sm hover:translate-y-0.5 transform transition">OK</button></div>';
+            document.body.appendChild(message);
+            checkAndHideMessage(); // ページ読み込み時にローカルストレージをチェックして非表示にする
+        };
+    
+        function hideMessage_sleeping() {
+            var message = document.getElementById('message');
+            if (message) {
+                var hideForeverCheckbox = document.getElementById('hideForeverCheckbox');
+                if (hideForeverCheckbox.checked) {
+                    localStorage.setItem('hideMessage_sleeping', true);
+                }
+                message.style.display = 'none';
             }
+        }
     
-            #message button {
-                margin-top: 10px;
-                padding: 8px 16px;
-                background-color: #007bff;
-                color: #fff;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-            }
-        </style>
-    
-        <script>
-            window.onload = function() {
-                var message = document.createElement('div');
-                message.id = 'message';
-                message.innerHTML = '今日はあまり睡眠時間がとれていません。体調に気を付けてください。<br><button onclick="hideMessage_sleeping()">OK</button><label><input type="checkbox" id="hideForeverCheckbox">二度と表示しない</label>';
-                document.body.appendChild(message);
-                checkAndHideMessage(); // ページ読み込み時にローカルストレージをチェックして非表示にする
-            };
-    
-            function hideMessage_sleeping() {
+        function checkAndHideMessage() {
+            if (localStorage.getItem('hideMessage_sleeping')) {
                 var message = document.getElementById('message');
                 if (message) {
-                    var hideForeverCheckbox = document.getElementById('hideForeverCheckbox');
-                    if (hideForeverCheckbox.checked) {
-                        localStorage.setItem('hideMessage_sleeping', true);
-                    }
                     message.style.display = 'none';
                 }
             }
+        }
     
-            function checkAndHideMessage() {
-                if (localStorage.getItem('hideMessage_sleeping')) {
-                    var message = document.getElementById('message');
-                    if (message) {
-                        message.style.display = 'none';
-                    }
+        document.addEventListener('DOMContentLoaded', function() {
+            var form = document.querySelector('form');
+            
+            form.addEventListener('submit', function() {
+                var hideForeverCheckbox = document.getElementById('hideForeverCheckbox');
+                if (hideForeverCheckbox.checked) {
+                    localStorage.setItem('hideMessage_sleeping', true);
                 }
-            }
-    
-            document.addEventListener('DOMContentLoaded', function() {
-                var form = document.querySelector('form');
-                
-                form.addEventListener('submit', function() {
-                    var hideForeverCheckbox = document.getElementById('hideForeverCheckbox');
-                    if (hideForeverCheckbox.checked) {
-                        localStorage.setItem('hideMessage_sleeping', true);
-                    }
-                });
             });
-        </script>
-    @endif
+        });
+    </script>
+@endif
+
 
     <script>
         function deleteSleeping(id) {

@@ -36,22 +36,93 @@
         th {
             background-color: #f2f2f2;
         }
+        #movementCalorieChart {
+          width: 60%;
+          height: auto;
+          max-width: 400px;
+          margin: 0 auto; /* グラフを中央に配置 */
+          display: block; /* インライン要素からブロック要素に変更 */
+        }
+        
+        .movement-calorie-label {
+          display: block; /* インライン要素からブロック要素に変更 */
+          margin-top: 10px; /* 上部のマージンを追加 */
+        }
     </style>
     <div class="container">
-        <h2 class="mb-4 text-2xl font-semibold leading-tight text-center">運動</h2>
+        <h2 class="mb-4 text-3xl font-semibold leading-tight text-center">Movement Management</h2>
         
-        <div class="summary">
-            <div class="summary_item">
-                <label>合計運動消費カロリー:</label>
-                <span id="movement_consumption_cal">{{ $sum_movement_consumption_cal }} kcal</span>
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="col-start-1 col-span-1 mt-8"> 
+                <!-- 合計運動消費カロリーと目標運動消費カロリーの円グラフを描画するCanvas要素 -->
+                <canvas id="movementCalorieChart"></canvas>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+                        
+                <script>
+                    const movementCtx = document.getElementById("movementCalorieChart");
+                    const movementPieChart = new Chart(movementCtx, {
+                        type: 'pie', // 円グラフを使用
+                        data: {
+                            labels: ["合計運動消費カロリー", "目標まであと"],
+                            datasets: [{
+                                backgroundColor: [
+                                    'rgba(54, 162, 235, 0.5)', // 青色
+                                    'rgba(0, 0, 0, 0)' // 透明
+                                ],
+                                borderColor: [
+                                    'rgba(54, 162, 235, 0.5)', // 青色（枠線）
+                                    'rgba(54, 162, 235, 0.5)', // 青色
+                                ],
+                                borderWidth: 2, // 枠線の幅を設定
+                                data: [{{ $sum_movement_consumption_cal }}, {{ $consumed_cal_up_to_target }}]
+                            }]
+                        },
+                        plugins: [ChartDataLabels], // pluginとしてchartdatalabelsを追加
+                        options: {
+                            plugins: {
+                                datalabels: { // パーセンテージからラベル表記に変更
+                                    formatter: function(value, context) {
+                                        if (value === 0) {
+                                            return '';
+                                        }
+                                        return context.chart.data.labels[context.dataIndex] + ": " + value + ' kcal';
+                                    },
+                                    color: '#000', // ラベルの色
+                                    display: true,
+                                    font: {
+                                        weight: 'bold' // ラベルのフォントウェイトを太字に設定
+                                    }
+                                },
+                                legend: {
+                                  display: false // 凡例を非表示にする
+                                }
+                            }
+                        }
+                    });
+                    
+                    // 合計運動消費カロリーが目標までの運動消費カロリーを超えた場合、残りの運動消費カロリーを0に設定する
+                    if ({{ $sum_movement_consumption_cal }} > {{ $target_movement_consumption_cal }}) {
+                        movementPieChart.data.datasets[0].data[1] = 0;
+                        movementPieChart.update();
+                    }
+                </script>
             </div>
-            <div class="summary_item">
-                <label>目標運動消費カロリー:</label>
-                <span id="target_movement_consumption_cal">{{ $target_movement_consumption_cal }} kcal</span>
-            </div>
-            <div class="summary_item">
-                <label>目標まであと</label>
-                <span id="consumed_cal_up_to_target">{{ $consumed_cal_up_to_target }} kcal</span>
+            <div class="col-start-2 col-span-1 mt-20"> 
+                <div class="summary">
+                    <div class="summary_item">
+                        <label>合計運動消費カロリー:</label>
+                        <span id="movement_consumption_cal">{{ $sum_movement_consumption_cal }} kcal</span>
+                    </div>
+                    <div class="summary_item">
+                        <label>目標運動消費カロリー:</label>
+                        <span id="target_movement_consumption_cal">{{ $target_movement_consumption_cal }} kcal</span>
+                    </div>
+                    <div class="summary_item">
+                        <label>目標まであと</label>
+                        <span id="consumed_cal_up_to_target">{{ $consumed_cal_up_to_target }} kcal</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -123,7 +194,7 @@
     			</tbody>
     		</table>
     	    <div class='paginate'>
-                {{ $movements->links() }}
+                {{ $movements->links('vendor.pagination.tailwind2') }}
             </div>
     	</div>
 	    @if (session('success'))
@@ -149,13 +220,19 @@
             }
     
             #message button {
-                margin-top: 10px;
-                padding: 8px 16px;
-                background-color: #007bff;
-                color: #fff;
                 border: none;
-                border-radius: 4px;
                 cursor: pointer;
+            }
+            
+            #message label + button {
+                margin-top: 10px;
+            }
+            
+            #message .button-container {
+                margin-top: 20px;
+                display: flex;
+                justify-content: space-between; /* OKボタンとチェックボックスの間にスペースを追加 */
+                width: 100%; /* 親要素の幅いっぱいに広げる */
             }
         </style>
     
@@ -163,18 +240,18 @@
             window.onload = function() {
                 var message = document.createElement('div');
                 message.id = 'message';
-                message.innerHTML = '目標運動消費カロリーを超えました！いい心掛けですね！<br><button onclick="hideMessage_movement()">OK</button><label><input type="checkbox" id="hideForeverCheckbox">二度と表示しない</label>';
+                message.innerHTML = '目標運動消費カロリーを超えました！いい心掛けですね！<br><div class="button-container"><label><input type="checkbox" id="hideForeverCheckbox">二度と表示しない</label><button onclick="hideMessage_movement()" class="shadow-lg px-5 py-1 bg-blue-500 text-white font-semibold rounded hover:bg-blue-700 hover:shadow-sm hover:translate-y-0.5 transform transition">OK</button></div>';
                 document.body.appendChild(message);
                 checkAndHideMessage(); // ページ読み込み時にローカルストレージをチェックして非表示にする
             };
         
             function hideMessage_movement() {
+                var hideForeverCheckbox = document.getElementById('hideForeverCheckbox');
+                if (hideForeverCheckbox.checked) {
+                    localStorage.setItem('hideMessage_movement', true);
+                }
                 var message = document.getElementById('message');
                 if (message) {
-                    var hideForeverCheckbox = document.getElementById('hideForeverCheckbox');
-                    if (hideForeverCheckbox.checked) {
-                        localStorage.setItem('hideMessage_movement', true);
-                    }
                     message.style.display = 'none';
                 }
             }
@@ -191,7 +268,7 @@
             document.addEventListener('DOMContentLoaded', function() {
                 var form = document.querySelector('form');
                 
-                form.addEventListener('submit', function() {
+                form.addEventListener('submit', function(event) {
                     var hideForeverCheckbox = document.getElementById('hideForeverCheckbox');
                     if (hideForeverCheckbox.checked) {
                         localStorage.setItem('hideMessage_movement', true);
@@ -200,6 +277,7 @@
             });
         </script>
     @endif
+
     
     <script>
         function deleteMovement(id) {

@@ -2,12 +2,6 @@
 <x-app-layout>
     <!-- Styles -->
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
         .container {
             max-width: 100%;
             margin: 0 auto;
@@ -57,7 +51,7 @@
     </style>
 
     <div class="container">
-        <h2 class="mb-4 text-2xl font-semibold leading-tight text-center">体重記録編集</h2>
+        <h2 class="mb-4 text-3xl font-semibold leading-tight text-center">Edit Body Weight Records</h2>
         <form action="{{ route('body_weight.update', ['id' => $body_weight->id]) }}" method="POST">
             @csrf
             @method('PUT')

@@ -1,20 +1,5 @@
 <!DOCTYPE html>
 <x-app-layout>   
-    <!-- Styles -->
-    <style>
-        .profile_info input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .profile_info input[type="submit"]:hover {
-            background-color: #45a049;
-        }
-    </style>
     <section class="w-full p-6 dark:bg-gray-100 dark:text-gray-900">
     	<form action="/myprofile/myprofile_setting" method="POST" enctype="multipart/form-data" class="container flex flex-col mx-auto space-y-12">
     	    @csrf
@@ -95,7 +80,7 @@
     			</div>
     		</fieldset>
     		<div class="profile_info">
-                <input type="submit" value="更新">
+                <input type="submit" value="更新" class="inline-block rounded-lg bg-indigo-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base">
             </div>
     	</form>
     </section>

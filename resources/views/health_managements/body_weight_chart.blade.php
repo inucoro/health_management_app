@@ -2,12 +2,6 @@
 <x-app-layout>
     <!-- Styles -->
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
         .container {
             max-width: 100%;
             margin: 0 auto;
@@ -19,7 +13,7 @@
     </style>
 
     <div class="container">
-        <h2 class="mb-4 text-2xl font-semibold leading-tight text-center">体重グラフ</h2>
+        <h2 class="mb-4 text-3xl font-semibold leading-tight text-center">Body Weight Graph</h2>
         <canvas id="body_weightChart" width="400" height="200"></canvas>
         <canvas id="body_fatChart" width="400" height="200"></canvas>
     
