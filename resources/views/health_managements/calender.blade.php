@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <x-app-layout>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -22,9 +16,10 @@
         }
         th {
             height: 30px; /* 曜日の枠の高さ */
+            background-color: #dcdcdc; /* 曜日のテーブルの背景色 */
         }
         td {
-            height: 60px; /* 日付の枠の高さ */
+            height: 100px; /* 日付の枠の高さ */
             position: relative; /* スタンプの位置を調整するために必要 */
         }
         td:hover {
@@ -58,7 +53,7 @@
          /* スタンプのスタイル */
         .stamp {
             position: absolute;
-            top: 50%;
+            top: 40%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 30px; /* スタンプの幅 */
@@ -78,11 +73,10 @@
     </style>
     
     <div class="container">
-        <h2 id="monthYear" class="mb-4 text-2xl font-semibold leading-tight text-center">カレンダー</h2>
-        
         <div class="m-3 flex justify-between">
-            <button id="prev" class="shadow-lg px-3 py-1 bg-blue-400 text-lg text-white font-semibold rounded hover:bg-blue-500 hover:shadow-sm hover:translate-y-0.5 transform transition mr-2">Last Month</button>
-            <button id="next" class="shadow-lg px-3 py-1 bg-red-400 text-lg text-white font-semibold rounded hover:bg-red-500 hover:shadow-sm hover:translate-y-0.5 transform transition">Next Month</button>
+            <button id="prev" class="shadow-lg px-3 py-1 bg-blue-500 text-lg text-white font-semibold rounded hover:bg-blue-700 hover:shadow-sm hover:translate-y-0.5 transform transition mr-2">Last Month</button>
+                    <h2 id="monthYear" class="mb-4 text-4xl font-semibold leading-tight text-center">カレンダー</h2>
+            <button id="next" class="shadow-lg px-3 py-1 bg-red-500 text-lg text-white font-semibold rounded hover:bg-red-700 hover:shadow-sm hover:translate-y-0.5 transform transition">Next Month</button>
         </div>
         
         <table id="calendar">
@@ -231,7 +225,56 @@
                 }
                 createCalendar(currentYear, currentMonth);
             });
-        </script>
+    </script>
+</div>
+
+<div style="margin-bottom: 20px;"></div>
+
+<div class="bg-white py-6 sm:py-6 lg:py-6 shadow-md rounded-md p-4">
+  <div class="mx-auto max-w-screen-2xl px-4 md:px-8">
+    <!-- text - start -->
+    <div class="mb-2 md:mb-2">
+      <h2 class="text-left text-2xl font-bold text-gray-800 lg:text-3xl">〇月〇日</h2>
+      <h2 class="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-6 lg:text-3xl">〇㎏</h2>
     </div>
+    <!-- text - end -->
+
+    <!-- form - start -->
+    <div class="mx-auto grid max-w-screen-md gap-4 sm:flex sm:flex-wrap sm:justify-between md:flex md:flex-wrap md:justify-between">
+
+      <div class="sm:w-1/5 md:w-1/5 mb-4 sm:mb-0 md:mb-0">
+        <label for="body_fat" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">体脂肪率</label>
+        <input id="body_fat" name="body-fat" class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+      </div>
+
+      <div class="sm:w-1/5 md:w-1/5 mb-4 sm:mb-0 md:mb-0">
+        <label for="sleep_hours" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">睡眠時間</label>
+        <input id="sleep_hours" name="sleep-hours" class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+      </div>
+      
+      <div class="sm:w-1/5 md:w-1/5 mb-4 sm:mb-0 md:mb-0">
+        <label for="calorie-intake" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">合計摂取カロリー</label>
+        <input id="calorie-intake" name="calorie-intake" class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+      </div>
+
+      <div class="sm:w-1/5 md:w-1/5 mb-4 sm:mb-0 md:mb-0">
+        <label for="calorie-burn" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">合計運動消費カロリー</label>
+        <input id="calorie-burn" name="calorie-burn" class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+      </div>
+
+    </div>
+    <!-- form - end -->
+    
+    <!-- Memo -->
+    <div class="mt-2">
+      <label for="memo" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">メモ</label><br>
+      <textarea id="memo" name="memo" class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"></textarea>
+    </div>
+    
+  </div>
+</div>
+
+
+
     
 </x-app-layout>

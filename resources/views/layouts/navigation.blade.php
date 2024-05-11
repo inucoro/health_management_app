@@ -1,49 +1,63 @@
-<nav x-data="{ open: false }" class="header bg-white border-b border-gray-100 h-16 p-0">
+<nav x-data="{ open: false }" class="bg-amber-100 border-b border-gray-100 h-16" style="position: fixed; width: 100%; z-index: 999;">
     
-	<style>
-		.header {
-            width: 100%;
-            margin: 0 auto;
-            border-radius: 8px;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    <style>
+        /* ナビゲーションリンクのテキストサイズを大きくする */
+        .nav-link {
+            font-size: 0.9rem; /* 例: 1.25remは16pxの1.25倍のサイズになります */
+        }
+        /* タイトルとサブタイトルの改行を許可 */
+        .nav-title {
+            white-space: pre-wrap;
+        }
+        
+        /*h1 {*/
+        /*  font-family: "Merienda-VariableFont", sans-serif;*/
+        /*}*/
+        /*@font-face {*/
+        /*  font-family: "Merienda-VariableFont";*/
+        /*  src: url("../../fonts/Merienda-VariableFont_wght.ttf") format("truetype");*/
+        /*}*/
+        .nav-link.active {
+            background-color: #DCDCDC; /* 塗りつぶしに使いたい色 */
+            color: #fff; /* テキスト色設定 */
         }
     </style>
-    
-    
+                
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
-            <div class="flex">
-                <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+            <!-- Logo -->
+            <div class="shrink-0 flex items-center">
+                <div>
+                    <h1 class="text-2xl font-semibold leading-tight text-center">LifeLeaf</h2>
+                    <h1 class="text-xs font-semibold leading-tight text-center nav-title">Nurturing Health, One Step at a Time</h2>
                 </div>
-
+            </div>
+            <div class="flex">
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('myprofile.show')" :active="request()->routeIs('dashboard')">
-                        {{ __('プロフィール') }}
+                    <x-nav-link :href="route('myprofile.show')" :active="request()->routeIs('myprofile.show')" class="nav-link">
+                        {{ __('Profile') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('meal.show')" :active="request()->routeIs('dashboard')">
-                        {{ __('食事') }}
+                    <x-nav-link :href="route('meal.show')" :active="request()->routeIs('meal.show')" class="nav-link">
+                        {{ __('Meal') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('movement.show')" :active="request()->routeIs('dashboard')">
-                        {{ __('運動') }}
+                    <x-nav-link :href="route('movement.show')" :active="request()->routeIs('movement.show')" class="nav-link">
+                        {{ __('Movement') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('body_weight.show')" :active="request()->routeIs('dashboard')">
-                        {{ __('体重') }}
+                    <x-nav-link :href="route('body_weight.show')" :active="request()->routeIs('body_weight.show')" class="nav-link">
+                        {{ __('Body Weight') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('sleeping.show')" :active="request()->routeIs('dashboard')">
-                        {{ __('睡眠') }}
+                    <x-nav-link :href="route('sleeping.show')" :active="request()->routeIs('sleeping.show')" class="nav-link">
+                        {{ __('Sleeping') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -52,7 +66,7 @@
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-amber-100 hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                             <div>{{ Auth::user()->name }}</div>
 
                             <div class="ml-1">

@@ -2,12 +2,6 @@
 <x-app-layout>
     <!-- Styles -->
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
         .container {
             max-width: 100%;
             margin: 0 auto;
@@ -89,7 +83,7 @@
     			</tbody>
     		</table>
             <div class='paginate'>
-                {{ $favorite_meals->links() }}
+                {{ $favorite_meals->links('vendor.pagination.tailwind2') }}
             </div>
             @if (session('success'))
                 <div class="alert alert-success">

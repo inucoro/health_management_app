@@ -2,12 +2,6 @@
 <x-app-layout>
     <!-- Styles -->
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
         .container {
             max-width: 100%;
             margin: 0 auto;
@@ -54,7 +48,7 @@
     </style>
 
     <div class="container">
-        <h2 class="mb-4 text-2xl font-semibold leading-tight text-center">睡眠記録</h2>
+        <h2 class="mb-4 text-3xl font-semibold leading-tight text-center">Sleeping Records</h2>
         <form action="/myprofile/sleeping/sleeping_record" method="POST">
             @csrf
             <label for="record_bedtime">就寝時間:</label>

@@ -2,12 +2,6 @@
 <x-app-layout>
     <!-- Styles -->
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
         .container {
             max-width: 100%;
             margin: 0 auto;
@@ -48,7 +42,7 @@
     </style>
 
         <div class="container">
-            <h2 class="mb-4 text-2xl font-semibold leading-tight text-center">お気に入り追加</h2>
+            <h2 class="mb-4 text-3xl font-semibold leading-tight text-center">Add to Meal Favorites</h2>
             <form action="{{ route('meal.favoriteadd', ['id' => $meal->id]) }}" method="POST">
                 @csrf
                 @method('PUT')

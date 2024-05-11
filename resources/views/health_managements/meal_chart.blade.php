@@ -2,12 +2,6 @@
 <x-app-layout>
     <!-- Styles -->
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
         .container {
             max-width: 100%;
             margin: 0 auto;
@@ -19,7 +13,7 @@
     </style>
 
     <div class="container">
-        <h2 class="mb-4 text-2xl font-semibold leading-tight text-center">食事グラフ</h2>
+        <h2 class="mb-4 text-3xl font-semibold leading-tight text-center">Meal Graph</h2>
         <canvas id="mealCalorieChart" width="400" height="200"></canvas>
         <canvas id="proteinChart" width="400" height="200"></canvas>
         <canvas id="fatChart" width="400" height="200"></canvas>
@@ -44,7 +38,7 @@
                             datasets: [{
                                 label: '食事カロリー',
                                 data: data.map(item => item.ingestion_cal),
-                                borderColor: 'rgb(75, 192, 192)',
+                                borderColor: 'rgba(255, 140, 0, 1)',
                                 tension: 0.1
                             }]
                         },
@@ -108,7 +102,7 @@
                             datasets: [{
                                 label: 'タンパク質',
                                 data: data.map(item => item.sum_ingested_protein),
-                                borderColor: 'rgb(255, 99, 132)',
+                                borderColor: 'rgba(255, 99, 132, 0.5)',
                                 tension: 0.1
                             }]
                         },
@@ -163,7 +157,7 @@
                             datasets: [{
                                 label: '脂質',
                                 data: data.map(item => item.sum_ingested_fat),
-                                borderColor: 'rgb(54, 162, 235)',
+                                borderColor: 'rgba(255, 205, 86, 0.5)',
                                 tension: 0.1
                             }]
                         },
@@ -218,7 +212,7 @@
                             datasets: [{
                                 label: '炭水化物',
                                 data: data.map(item => item.sum_ingested_carbo),
-                                borderColor: 'rgb(255, 205, 86)',
+                                borderColor: 'rgba(54, 162, 235, 0.5)',
                                 tension: 0.1
                             }]
                         },

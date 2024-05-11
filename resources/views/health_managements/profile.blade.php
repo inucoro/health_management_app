@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <x-app-layout>    
-    <section class="py-6 sm:py-12 dark:bg-gray-100 dark:text-gray-800 bg-white header">
+    <section class="py-6 sm:py-12 dark:bg-gray-100 dark:text-gray-800 bg-white rounded-md shadow-md">
     	<div class="container p-6 mx-auto space-y-8">
     		<div class="space-y-2 text-center">
     			<h2 class="text-3xl font-bold">Health Management App</h2>
