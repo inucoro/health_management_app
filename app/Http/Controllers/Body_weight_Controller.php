@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Body_weight;
 use App\Models\User;
+use App\Models\Calendar;
 use Illuminate\Support\Facades\Auth;
 
 class Body_weight_Controller extends Controller
@@ -92,8 +93,39 @@ class Body_weight_Controller extends Controller
         // Body_weightモデルの新しいインスタンスを作成し、データを追加して保存
         $body_weight = Body_weight::create($data);
     
+        // カレンダーレコードを作成して保存
+        $this->saveWeightToCalendar($user, $data['record_body_weight'], $data['record_body_fat']);
+        
         // 体重記録画面にリダイレクトする
         return redirect()->route('body_weight.show')->with('success', '体重を記録しました。');
+    }
+
+    // 今日の体重をカレンダーテーブルに保存するメソッド
+    private function saveWeightToCalendar($user, $weight, $bodyFat)
+    {
+        // 今日の日付を取得
+        $today = now()->toDateString();
+        
+        // カレンダーテーブルから今日の日付のレコードを取得
+        $calenderRecord = Calendar::where('user_id', $user->id)
+                                  ->whereDate('date', $today)
+                                  ->first();
+    
+        // 今日の日付のレコードが既に存在する場合は、そのレコードを更新します
+        if ($calenderRecord) {
+            // 既存の体重と体脂肪率を更新します
+            $calenderRecord->record_body_weight = $weight;
+            $calenderRecord->record_body_fat = $bodyFat;
+            $calenderRecord->save();
+        } else {
+            // 今日の日付のレコードが存在しない場合は、新しいレコードを作成します
+            $calender = new Calendar();
+            $calender->user_id = $user->id;
+            $calender->date = $today; // 今日の日付を使用します
+            $calender->record_body_weight = $weight;
+            $calender->record_body_fat = $bodyFat;
+            $calender->save();
+        }
     }
     
     public function editBody_weight($id)

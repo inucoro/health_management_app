@@ -7,6 +7,8 @@ use App\Http\Controllers\Meal_Controller;
 use App\Http\Controllers\Movement_Controller;
 use App\Http\Controllers\Body_weight_Controller;
 use App\Http\Controllers\Sleeping_Controller;
+use App\Http\Controllers\Calendar_Controller;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -67,6 +69,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/myprofile/meal/favorite_meal_record/{id}', [Meal_Controller::class, 'showrecordfavoriteMeal'])->name('meal.favoriterecordshow');
     Route::put('/myprofile/meal/favorite_meal_record/{id}', [Meal_Controller::class, 'addfavoriteMeal'])->name('meal.favoriteadd');
     Route::post('/myprofile/meal/favorite_meal', [Meal_Controller::class, 'savefavoriteMeal'])->name('meal.favoritesave');
+    
      //食事お気に入り消去のルート
     Route::delete('/myprofile/meal/favorite_meal/{favorite_meal}', [Meal_Controller::class, 'deleteFavoritemeal'])->name('favoritemeal.delete');
     
@@ -157,8 +160,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/get_target_sleeping', [Sleeping_Controller::class, 'getTargetSleeping'])->name('targetsleeping.get');
     
     
-    
     //  カレンダー表示画面のルート
-    Route::get('/myprofile/calender', [Movement_Controller::class, 'showMovement_calender'])->name('movementcalender.show');
+    Route::get('/myprofile/calendar', [Calendar_Controller::class, 'show_calendar'])->name('calendar.show');
+    Route::post('/myprofile/calendar', [Calendar_Controller::class, 'saveMemo'])->name('calendar.saveMemo');
 });
 

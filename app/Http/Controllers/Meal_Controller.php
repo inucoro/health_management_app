@@ -9,6 +9,7 @@ use App\Models\Movement;
 use App\Models\Daily_record;
 use Carbon\Carbon;
 use App\Models\Favorite_meal;
+use App\Models\Calendar;
 use Illuminate\Support\Facades\Auth;
 
 class Meal_Controller extends Controller
@@ -123,6 +124,9 @@ class Meal_Controller extends Controller
                 'sum_ingested_fat' => $sum_ingested_fat,
                 'sum_ingested_carbo' => $sum_ingested_carbo,
             ]);
+            
+            // カレンダーレコードを作成して保存
+            $this->saveMealToCalendar($user, $ingestion_cal);
         }
     }
     
@@ -161,6 +165,33 @@ class Meal_Controller extends Controller
         // 食事記録画面にリダイレクトする
         return redirect()->route('meal.show')->with('success', '食事を記録しました。');
     }
+    
+    // 今日の食事をカレンダーテーブルに保存するメソッド
+    private function saveMealToCalendar($user, $MealCal)
+    {
+        // 今日の日付を取得
+        $today = now()->toDateString();
+        
+        // カレンダーテーブルから今日の日付のレコードを取得
+        $calendarRecord = Calendar::where('user_id', $user->id)
+                                  ->whereDate('date', $today)
+                                  ->first();
+    
+        // 今日の日付のレコードが既に存在する場合は、そのレコードを更新します
+        if ($calendarRecord) {
+            // 既存の食事カロリーを更新します
+            $calendarRecord->ingestion_cal = $MealCal;
+            $calendarRecord->save();
+        } else {
+            // 今日の日付のレコードが存在しない場合は、新しいレコードを作成します
+            $calendar = new Calendar();
+            $calendar->user_id = $user->id;
+            $calendar->date = $today; // 今日の日付を使用します
+            $calendar->ingestion_cal = $MealCal;
+            $calendar->save();
+        }
+    }
+    
     
     public function editMeal($id)
     {

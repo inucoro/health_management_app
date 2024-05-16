@@ -6,8 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Movement;
 use App\Models\User;
 use App\Models\Daily_record;
+use App\Models\Body_weight;
+use App\Models\Sleeping;
 use Carbon\Carbon;
 use App\Models\Favorite_movement;
+use App\Models\Calendar;
 use Illuminate\Support\Facades\Auth;
 
 class Movement_Controller extends Controller
@@ -71,6 +74,9 @@ class Movement_Controller extends Controller
             ], [
                 'sum_movement_consumption_cal' => $sum_movement_consumption_cal,
             ]);
+            
+            // カレンダーレコードを作成して保存
+            $this->saveMovementToCalendar($user, $sum_movement_consumption_cal);
         }
     }
     
@@ -107,6 +113,33 @@ class Movement_Controller extends Controller
     
         // 運動記録画面にリダイレクトする
         return redirect()->route('movement.show')->with('success', '運動を記録しました。');
+    }
+    
+    // 今日の運動をカレンダーテーブルに保存するメソッド
+    private function saveMovementToCalendar($user, $Movementcal)
+    {
+        // 今日の日付を取得
+        $today = now()->toDateString();
+        
+        // カレンダーテーブルから今日の日付のレコードを取得
+        $calendarRecord = Calendar::where('user_id', $user->id)
+                                  ->whereDate('date', $today)
+                                  ->first();
+    
+        // 今日の日付のレコードが既に存在する場合は、そのレコードを更新します
+        if ($calendarRecord) {
+    
+            // 既存の運動消費カロリーと新しい運動消費カロリーの和を計算し、更新します
+            $calendarRecord->sum_movement_consumption_cal = $Movementcal;
+            $calendarRecord->save();
+        } else {
+            // 今日の日付のレコードが存在しない場合は、新しいレコードを作成します
+            $calendar = new Calendar();
+            $calendar->user_id = $user->id;
+            $calendar->date = $today; // 今日の日付を使用します
+            $calendar->sum_movement_consumption_cal = $Movementcal;
+            $calendar->save();
+        }
     }
     
     public function editMovement($id)
@@ -262,26 +295,5 @@ class Movement_Controller extends Controller
         // 運動表示画面にリダイレクトする
         return redirect()->route('movement.show')->with('success', 'お気に入りが削除されました');
     }
-    
-    // カレンダーに運動した日にスタンプを表示
-    public function showMovement_calender()
-    {
-        $user = Auth::user(); // ログインしているユーザーを取得
-        $userId = $user->id; // ログインユーザーidの取得
-    
-        // 現在の年と月を取得
-        $currentYear = Carbon::now()->year;
-        $currentMonth = Carbon::now()->month;
-    
-        // 全年、全月に関しての運動記録の日付の配列を取得
-        $recordedDates = Movement::where('user_id', $userId)
-                                 ->pluck('movement_created_at')
-                                 ->map(function ($date) {
-                                     return Carbon::parse($date)->format('Y-m-d');
-                                 })
-                                 ->toArray();
-    
-        // Bladeテンプレートを返す
-        return view('health_managements.calender', compact('currentYear', 'currentMonth', 'recordedDates'));
-    }
+
 }
