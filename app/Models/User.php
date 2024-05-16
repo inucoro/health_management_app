@@ -96,4 +96,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Daily_records::class);  
     }
+    
+    //Calenderに対するリレーション
+    public function calendars()   
+    {
+        return $this->hasMany(Calendar::class);  
+    }
 }

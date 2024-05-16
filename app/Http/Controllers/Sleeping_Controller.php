@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Sleeping;
 use App\Models\User;
+use App\Models\Calendar;
 use Illuminate\Support\Facades\Auth;
 
 class Sleeping_Controller extends Controller
@@ -104,9 +105,34 @@ class Sleeping_Controller extends Controller
     
         // Sleepingモデルの新しいインスタンスを作成し、データを追加して保存
         $sleeping = Sleeping::create($data);
+        
+        // 今日の睡眠時間をカレンダーテーブルに保存します
+        $this->saveSleepingToCalendar($user, $sleepingTime);
 
         // 睡眠記録画面にリダイレクトする
         return redirect()->route('sleeping.show')->with('success', '睡眠時間を記録しました。');
+    }
+    
+    // 今日の睡眠時間をカレンダーテーブルに保存するメソッド
+    private function saveSleepingToCalendar($user, $sleepingTime)
+    {
+        // カレンダーテーブルから今日の日付のレコードを取得します
+        $calendarRecord = Calendar::where('user_id', $user->id)
+                                  ->whereDate('date', now()->toDateString())
+                                  ->first();
+    
+        // 今日の日付のレコードが既に存在する場合は、そのレコードを更新します
+        if ($calendarRecord) {
+            $calendarRecord->record_sleeping_time = $sleepingTime;
+            $calendarRecord->save();
+        } else {
+            // 今日の日付のレコードが存在しない場合は、新しいレコードを作成します
+            $calendar = new Calendar();
+            $calendar->user_id = $user->id;
+            $calendar->date = now()->toDateString(); // 今日の日付を使用します
+            $calendar->record_sleeping_time = $sleepingTime;
+            $calendar->save();
+        }
     }
     
     public function editSleeping($id)

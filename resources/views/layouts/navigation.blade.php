@@ -10,13 +10,6 @@
             white-space: pre-wrap;
         }
         
-        /*h1 {*/
-        /*  font-family: "Merienda-VariableFont", sans-serif;*/
-        /*}*/
-        /*@font-face {*/
-        /*  font-family: "Merienda-VariableFont";*/
-        /*  src: url("../../fonts/Merienda-VariableFont_wght.ttf") format("truetype");*/
-        /*}*/
         .nav-link.active {
             background-color: #DCDCDC; /* 塗りつぶしに使いたい色 */
             color: #fff; /* テキスト色設定 */
@@ -29,8 +22,8 @@
             <!-- Logo -->
             <div class="shrink-0 flex items-center">
                 <div>
-                    <h1 class="text-2xl font-semibold leading-tight text-center">LifeLeaf</h2>
-                    <h1 class="text-xs font-semibold leading-tight text-center nav-title">Nurturing Health, One Step at a Time</h2>
+                    <h1 class="font-font1 text-2xl font-semibold leading-tight text-center">LifeLeaf</h2>
+                    <h1 class="font-font1 text-xs font-semibold leading-tight text-center nav-title">Nurturing Health, One Step at a Time</h2>
                 </div>
             </div>
             <div class="flex">
