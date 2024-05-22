@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('calenders', function (Blueprint $table) {
+        Schema::create('calendars', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->date('date');
@@ -22,9 +22,9 @@ return new class extends Migration
             $table->integer('record_sleeping_time')->default(0);
             $table->integer('ingestion_cal')->default(0);
             $table->integer('sum_movement_consumption_cal')->default(0);
-            $table->string('record_calneder_memo')->nullable();
-            $table->timestamp('calender_created_at')->nullable();
-            $table->timestamp('calender_updated_at')->nullable();
+            $table->string('record_calendar_memo')->nullable();
+            $table->timestamp('calendar_created_at')->nullable();
+            $table->timestamp('calendar_updated_at')->nullable();
             $table->timestamps();
         });
     }
@@ -36,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('calenders');
+        Schema::dropIfExists('calendars');
     }
 };

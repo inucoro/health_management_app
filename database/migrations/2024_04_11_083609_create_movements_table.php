@@ -24,11 +24,6 @@ return new class extends Migration
             $table->integer('record_movement_times');
             $table->timestamp('movement_created_at')->nullable();
             $table->timestamp('movement_updated_at')->nullable();
-            $table->string('favorite_type')->nullable();
-            $table->integer('favorite_weight')->nullable();
-            $table->integer('favorite_times')->nullable();
-            $table->integer('favorite_sets')->nullable();
-            $table->integer('favorite_movement_times')->nullable();
             $table->timestamps();
         });
     }

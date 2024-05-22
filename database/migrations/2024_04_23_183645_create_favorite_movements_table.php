@@ -23,6 +23,7 @@ return new class extends Migration
             $table->integer('favorite_times')->nullable();
             $table->integer('favorite_sets')->nullable();
             $table->integer('favorite_movement_times')->nullable();
+            $table->integer('favorite_movement_consumption_cal')->nullable();
             $table->timestamps();
         });
     }

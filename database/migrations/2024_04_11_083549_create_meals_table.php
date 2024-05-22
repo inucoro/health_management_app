@@ -23,11 +23,6 @@ return new class extends Migration
             $table->integer('record_carbo');
             $table->timestamp('meal_created_at')->nullable();
             $table->timestamp('meal_updated_at')->nullable();
-            $table->string('favorite_menu')->nullable();
-            $table->integer('favorite_cal')->nullable();
-            $table->integer('favorite_protein')->nullable();
-            $table->integer('favorite_fat')->nullable();
-            $table->integer('favorite_carbo')->nullable();
             $table->timestamps();
         });
     }

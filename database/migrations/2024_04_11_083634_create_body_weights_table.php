@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('body_weights', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->integer('record_body_weight');
-            $table->integer('record_body_fat');
+            $table->double('record_body_weight')->nullable();
+            $table->double('record_body_fat')->nullable();
             $table->string('record_body_weight_memo')->nullable();
             $table->timestamp('body_weight_created_at')->nullable();
             $table->timestamp('body_weight_updated_at')->nullable();

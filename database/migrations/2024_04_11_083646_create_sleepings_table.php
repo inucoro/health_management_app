@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('sleepings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->integer('record_sleeping_time');
+            $table->double('record_sleeping_time')->nullable();
             $table->string('record_sleeping_memo')->nullable();
             $table->timestamp('sleeping_created_at')->nullable();
             $table->timestamp('sleeping_updated_at')->nullable();
